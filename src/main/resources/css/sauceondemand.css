@@ -1,0 +1,212 @@
+
+#sauceBuilderTabs .sauce_panel .sauce_panel_box, #saucePostTabs .sauce_panel .sauce_panel_box {
+    min-height: 160px;
+}
+
+#sauceBuilderTabs .sauce_panel .sauce_panel_box .helpTextArea, #saucePostTabs .sauce_panel .sauce_panel_box .helpTextArea {
+    margin-bottom: 20px;
+    color: #2f2f2f;
+}
+
+#sauceBuilderTabs .sauce_panel .sauce_panel_box .helpTextArea, #saucePostTabs .sauce_panel .sauce_panel_box .helpTextArea {
+    margin-bottom: 20px;
+    padding-left:30px;
+    color: #2f2f2f;
+}
+
+#sauceBuilderTabs .sauce_panel .sauce_panel_header, #saucePostTabs .sauce_panel .sauce_panel_header {
+    color: #2f2f2f;
+}
+
+.bambooForm #sauceBuilderTabs .fieldArea, .bambooForm #saucePostTabs .fieldArea {
+    clear: none;
+
+}
+
+/* Vertical Tabs
+----------------------------------*/
+
+#sauceBuilderTabs, #saucePostTabs {
+    margin: auto;
+    width: 80%;
+    height: 100%;
+}
+
+#sauceBuilderTabs > ul > li, #saucePostTabs > ul > li {
+    cursor: pointer;
+    background-color: #EBF1F7 !important;
+    list-style-type: none;
+    display: block;
+    text-align: center;
+    margin: auto;
+    padding: 5px;
+
+    border: 1px solid #A9C2DB;
+    position: relative;
+    border-right: none;
+}
+
+#sauceBuilderTabs > ul > li.selected, #saucePostTabs > ul > li.selected {
+    border: 1px solid #005AB5;
+    border-right: none;
+    z-index: 10;
+    background-color: #C8E0F7 !important;
+    position: relative;
+}
+
+#sauceBuilderTabs > ul, #saucePostTabs > ul {
+    float: left;
+    text-align: left;
+    display: block;
+    margin: auto 0;
+    padding: 0;
+    position: relative;
+    top: 30px;
+    width: 150px;
+}
+
+#sauceBuilderTabs > div, #saucePostTabs > div {
+    background-color: #C8E0F7 !important;
+    margin-left: 150px;
+    border: 1px solid #A9C2DB;
+    min-height: 150px;
+    padding: 12px;
+    position: relative;
+    z-index: 9;
+    -moz-border-radius: 20px;
+}
+
+div.sauce_panel {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10px;
+}
+
+div.sauce_panel_header {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 2px 4px 2px 4px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    color: #666;
+}
+
+div.sauce_panel_box {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-top: 0px;
+    padding: 10px 4px 2px 4px;
+
+}
+
+div.sauce_panel_box .fieldArea {
+    float: left;
+}
+
+/*  TABLES  */
+table.sauce_versiontypes {
+    margin: 10px auto 10px auto;
+    width: auto;
+}
+
+table.sauce_versiontypes th {
+    padding: 2px;
+}
+
+table.sauce_versiontypes .checkboxCell {
+    text-align: center;
+    padding: 0;
+    width: 10%;
+    vertical-align: middle;
+}
+
+table.sauce_versiontypes .buttons {
+    padding: 5px 0 5px 0;
+    border-top: 1px solid #BBD0E5;
+    background-color: #EBF1F7;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.sauceVariableHelp {
+    margin-left: 15em;
+    margin-bottom: 12px;
+}
+
+.sauceTable  .checkboxCell {
+    text-align: center;
+    padding: 0;
+    vertical-align: middle;
+}
+
+.sauceTable th {
+    background-color: #3C78B5;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    text-align:center;
+}
+
+.sauceTable tr:nth-child(even) td {
+    background-color: #EBF1F7;
+}
+
+.sauceTable tr:nth-child(odd) td {
+    background-color: #ffffff;
+}
+
+.sauceViewQualifierTable {
+    width:80%;
+}
+
+.sauceEditQualifierTable {
+    margin: 15px auto 15px auto;
+}
+
+
+.sauce_versionrow h2 {
+    margin-top: 15px;
+
+}
+
+table.saucetagger_versiontypes {
+    margin: 10px 100px 10px 100px;
+    width: auto;
+}
+
+table.saucetagger_versiontypes th {
+    padding: 2px;
+}
+
+table.saucetagger_versiontypes .checkboxCell {
+    text-align: center;
+    padding: 0;
+    width: 10%;
+    vertical-align: middle;
+}
+
+/* ------- LICENSE TABLE ---------*/
+#sauceLicenseInfo .sauceLicenseTable {
+    border:1px solid #CCCCCC;
+    cellpadding:3px;
+    cellspacing:1px;
+    width: 100%;
+}
+
+#sauceLicenseInfo .sauceLicenseTable .sauceLicenseTableHeader {
+    background-color:#f0f0f0;
+    width:20%;
+    vertical-align:top;
+    text-align:right;
+    padding-right:8px;
+}
+
+#sauceLicenseInfo .sauceLicenseTable .sauceLicenseTableInfo {
+    background-color:#ffffff;
+}
+
+.sauceLicenseValid {
+    color:green;
+    font-weight:bold;
+}
