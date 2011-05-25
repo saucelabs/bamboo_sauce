@@ -4,8 +4,8 @@ import com.atlassian.bamboo.build.CustomBuildProcessorServer;
 import com.atlassian.bamboo.builder.AbstractBuilder;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanManager;
-import com.atlassian.bamboo.v2.build.BaseConfigurablePlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
+import com.sysbliss.bamboo.sod.AbstractSauceBuildPlugin;
 import com.sysbliss.bamboo.sod.config.SODKeys;
 import com.sysbliss.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */
-public class PostBuildAction extends BaseConfigurablePlugin implements CustomBuildProcessorServer
+public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomBuildProcessorServer
 {
     private BuildContext buildContext;
     private PlanManager planManager;

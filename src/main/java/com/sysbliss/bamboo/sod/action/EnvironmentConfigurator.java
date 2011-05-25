@@ -7,10 +7,10 @@ import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanManager;
-import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.plugin.ModuleDescriptor;
+import com.sysbliss.bamboo.sod.AbstractSauceBuildPlugin;
 import com.sysbliss.bamboo.sod.Browser;
 import com.sysbliss.bamboo.sod.BrowserFactory;
 import com.sysbliss.bamboo.sod.SODSeleniumConfiguration;
@@ -30,7 +30,7 @@ import java.util.Map;
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */
-public class EnvironmentConfigurator extends BaseConfigurableBuildPlugin implements CustomPreBuildQueuedAction {
+public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements CustomPreBuildQueuedAction {
 
     private AdministrationConfigurationManager administrationConfigurationManager;
     private PlanManager planManager;
