@@ -36,12 +36,30 @@
     </developers>
     <properties>
         <ci.version>1.0.1</ci.version>
-        <bamboo.version>3.0.3</bamboo.version>
+        <bamboo.version>3.1</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
     <build>
         <plugins>
+			<!--plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0-alpha-1</version>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>pom.properties</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin-->
             <!--plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-bamboo-plugin</artifactId>
@@ -133,6 +151,13 @@
             <version>1.0.2</version>
             <scope>test</scope>
         </dependency>
+		<!--dependency>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>properties-maven-plugin</artifactId>
+			<version>1.0-alpha-1</version>
+		</dependency-->
+				
+	
     </dependencies>
     <repositories>
         <repository>
