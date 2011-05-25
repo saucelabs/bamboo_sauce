@@ -30,7 +30,7 @@
     </developers>
     <properties>
         <ci.version>1.0.1</ci.version>
-        <bamboo.version>3.1</bamboo.version>
+        <bamboo.version>2.7.4</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
