@@ -7,7 +7,6 @@ package com.sysbliss.bamboo.sod.config;
  */
 public final class SODKeys
 {
-    public static final String SAUCE_CUSTOM_DATA = "SAUCE_CUSTOM_DATA";
 
     /** Disallow instantiation of class.*/
     private SODKeys() {}
@@ -57,6 +56,7 @@ public final class SODKeys
     public static final String SELENIUM_BROWSER_ENV = SELENIUM_BROWSER_KEY;
     public static final String SAUCE_ONDEMAND_HOST = "sauce.host";
     public static final String SELENIUM_STARTING_URL_ENV = "selenium.url";
+    public static final String SAUCE_CUSTOM_DATA = "sauce.bamboo.buildNumber";
 
     public static final String TEMP_ENV_VARS = CUSTOM_PREFIX + "temp.env.vars";
 
