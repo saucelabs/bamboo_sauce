@@ -7,6 +7,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -16,26 +17,32 @@ public class DummySauceTest {
     private DefaultSelenium selenium;
     private static final String DUMMY_CUSTOM_DATA = "sauce:job-info={\"custom-data\": {\"bamboo-buildKey\": \"TEST_PLAN\", \"bamboo-buildNumber\": \"1\", \"bamboo-buildResultKey\": \"TST\"}";
 
+    private static final String DUMMY_TAG_DATA ="sauce:job-tags=BSAD-TRUNK-14";
+
+    private static final String DUMMY_BUILD_DATA ="sauce:job-build=BSAD-TRUNK-14";
+
+
     @Before
     public void setUp() throws Exception {
-        DefaultSelenium selenium = new DefaultSelenium(
+        this.selenium = new DefaultSelenium(
                 "ondemand.saucelabs.com",
                 80,
                 "{\"username\": \"rossco_9_9\"," +
-                "\"access-key\": \"BLAH\"," +
+                "\"access-key\": \"44f0744c-1689-4418-af63-560303cbb37b\"," +
                 "\"os\": \"Windows 2003\"," +
                 "\"browser\": \"firefox\"," +
                 "\"browser-version\": \"3.6.\"," +
                 "\"name\": \"This is an example test\"}",
                 "http://example.saucelabs.com/");
-        System.setProperty(SODKeys.SAUCE_CUSTOM_DATA, DUMMY_CUSTOM_DATA);
+//        System.setProperty(SODKeys.SAUCE_CUSTOM_DATA, DUMMY_BUILD_DATA);
         String bambooData = System.getProperty(SODKeys.SAUCE_CUSTOM_DATA);
-        this.selenium.setContext(bambooData);
         selenium.start();
-        this.selenium = selenium;
+        this.selenium.setContext(bambooData);
+
     }
 
     @Test
+    @Ignore
     public void sauce() throws Exception {
         this.selenium.open("/");
         assertEquals("Cross browser testing with Selenium - Sauce Labs",

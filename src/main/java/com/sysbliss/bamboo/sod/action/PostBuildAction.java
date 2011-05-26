@@ -47,7 +47,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     private void recordSauceJobResult() {
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     private void resetEnvironmentVariables(final SODMappedBuildConfiguration config) {

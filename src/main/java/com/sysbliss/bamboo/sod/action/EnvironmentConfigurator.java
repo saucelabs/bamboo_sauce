@@ -123,7 +123,7 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
             finalStartingUrl = "http://" + sodHost + ':' + config.getSshTunnelPorts() + '/';
         }
 
-        envBuffer.append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
+        envBuffer.append("-D").append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
         envBuffer.append(' ').append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
         envBuffer.append(' ').append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
         envBuffer.append(' ').append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
@@ -138,10 +138,12 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
 
         if (buildContext.getParentBuildContext() == null) {
             envBuffer.append(' ').append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
-                    String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey()));
+                    String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey()))
+                    .append('"');
         } else {
             envBuffer.append(' ').append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
-                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey()));
+                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey())).
+                    append('"');
         }
         return envBuffer.toString();
     }
