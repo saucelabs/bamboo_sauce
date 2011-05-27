@@ -2,6 +2,7 @@ package com.sysbliss.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.builder.AbstractBuilder;
+import com.atlassian.bamboo.builder.AbstractMavenBuilder;
 import com.atlassian.bamboo.buildqueue.manager.CustomPreBuildQueuedAction;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
@@ -44,8 +45,6 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
 
         if (config.isEnabled()) {
-
-
             setSeleniumEnvironmentVars(config);
         }
 
@@ -84,21 +83,35 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
             //legacy pre Bamboo 3 support            
             AbstractBuilder builder = (AbstractBuilder) definition.getBuilder();
             if (builder != null) {
+                if (builder instanceof AbstractMavenBuilder) {
+                    AbstractMavenBuilder mavenBuilder = (AbstractMavenBuilder) builder;
+                    String originalEnv = mavenBuilder.getGoal();
+                    config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
+                    if (StringUtils.isNotBlank(originalEnv)) {
+                        envBuffer = " " + envBuffer;
+                    }
+                    mavenBuilder.setGoal(mavenBuilder.getGoal() + envBuffer.toString());
+                } else {
 
-                String originalEnv = builder.getEnvironmentVariables();
-                config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
-                if (StringUtils.isNotBlank(originalEnv)) {
-                    envBuffer = " " + envBuffer;
+                    String originalEnv = builder.getEnvironmentVariables();
+                    config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
+                    if (StringUtils.isNotBlank(originalEnv)) {
+                        envBuffer = " " + envBuffer;
+                    }
+                    builder.setEnvironmentVariables(builder.getEnvironmentVariables() + envBuffer.toString());
                 }
-                builder.setEnvironmentVariables(builder.getEnvironmentVariables() + envBuffer.toString());
 
             }
             planManager.savePlan(plan);
         }
     //buildDefinitionManager.savePlanAndDefinition(plan);
     }
-
+    
     private String createSeleniumEnvironmentVariables(SODMappedBuildConfiguration config) throws JSONException {
+        return createSeleniumEnvironmentVariables(config, "");
+    }
+
+    private String createSeleniumEnvironmentVariables(SODMappedBuildConfiguration config, String prefix) throws JSONException {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
@@ -123,24 +136,24 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
             finalStartingUrl = "http://" + sodHost + ':' + config.getSshTunnelPorts() + '/';
         }
 
-        envBuffer.append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
-        envBuffer.append(' ').append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
-        envBuffer.append(' ').append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
-        envBuffer.append(' ').append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
-        envBuffer.append(' ').append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
-        envBuffer.append(' ').append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
-        envBuffer.append(SODKeys.SELENIUM_HOST_ENV_LEGACY).append(EQUALS).append(host).append('"');
-        envBuffer.append(' ').append(SODKeys.SELENIUM_PORT_ENV_LEGACY).append('=').append(port);
-        envBuffer.append(' ').append(SODKeys.SELENIUM_BROWSER_ENV_LEGACY).append(EQUALS).append(browserJson).append('"');
-        envBuffer.append(' ').append(SODKeys.SELENIUM_STARTING_URL_ENV_LEGACY).append(EQUALS).append(finalStartingUrl).append('"');
-        envBuffer.append(' ').append(SODKeys.SAUCE_ONDEMAND_HOST_LEGACY).append(EQUALS).append(sodHost).append('"');
-        envBuffer.append(' ').append(SODKeys.SELENIUM_DRIVER_ENV_LEGACY).append(EQUALS).append(sodDriverURI).append('"');
+        envBuffer.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_HOST_ENV_LEGACY).append(EQUALS).append(host).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV_LEGACY).append('=').append(port);
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV_LEGACY).append(EQUALS).append(browserJson).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV_LEGACY).append(EQUALS).append(finalStartingUrl).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST_LEGACY).append(EQUALS).append(sodHost).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV_LEGACY).append(EQUALS).append(sodDriverURI).append('"');
 
         if (buildContext.getParentBuildContext() == null) {
-            envBuffer.append(' ').append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
                     String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey()));
         } else {
-            envBuffer.append(' ').append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
                     String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey()));
         }
         return envBuffer.toString();
