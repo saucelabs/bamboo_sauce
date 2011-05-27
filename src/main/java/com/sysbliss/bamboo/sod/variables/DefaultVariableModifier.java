@@ -78,9 +78,7 @@ public class DefaultVariableModifier implements VariableModifier {
         config.setTempUsername(sodUsername);
         config.setTempApikey(sodKey);
 
-
         StringBuilder envBuffer = new StringBuilder();
-
 
         String sodHost = config.getSshDomains();
         String finalStartingUrl = browserUrl;

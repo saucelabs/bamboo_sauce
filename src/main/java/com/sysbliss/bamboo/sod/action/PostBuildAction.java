@@ -26,14 +26,12 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             resetEnvironmentVariables(config);
             recordSauceJobResult();
         }
-
         return buildContext;
     }
 
     public void init(@NotNull BuildContext context) {
         this.buildContext = context;
     }
-
 
     public void setPlanManager(PlanManager planManager) {
         this.planManager = planManager;
@@ -52,5 +50,4 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             }
         }
     }
-
 }

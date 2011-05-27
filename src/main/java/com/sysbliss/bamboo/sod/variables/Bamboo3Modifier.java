@@ -68,4 +68,5 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
             //ignore and attempt to continue
         }
     }
+
 }

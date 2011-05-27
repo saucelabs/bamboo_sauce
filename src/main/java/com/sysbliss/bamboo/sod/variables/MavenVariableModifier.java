@@ -14,6 +14,7 @@ import org.json.JSONException;
  * @author Ross Rowe
  */
 public class MavenVariableModifier extends DefaultVariableModifier {
+    
     public MavenVariableModifier(SODMappedBuildConfiguration config, AdministrationConfigurationManager administrationConfigurationManager, BuildDefinition definition, BuildContext buildContext, BrowserFactory sauceBrowserFactory) {
         super(config, administrationConfigurationManager, definition, buildContext, sauceBrowserFactory);
     }
