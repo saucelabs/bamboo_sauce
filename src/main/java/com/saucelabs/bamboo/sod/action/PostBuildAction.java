@@ -1,12 +1,12 @@
-package com.sysbliss.bamboo.sod.action;
+package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.sysbliss.bamboo.sod.AbstractSauceBuildPlugin;
-import com.sysbliss.bamboo.sod.config.SODMappedBuildConfiguration;
-import com.sysbliss.bamboo.sod.variables.VariableModifier;
+import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
+import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.bamboo.sod.variables.VariableModifier;
 import org.jetbrains.annotations.NotNull;
 
 /**

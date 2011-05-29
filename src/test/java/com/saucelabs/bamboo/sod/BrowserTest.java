@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod;
+package com.saucelabs.bamboo.sod;
 
 import org.junit.Test;
 /**

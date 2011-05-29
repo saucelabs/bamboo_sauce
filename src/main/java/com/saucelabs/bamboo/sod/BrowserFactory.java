@@ -3,10 +3,10 @@
  * and open the template in the editor.
  */
 
-package com.sysbliss.bamboo.sod;
+package com.saucelabs.bamboo.sod;
 
-import com.sysbliss.bamboo.sod.util.CacheTimeUtil;
-import com.sysbliss.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.util.CacheTimeUtil;
+import com.saucelabs.bamboo.sod.util.SauceFactory;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -72,7 +72,7 @@ public class BrowserFactory {
     }
 
     /**
-     * Parses the JSON response and constructs a List of {@link com.sysbliss.bamboo.sod.Browser} instances.
+     * Parses the JSON response and constructs a List of {@link com.saucelabs.bamboo.sod.Browser} instances.
      *
      * @param browserListJson
      * @return

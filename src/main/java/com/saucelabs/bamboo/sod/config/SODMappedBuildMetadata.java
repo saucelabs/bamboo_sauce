@@ -1,7 +1,7 @@
-package com.sysbliss.bamboo.sod.config;
+package com.saucelabs.bamboo.sod.config;
 
 import java.util.Map;
-import static com.sysbliss.bamboo.sod.config.SODKeys.*;
+import static com.saucelabs.bamboo.sod.config.SODKeys.*;
 
 /**
  *

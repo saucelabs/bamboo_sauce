@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod.action;
+package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.CustomPreBuildAction;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
@@ -9,11 +9,11 @@ import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
-import com.sysbliss.bamboo.sod.Browser;
-import com.sysbliss.bamboo.sod.BrowserFactory;
-import com.sysbliss.bamboo.sod.config.*;
-import com.sysbliss.bamboo.sod.util.SauceFactory;
-import com.sysbliss.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.bamboo.sod.Browser;
+import com.saucelabs.bamboo.sod.BrowserFactory;
+import com.saucelabs.bamboo.sod.config.*;
+import com.saucelabs.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.jetbrains.annotations.NotNull;

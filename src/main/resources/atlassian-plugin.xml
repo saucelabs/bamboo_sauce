@@ -23,40 +23,40 @@
         <resource type="download" name="sauceondemand.css" location="css/sauceondemand.css"/>
     </web-resource>
 
-    <preBuildAction key="sodBuildConfigurator" name="Sauce OnDemand Build Configurator" class="com.sysbliss.bamboo.sod.action.BuildConfigurator">
+    <preBuildAction key="sodBuildConfigurator" name="Sauce OnDemand Build Configurator" class="com.saucelabs.bamboo.sod.action.BuildConfigurator">
         <resource type="freemarker" name="edit" location="templates/build/sodEdit.ftl"/>
         <resource type="freemarker" name="view" location="templates/build/sodView.ftl"/>
         <description>Configures Sauce OnDemand Build Plan Settings</description>
     </preBuildAction>
 
-    <preBuildQueuedAction key="sodEnvironmentConfigurator" name="Sauce OnDemand Environment Configurator" class="com.sysbliss.bamboo.sod.action.EnvironmentConfigurator">
+    <preBuildQueuedAction key="sodEnvironmentConfigurator" name="Sauce OnDemand Environment Configurator" class="com.saucelabs.bamboo.sod.action.EnvironmentConfigurator">
     </preBuildQueuedAction>
 
-    <buildProcessor key="sodTunnelCloser" name="Sauce OnDemand Tunnel Closer" class="com.sysbliss.bamboo.sod.action.SSHTunnelCloser">
+    <buildProcessor key="sodTunnelCloser" name="Sauce OnDemand Tunnel Closer" class="com.saucelabs.bamboo.sod.action.SSHTunnelCloser">
         <skipIfFailed>false</skipIfFailed>
     </buildProcessor>
 
-    <buildProcessorServer key="sodPostRunner" name="Sauce OnDemand Post Runner" class="com.sysbliss.bamboo.sod.action.PostBuildAction">
+    <buildProcessorServer key="sodPostRunner" name="Sauce OnDemand Post Runner" class="com.saucelabs.bamboo.sod.action.PostBuildAction">
         <skipIfFailed>false</skipIfFailed>
     </buildProcessorServer>
 
 
     <xwork key="sodActions" name="Sauce OnDemand Actions">
         <package name="sodAdmin" extends="admin" namespace="/admin/sauceondemand">
-            <action name="configureSauceOnDemand" class="com.sysbliss.bamboo.sod.admin.action.ConfigureSODAction" method="default">
+            <action name="configureSauceOnDemand" class="com.saucelabs.bamboo.sod.admin.action.ConfigureSODAction" method="default">
                 <result name="input" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
             </action>
 
-            <action name="configureSauceOnDemandSave" class="com.sysbliss.bamboo.sod.admin.action.ConfigureSODAction" method="save">
+            <action name="configureSauceOnDemandSave" class="com.saucelabs.bamboo.sod.admin.action.ConfigureSODAction" method="save">
                 <result name="input" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
             </action>
         </package>
         <package name="sodPlan" extends="buildView">
-            <action name="viewSauceOnDemandPlan" class="com.sysbliss.bamboo.sod.plan.ViewSODAction" method="default">
+            <action name="viewSauceOnDemandPlan" class="com.saucelabs.bamboo.sod.plan.ViewSODAction" method="default">
                 <result name="input" type="freemarker">/templates/plan/viewSauceOnDemand.ftl</result>
                 <result name="success" type="freemarker">/templates/plan/viewSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
@@ -64,7 +64,7 @@
 
         </package>    
         <package name="sodResult" extends="buildView">
-            <action name="viewSauceOnDemandResult" class="com.sysbliss.bamboo.sod.plan.ViewSODAction" method="default">
+            <action name="viewSauceOnDemandResult" class="com.saucelabs.bamboo.sod.plan.ViewSODAction" method="default">
                 <result name="input" type="freemarker">/templates/plan/viewSauceOnDemandBuildResult.ftl</result>
                 <result name="success" type="freemarker">/templates/plan/viewSauceOnDemandBuildResult.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
@@ -77,22 +77,12 @@
         <label key="Sauce OnDemand"/>
         <link linkId="sauceOnDemandConfig">/admin/sauceondemand/configureSauceOnDemand.action</link>
     </web-item>
-
-    <!--<web-item key="sodChainDetails" name="Sauce OnDemand Plan details" section="chain.subMenu/chain" weight="10">-->
-        <!--<description key="sodPlanDetails.desc">Provides details of the Sauce OnDemand results</description>-->
-        <!--<label key="Sauce OnDemand Results" />-->
-        <!--<link linkId="saucePlanDetails">/build/sauceondemand/viewSauceOnDemandPlan.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>-->
-        <!--<condition class="com.sysbliss.bamboo.sod.plan.ViewSODCondition">-->
-
-        <!--</condition>-->
-    <!--</web-item>-->
-
-
+    
     <web-item key="sodPlanDetails" name="sauce" section="chainResults.subMenu/chainResults" weight="10">
         <description key="sodPlanDetails.desc">Provides details of the Sauce OnDemand results</description>
         <label key="Sauce OnDemand Results" />
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>
-        <condition class="com.sysbliss.bamboo.sod.plan.ViewSODCondition">
+        <condition class="com.saucelabs.bamboo.sod.plan.ViewSODCondition">
 
         </condition>
     </web-item>
@@ -101,20 +91,20 @@
         <description key="sodPlanDetails.desc">Provides details of the Sauce OnDemand results</description>
         <label key="Sauce OnDemand Results" />
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>
-        <condition class="com.sysbliss.bamboo.sod.plan.ViewSODCondition">
+        <condition class="com.saucelabs.bamboo.sod.plan.ViewSODCondition">
 
         </condition>
     </web-item>
 
-    <component name="sauceTunnelManager" key="sauceTunnelManager" class="com.sysbliss.bamboo.sod.util.SauceTunnelManager">
+    <component name="sauceTunnelManager" key="sauceTunnelManager" class="com.saucelabs.bamboo.sod.util.SauceTunnelManager">
         
     </component>
 
-    <component name="sauceBrowserFactory" key="sauceBrowserFactory" class="com.sysbliss.bamboo.sod.BrowserFactory">
+    <component name="sauceBrowserFactory" key="sauceBrowserFactory" class="com.saucelabs.bamboo.sod.BrowserFactory">
         
     </component>
     
-    <component name="sauceAPIFactory" key="sauceAPIFactory" class="com.sysbliss.bamboo.sod.util.SauceFactory">
+    <component name="sauceAPIFactory" key="sauceAPIFactory" class="com.saucelabs.bamboo.sod.util.SauceFactory">
         
     </component>
 

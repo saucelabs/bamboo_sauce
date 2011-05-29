@@ -2,10 +2,10 @@ package it.com.saucelabs.bamboo.sod;
 
 import com.atlassian.bamboo.results.BuildResults;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.sysbliss.bamboo.sod.action.BuildConfigurator;
-import com.sysbliss.bamboo.sod.action.SSHTunnelCloser;
-import com.sysbliss.bamboo.sod.util.SauceFactory;
-import com.sysbliss.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.bamboo.sod.action.BuildConfigurator;
+import com.saucelabs.bamboo.sod.action.SSHTunnelCloser;
+import com.saucelabs.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleneseTestCase;
 import java.io.InputStream;

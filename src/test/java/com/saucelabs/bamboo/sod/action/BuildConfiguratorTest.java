@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod.action;
+package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
@@ -6,9 +6,9 @@ import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
-import com.sysbliss.bamboo.sod.config.SODKeys;
-import com.sysbliss.bamboo.sod.util.SauceFactory;
-import com.sysbliss.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod.plan;
+package com.saucelabs.bamboo.sod.plan;
 
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.plugin.PluginParseException;

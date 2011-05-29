@@ -1,11 +1,11 @@
-package com.sysbliss.bamboo.sod.variables;
+package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.sysbliss.bamboo.sod.BrowserFactory;
-import com.sysbliss.bamboo.sod.config.SODKeys;
-import com.sysbliss.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.bamboo.sod.BrowserFactory;
+import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 

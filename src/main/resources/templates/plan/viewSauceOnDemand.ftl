@@ -4,6 +4,7 @@
     <meta name="decorator" content="plan">
 </head>
 <body>
+[@cp.resultsSubMenu selectedTab='sauce' /]
 
 [#if jobId?has_content ]
 
@@ -19,13 +20,14 @@ Unable to find a Sauce Job result for ${buildKey}.
 
 <p>Please verify that your Sauce tests are applying the value of the SAUCE_CUSTOM_DATA environment variable to the
 selenium context, eg.
+</p>
 
 <pre>
 String bambooData = System.getProperty("SAUCE_CUSTOM_DATA");
 this.selenium.setContext(bambooData);
 </pre>
 
-</p>
+
 
 [/#if]
 </body>

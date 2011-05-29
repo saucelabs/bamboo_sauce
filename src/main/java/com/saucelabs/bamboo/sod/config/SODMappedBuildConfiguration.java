@@ -1,9 +1,9 @@
-package com.sysbliss.bamboo.sod.config;
+package com.saucelabs.bamboo.sod.config;
 
 import org.apache.commons.lang.math.NumberUtils;
 
 import java.util.Map;
-import static com.sysbliss.bamboo.sod.config.SODKeys.*;
+import static com.saucelabs.bamboo.sod.config.SODKeys.*;
 
 /**
  *

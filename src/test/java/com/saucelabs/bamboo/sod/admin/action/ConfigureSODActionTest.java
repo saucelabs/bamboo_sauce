@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod.admin.action;
+package com.saucelabs.bamboo.sod.admin.action;
 
 import com.atlassian.bamboo.Bamboo;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
@@ -7,7 +7,7 @@ import com.opensymphony.xwork.ActionContext;
 import org.junit.Test;
 import org.junit.Before;
 
-import com.sysbliss.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.config.SODKeys;
 import java.util.HashMap;
 import java.util.Map;
 import static org.junit.Assert.assertEquals;

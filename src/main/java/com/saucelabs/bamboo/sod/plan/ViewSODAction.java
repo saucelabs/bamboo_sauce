@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod.plan;
+package com.saucelabs.bamboo.sod.plan;
 
 import com.atlassian.bamboo.build.PlanResultsAction;
 import com.atlassian.bamboo.build.ViewBuildResults;
@@ -9,8 +9,8 @@ import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.plan.PlanResultKey;
 import com.atlassian.bamboo.resultsummary.ResultsSummaryManager;
-import com.sysbliss.bamboo.sod.config.SODKeys;
-import com.sysbliss.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.util.SauceFactory;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.commons.codec.binary.Hex;
@@ -69,11 +69,13 @@ public class ViewSODAction extends ViewBuildResults {
             //check custom data to find job that was for build
             JSONObject jobData = jobResults.getJSONObject(i);
 
-            if (!jobData.isNull("build")) {
+            if (!jobData.isNull("tags")) {
 //                JSONObject customData = (JSONObject) jobData.get("custom-data");
-                String buildResultKey = jobData.getString("build");
-                if (buildResultKey.equals(getResultsSummary().getBuildResultKey())) {
-                    jobId = jobData.getString("id");
+//                String buildResultKey = jobData.getString("build");
+                String tags = jobData.getString("tags");
+                if (tags.indexOf(getResultsSummary().getBuildResultKey()) != -1) {
+                    jobId = (String) jobData.getJSONArray("tags").get(0);
+//                    jobId = jobData.getString("id");
                     Date now = new Date();
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
                     

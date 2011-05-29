@@ -4,7 +4,7 @@
     <meta name="decorator" content="adminpage">
 </head>
 <body>
-<img src="${req.contextPath}/download/resources/com.sysbliss.bamboo.bamboo-sauceondemand-plugin:sauceImages/sauce_labs_horizontal.png" border="0"/>
+<img src="${req.contextPath}/download/resources/com.saucelabs.bamboo.bamboo-sauceondemand-plugin:sauceImages/sauce_labs_horizontal.png" border="0"/>
 <h1>Sauce OnDemand Configuration</h1>
 
 <div class="paddedClearer"></div>

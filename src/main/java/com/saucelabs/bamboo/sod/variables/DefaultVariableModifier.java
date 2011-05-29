@@ -1,15 +1,15 @@
-package com.sysbliss.bamboo.sod.variables;
+package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.builder.AbstractBuilder;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.sysbliss.bamboo.sod.Browser;
-import com.sysbliss.bamboo.sod.BrowserFactory;
-import com.sysbliss.bamboo.sod.SODSeleniumConfiguration;
-import com.sysbliss.bamboo.sod.config.SODKeys;
-import com.sysbliss.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.bamboo.sod.Browser;
+import com.saucelabs.bamboo.sod.BrowserFactory;
+import com.saucelabs.bamboo.sod.SODSeleniumConfiguration;
+import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
@@ -20,7 +20,7 @@ public class DefaultVariableModifier implements VariableModifier {
 
     protected static final String EQUALS = "=\"";
 
-    protected static final String CUSTOM_DATA = "sauce:job-build=%3$s";
+    protected static final String CUSTOM_DATA = "sauce:job-tags=%3$s";
 
     protected SODMappedBuildConfiguration config;
     protected AdministrationConfigurationManager administrationConfigurationManager;
@@ -95,14 +95,14 @@ public class DefaultVariableModifier implements VariableModifier {
 //        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV_LEGACY).append(EQUALS).append(finalStartingUrl).append('"');
 //        envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST_LEGACY).append(EQUALS).append(sodHost).append('"');
 //        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV_LEGACY).append(EQUALS).append(sodDriverURI).append('"');
-//
-//        if (buildContext.getParentBuildContext() == null) {
-//            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
-//                    String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey())).append('"');
-//        } else {
-//            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
-//                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey())).append('"');
-//        }        
+
+        if (buildContext.getParentBuildContext() == null) {
+            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+                    String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey())).append('"');
+        } else {
+            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey())).append('"');
+        }
         return envBuffer.toString();
     }
 

@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod.util;
+package com.saucelabs.bamboo.sod.util;
 
 import com.saucelabs.rest.Credential;
 import com.saucelabs.rest.SauceTunnelFactory;

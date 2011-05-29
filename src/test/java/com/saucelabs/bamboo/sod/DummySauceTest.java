@@ -1,6 +1,6 @@
-package com.sysbliss.bamboo.sod;
+package com.saucelabs.bamboo.sod;
 
-import com.sysbliss.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.thoughtworks.selenium.DefaultSelenium;
 
 import static org.junit.Assert.assertEquals;

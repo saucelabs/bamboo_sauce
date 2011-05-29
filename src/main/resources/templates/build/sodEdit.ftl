@@ -1,5 +1,5 @@
-${webResourceManager.requireResource("com.sysbliss.bamboo.bamboo-sauceondemand-plugin:sodCSS")}
-${webResourceManager.requireResource("com.sysbliss.bamboo.bamboo-sauceondemand-plugin:sodJS")}
+${webResourceManager.requireResource("com.saucelabs.bamboo.bamboo-sauceondemand-plugin:sodCSS")}
+${webResourceManager.requireResource("com.saucelabs.bamboo.bamboo-sauceondemand-plugin:sodJS")}
 [#include "sodScript.ftl"]
 <!--[if IE 7]>
 <style type="text/css">
@@ -16,7 +16,7 @@ ${webResourceManager.requireResource("com.sysbliss.bamboo.bamboo-sauceondemand-p
 </style>
 <![endif]-->
 
-[@ui.bambooSection title='<img src="${req.contextPath}/download/resources/com.sysbliss.bamboo.bamboo-sauceondemand-plugin:sauceImages/sauce_icon.jpg" />&nbsp;&nbsp;Sauce OnDemand' ]
+[@ui.bambooSection title='<img src="${req.contextPath}/download/resources/com.saucelabs.bamboo.bamboo-sauceondemand-plugin:sauceImages/sauce_icon.jpg" />&nbsp;&nbsp;Sauce OnDemand' ]
     [#assign createMode=req.servletPath.contains('/build/admin/create/') /]
 
     [#if hasValidSauceConfig]

@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod;
+package com.saucelabs.bamboo.sod;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;

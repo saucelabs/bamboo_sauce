@@ -1,4 +1,4 @@
-package com.sysbliss.bamboo.sod.config;
+package com.saucelabs.bamboo.sod.config;
 
 /**
  *
