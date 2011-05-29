@@ -35,10 +35,6 @@ public class ViewSODAction extends ViewBuildResults {
 
     private static final String JOB_DETAILS_URL = "https://saucelabs.com/rest/v1/%1$s/jobs?full=true";
 
-    private PlanManager planManager;
-
-    private ResultsSummaryManager resultsSummaryManager;
-
     private AdministrationConfigurationManager administrationConfigurationManager;
 
     /**
@@ -57,7 +53,6 @@ public class ViewSODAction extends ViewBuildResults {
     @Override
     public String doDefault() throws Exception {
 
-
         setResultsSummary(resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(getBuildKey(), getBuildNumber())));
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
@@ -74,8 +69,7 @@ public class ViewSODAction extends ViewBuildResults {
 //                String buildResultKey = jobData.getString("build");
                 String tags = jobData.getString("tags");
                 if (tags.indexOf(getResultsSummary().getBuildResultKey()) != -1) {
-                    jobId = (String) jobData.getJSONArray("tags").get(0);
-//                    jobId = jobData.getString("id");
+                    jobId = jobData.getString("id");
                     Date now = new Date();
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
                     
@@ -111,10 +105,6 @@ public class ViewSODAction extends ViewBuildResults {
         this.administrationConfigurationManager = administrationConfigurationManager;
     }
 
-    public void setPlanManager(PlanManager planManager) {
-        this.planManager = planManager;
-    }
-
     public String getJobId() {
         return jobId;
     }
@@ -123,7 +113,4 @@ public class ViewSODAction extends ViewBuildResults {
         return hmac;
     }
 
-    public void setResultsSummaryManager(ResultsSummaryManager resultsSummaryManager) {
-        this.resultsSummaryManager = resultsSummaryManager;
-    }
 }
