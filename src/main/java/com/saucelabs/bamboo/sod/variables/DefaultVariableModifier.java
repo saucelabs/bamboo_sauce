@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
 /**
+ * Handles writing and restoring the Sauce OnDemand environment variables to the Builder instance (for pre-Bamboo 3 instances).  
+ * The variables are saved to the plan's configuration, and are removed by the {@link PostBuildAction} class.
  * @author Ross Rowe
  */
 public class DefaultVariableModifier implements VariableModifier {
@@ -28,13 +30,17 @@ public class DefaultVariableModifier implements VariableModifier {
     protected BuildContext buildContext;
     private BrowserFactory sauceBrowserFactory;
 
-
     public DefaultVariableModifier(SODMappedBuildConfiguration config, BuildDefinition definition, BuildContext buildContext) {
         this.config = config;
         this.definition = definition;
         this.buildContext = buildContext;
     }
 
+    /**
+    * Stores the Sauce configuration values as environment variables.  Ideally, we would rather use system properties
+    * instead of environment variables however there is a <a href="https://jira.atlassian.com/browse/BAM-7265">defect</a> in Bamboo
+    * which causes quotes inside the -DargLine argument to be dropped.
+    */
     public void storeVariables() throws JSONException {
 
         String envBuffer = createSeleniumEnvironmentVariables();
@@ -84,18 +90,12 @@ public class DefaultVariableModifier implements VariableModifier {
         }
 
         envBuffer.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_HOST_ENV_LEGACY).append(EQUALS).append(host).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV_LEGACY).append('=').append(port);
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV_LEGACY).append(EQUALS).append(browserJson).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV_LEGACY).append(EQUALS).append(finalStartingUrl).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST_LEGACY).append(EQUALS).append(sodHost).append('"');
-//        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV_LEGACY).append(EQUALS).append(sodDriverURI).append('"');
-
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
+       
         if (buildContext.getParentBuildContext() == null) {
             envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
                     String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey())).append('"');
