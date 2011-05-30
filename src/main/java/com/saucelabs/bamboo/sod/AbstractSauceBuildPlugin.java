@@ -1,19 +1,16 @@
-
 package com.saucelabs.bamboo.sod;
 
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.builder.AbstractBuilder;
-import com.atlassian.bamboo.builder.AbstractMavenBuilder;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
-import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.variables.Bamboo3Modifier;
 import com.saucelabs.bamboo.sod.variables.DefaultVariableModifier;
-import com.saucelabs.bamboo.sod.variables.MavenVariableModifier;
 import com.saucelabs.bamboo.sod.variables.VariableModifier;
 
 /**
+ * Contains common logic for Sauce OnDemand plugin classes. 
  *
  * @author Ross Rowe
  */
@@ -35,14 +32,8 @@ public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlug
         //legacy,pre-Bamboo 3 support
         AbstractBuilder builder = (AbstractBuilder) definition.getBuilder();
         if (builder != null) {
-//            if (builder instanceof AbstractMavenBuilder) {
-//                variableModifier = new MavenVariableModifier(config, definition, buildContext);
-//            } else {
-                variableModifier = new DefaultVariableModifier(config, definition, buildContext);
-//            }
+            variableModifier = new DefaultVariableModifier(config, definition, buildContext);
         }
-
         return variableModifier;
-
     }
 }

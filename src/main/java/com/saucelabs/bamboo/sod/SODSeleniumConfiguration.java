@@ -43,9 +43,11 @@ public class SODSeleniumConfiguration
         JSONObject config = new JSONObject();
         config.put("username",username);
         config.put("access-key",accessKey);
-        config.put("os",browser.getOs());
-        config.put("browser",browser.getBrowserName());
-        config.put("browser-version",browser.getVersion());
+        if (browser != null) {
+            config.put("os",browser.getOs());
+            config.put("browser",browser.getBrowserName());
+            config.put("browser-version",browser.getVersion());
+        }
         config.put("record-video",recordVideo);
 
         if(StringUtils.isNotBlank(jobName)) {

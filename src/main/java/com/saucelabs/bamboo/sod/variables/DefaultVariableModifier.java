@@ -14,8 +14,10 @@ import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
 /**
- * Handles writing and restoring the Sauce OnDemand environment variables to the Builder instance (for pre-Bamboo 3 instances).  
- * The variables are saved to the plan's configuration, and are removed by the {@link PostBuildAction} class.
+ * Handles writing and restoring the Sauce OnDemand environment variables to the Builder instance (for pre-Bamboo 3 instances).
+ * The variables are saved to the plan's configuration by the {@link com.saucelabs.bamboo.sod.action.EnvironmentConfigurator} class,
+ * and are removed by the {@link com.saucelabs.bamboo.sod.action.PostBuildAction} class.
+ *
  * @author Ross Rowe
  */
 public class DefaultVariableModifier implements VariableModifier {
@@ -37,10 +39,12 @@ public class DefaultVariableModifier implements VariableModifier {
     }
 
     /**
-    * Stores the Sauce configuration values as environment variables.  Ideally, we would rather use system properties
-    * instead of environment variables however there is a <a href="https://jira.atlassian.com/browse/BAM-7265">defect</a> in Bamboo
-    * which causes quotes inside the -DargLine argument to be dropped.
-    */
+     * Stores the Sauce configuration values as environment variables.  Ideally, we would rather use system properties
+     * instead of environment variables however there is a <a href="https://jira.atlassian.com/browse/BAM-7265">defect</a> in Bamboo
+     * which causes quotes inside the -DargLine argument to be dropped.
+     *
+     * @throws JSONException if an error occurs generating the Selenium environment variables
+     */
     public void storeVariables() throws JSONException {
 
         String envBuffer = createSeleniumEnvironmentVariables();
@@ -58,14 +62,27 @@ public class DefaultVariableModifier implements VariableModifier {
 
     public void restoreVariables() {
         AbstractBuilder builder = (AbstractBuilder) definition.getBuilder();
-        builder.setEnvironmentVariables(config.getMap().get(SODKeys.TEMP_ENV_VARS));
+        if (builder != null) {
+            builder.setEnvironmentVariables(config.getMap().get(SODKeys.TEMP_ENV_VARS));
+        }
         config.getMap().put(SODKeys.TEMP_ENV_VARS, "");
     }
 
+    /**
+     *
+     * @return
+     * @throws JSONException
+     */
     protected String createSeleniumEnvironmentVariables() throws JSONException {
         return createSeleniumEnvironmentVariables("");
     }
 
+    /**
+     *
+     * @param prefix Prefix for each environment variable (eg '-D'), can be null
+     * @return String representing the set of environment variables to apply
+     * @throws JSONException if an error occurs generating the Selenium environment variables
+     */
     protected String createSeleniumEnvironmentVariables(String prefix) throws JSONException {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
@@ -95,7 +112,7 @@ public class DefaultVariableModifier implements VariableModifier {
         envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
         envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
         envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
-       
+
         if (buildContext.getParentBuildContext() == null) {
             envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
                     String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey())).append('"');
@@ -106,6 +123,14 @@ public class DefaultVariableModifier implements VariableModifier {
         return envBuffer.toString();
     }
 
+    /**
+     *
+     * @param username
+     * @param apiKey
+     * @param config
+     * @return
+     * @throws JSONException if an error occurs converting the config to JSON
+     */
     protected String getSodJson(String username, String apiKey, SODMappedBuildConfiguration config) throws JSONException {
 
         SODSeleniumConfiguration sodConfig = new SODSeleniumConfiguration(username, apiKey, sauceBrowserFactory.forKey(config.getBrowserKey()));
@@ -115,7 +140,6 @@ public class DefaultVariableModifier implements VariableModifier {
         sodConfig.setMaxDuration(config.getMaxDuration());
         sodConfig.setRecordVideo(config.recordVideo());
         sodConfig.setUserExtensions(StringUtils.defaultString(config.getUserExtensionsJson()));
-
         return sodConfig.toJson();
     }
 
@@ -126,19 +150,20 @@ public class DefaultVariableModifier implements VariableModifier {
      * @param apiKey
      * @param config
      * @param config
-     * @return
-     * @throws org.json.JSONException
+     * @return String repreenting the Sauce OnDemand driver URI
      */
-    protected String getSodDriverUri(String username, String apiKey, SODMappedBuildConfiguration config) throws JSONException {
+    protected String getSodDriverUri(String username, String apiKey, SODMappedBuildConfiguration config) {
         StringBuilder sb = new StringBuilder("sauce-ondemand:?username=");
         sb.append(username);
         sb.append("&access-key=").append(apiKey);
         sb.append("&job-name=").append(StringUtils.trim(buildContext.getPlanName())).append('-').append(Integer.toString(buildContext.getBuildNumber()));
 
         Browser browser = sauceBrowserFactory.forKey(config.getBrowserKey());
-        sb.append("&os=").append(browser.getOs());
-        sb.append("&browser=").append(browser.getBrowserName());
-        sb.append("&browser-version=").append(browser.getVersion());
+        if (browser != null) {
+            sb.append("&os=").append(browser.getOs());
+            sb.append("&browser=").append(browser.getBrowserName());
+            sb.append("&browser-version=").append(browser.getVersion());
+        }
 
         sb.append("&firefox-profile-url=").append(StringUtils.defaultString(config.getFirefoxProfileUrl()));
         sb.append("&max-duration=").append(config.getMaxDuration());
