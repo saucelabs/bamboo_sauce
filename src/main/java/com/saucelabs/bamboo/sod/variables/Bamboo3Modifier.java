@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Handles writing and restoring the Sauce OnDemand environment variables to the TaskDefinition instance (for Bamboo 3 instances).  
+ * The variables are saved to the plan's configuration, and are removed by the {@link PostBuildAction} class.
  * @author Ross Rowe
  */
 public class Bamboo3Modifier extends DefaultVariableModifier  {
