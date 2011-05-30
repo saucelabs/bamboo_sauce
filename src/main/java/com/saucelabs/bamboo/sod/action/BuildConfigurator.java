@@ -26,7 +26,7 @@ import java.util.Map;
 
 /**
  * Pre-Build Action which will start a SSH Tunnel via the Sauce REST API if the build is configured to run
- * tests via the tunnel. 
+ * tests via the tunnel.
  *
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
@@ -134,11 +134,14 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public void addDefaultValues(@NotNull BuildConfiguration buildConfiguration) {
         super.addDefaultValues(buildConfiguration);
 
+        //only set SSH enabled if we don't have any properties set
+        if (!buildConfiguration.getKeys(SODKeys.CUSTOM_PREFIX).hasNext()) {
+            addDefaultStringValue(buildConfiguration, SODKeys.SSH_ENABLED_KEY, Boolean.TRUE.toString());
+        }
         addDefaultNumberValue(buildConfiguration, SODKeys.MAX_DURATION_KEY, DEFAULT_MAX_DURATION);
         addDefaultNumberValue(buildConfiguration, SODKeys.IDLE_TIMEOUT_KEY, DEFAULT_IDLE_TIMEOUT);
         addDefaultStringValue(buildConfiguration, SODKeys.RECORD_VIDEO_KEY, Boolean.TRUE.toString());
         addDefaultStringValue(buildConfiguration, SODKeys.SELENIUM_URL_KEY, DEFAULT_SELENIUM_URL);
-        addDefaultStringValue(buildConfiguration, SODKeys.SSH_ENABLED_KEY, Boolean.TRUE.toString());
         addDefaultStringValue(buildConfiguration, SODKeys.SSH_LOCAL_HOST_KEY, DEFAULT_SSH_LOCAL_HOST);
         addDefaultStringValue(buildConfiguration, SODKeys.SSH_LOCAL_PORTS_KEY, DEFAULT_SSH_LOCAL_PORT);
         addDefaultStringValue(buildConfiguration, SODKeys.SSH_REMOTE_PORTS_KEY, DEFAULT_SSH_REMOTE_PORT);

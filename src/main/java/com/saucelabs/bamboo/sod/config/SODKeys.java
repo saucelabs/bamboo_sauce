@@ -42,15 +42,14 @@ public final class SODKeys
     public static final String SELENIUM_PORT_KEY = "selenium.port";
     public static final String SELENIUM_BROWSER_KEY = "selenium.browser";
 
-
     /* ENV Vars */
     public static final String SELENIUM_DRIVER_ENV = "SELENIUM_DRIVER";
     public static final String SELENIUM_HOST_ENV = "SELENIUM_HOST";
     public static final String SELENIUM_PORT_ENV = "SELENIUM_PORT";
     public static final String SELENIUM_BROWSER_ENV = "SELENIUM_BROWSER";
-    public static final String SAUCE_ONDEMAND_HOST = "SAUCE_ONDEMAND_HOST";
+    public static final String SAUCE_ONDEMAND_HOST = "SAUCE_HOST";
     public static final String SELENIUM_STARTING_URL_ENV = "SELENIUM_STARTING_URL";
-    public static final String SAUCE_CUSTOM_DATA = "sauce_bamboo_buildNumber";
+    public static final String SAUCE_CUSTOM_DATA = "SAUCE_BAMBOO_BUILDNUMBER";
 
     public static final String TEMP_ENV_VARS = CUSTOM_PREFIX + "temp.env.vars";
 
