@@ -8,6 +8,7 @@ import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.Browser;
 import com.saucelabs.bamboo.sod.BrowserFactory;
 import com.saucelabs.bamboo.sod.SODSeleniumConfiguration;
+import com.saucelabs.bamboo.sod.SeleniumVersion;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.apache.commons.lang.StringUtils;
@@ -84,6 +85,18 @@ public class DefaultVariableModifier implements VariableModifier {
      * @throws JSONException if an error occurs generating the Selenium environment variables
      */
     protected String createSeleniumEnvironmentVariables(String prefix) throws JSONException {
+        if (config.getSeleniumVersion().equals(SeleniumVersion.ONE)) {
+            return createSelenium1EnvironmentVariables(prefix);
+        } else {
+            return createSelenium2EnvironmentVariables(prefix);
+        }
+    }
+
+    private String createSelenium2EnvironmentVariables(String prefix) {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+    private String createSelenium1EnvironmentVariables(String prefix) throws JSONException {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
@@ -144,7 +157,8 @@ public class DefaultVariableModifier implements VariableModifier {
     }
 
     /**
-     * Generates a String that represents the Sauce OnDemand driver URL.
+     * Generates a String that represents the Sauce OnDemand driver URL. This is used by the
+     * <a href="http://selenium-client-factory.infradna.com/">selenium-client-factory</a> library to instantiate the Sauce-specific drivers.
      *
      * @param username
      * @param apiKey

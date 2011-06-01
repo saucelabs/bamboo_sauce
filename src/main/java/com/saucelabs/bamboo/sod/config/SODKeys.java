@@ -17,6 +17,7 @@ public final class SODKeys
     public static final String ENABLED_KEY = CUSTOM_PREFIX + "enabled";
     public static final String BROWSER_KEY = CUSTOM_PREFIX + "browser";
     public static final String SELENIUM_URL_KEY = CUSTOM_PREFIX + "selenium.url";
+    public static final String SELENIUM_VERSION_KEY = CUSTOM_PREFIX + "selenium.version";
 
     /* ADVANCED OPTIONS */
     public static final String RECORD_VIDEO_KEY = CUSTOM_PREFIX + "record-video";

@@ -1,8 +1,10 @@
 package com.saucelabs.bamboo.sod.config;
 
+import com.saucelabs.bamboo.sod.SeleniumVersion;
 import org.apache.commons.lang.math.NumberUtils;
 
 import java.util.Map;
+
 import static com.saucelabs.bamboo.sod.config.SODKeys.*;
 
 /**
@@ -192,5 +194,17 @@ public class SODMappedBuildConfiguration
     public Map<String, String> getMap()
     {
         return map;
+    }
+
+    public SeleniumVersion getSeleniumVersion() {
+        String versionNumber = map.get(SELENIUM_VERSION_KEY);
+        SeleniumVersion version = null;
+        for (SeleniumVersion storedVersion : SeleniumVersion.values()) {
+            if (storedVersion.getVersionNumber().equals(versionNumber)) {
+                version = storedVersion;
+                break;
+            }
+        }
+        return version;
     }
 }

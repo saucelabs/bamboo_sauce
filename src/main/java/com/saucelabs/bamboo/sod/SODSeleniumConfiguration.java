@@ -18,6 +18,7 @@ import java.util.List;
 public class SODSeleniumConfiguration
 {
     private static final Logger logger = Logger.getLogger(SODSeleniumConfiguration.class);
+
     private String username;
     private String accessKey;
     private Browser browser;

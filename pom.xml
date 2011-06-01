@@ -48,7 +48,7 @@
                 <configuration>
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
-                    <!-- The Atlassian SDK doesn't seem to include sub-dependencies, so we have to 
+                    <!-- The Atlassian SDK doesn't seem to include sub-dependencies, so we have to
                     explictly include them here -->
                     <libArtifacts>
                         <libArtifact>
@@ -174,8 +174,8 @@
         <!-- Selenium 2 -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium</artifactId>
-            <version>2.0a5</version>
+            <artifactId>selenium-server</artifactId>
+            <version>2.0b3</version>
         </dependency>
     </dependencies>
     <repositories>
