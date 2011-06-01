@@ -21,7 +21,9 @@ public class DummySelenium2Test {
     public void setUp() throws Exception {
         DesiredCapabilities capabillities = new DesiredCapabilities(
                 "firefox", "3.6.", Platform.WINDOWS);
-        capabillities.setCapability("name", "Hello, Sauce OnDemand!");
+        capabillities.setCapability("name", "Selenium 2 Test");
+        capabillities.setCapability("username","rossco_9_9");
+        capabillities.setCapability("access-key","44f0744c-1689-4418-af63-560303cbb37b");
         driver = new RemoteWebDriver(
                 new URL("http://rossco_9_9:44f0744c-1689-4418-af63-560303cbb37b@ondemand.saucelabs.com:80/wd/hub"),
                 capabillities);

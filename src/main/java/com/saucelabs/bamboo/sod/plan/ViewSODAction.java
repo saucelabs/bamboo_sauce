@@ -64,11 +64,11 @@ public class ViewSODAction extends ViewBuildResults {
             //check custom data to find job that was for build
             JSONObject jobData = jobResults.getJSONObject(i);
 
-            if (!jobData.isNull("tags")) {
+            if (!jobData.isNull("build")) {
 //                JSONObject customData = (JSONObject) jobData.get("custom-data");
-//                String buildResultKey = jobData.getString("build");
-                String tags = jobData.getString("tags");
-                if (tags.indexOf(getResultsSummary().getBuildResultKey()) != -1) {
+                String buildResultKey = jobData.getString("build");
+//                String tags = jobData.getString("tags");
+                if (buildResultKey.equals(getResultsSummary().getBuildResultKey())) {
                     jobId = jobData.getString("id");
                     Date now = new Date();
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);

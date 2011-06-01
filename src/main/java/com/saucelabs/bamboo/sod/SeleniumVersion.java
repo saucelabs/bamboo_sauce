@@ -4,7 +4,7 @@ package com.saucelabs.bamboo.sod;
  * @author Ross Rowe
  */
 public enum SeleniumVersion {
-    ONE("1"), TWO("2");
+    ONE("1.x"), TWO("2.x");
     private String versionNumber;
 
     SeleniumVersion(String versionNumber) {

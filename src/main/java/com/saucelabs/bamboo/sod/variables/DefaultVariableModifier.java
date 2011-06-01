@@ -25,7 +25,7 @@ public class DefaultVariableModifier implements VariableModifier {
 
     protected static final String EQUALS = "=\"";
 
-    protected static final String CUSTOM_DATA = "sauce:job-tags=%3$s";
+    protected static final String CUSTOM_DATA = "sauce:job-info={\'build\': \'%3$s\'}";
 
     protected SODMappedBuildConfiguration config;
     protected AdministrationConfigurationManager administrationConfigurationManager;

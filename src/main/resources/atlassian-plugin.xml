@@ -78,7 +78,7 @@
         <link linkId="sauceOnDemandConfig">/admin/sauceondemand/configureSauceOnDemand.action</link>
     </web-item>
     
-    <web-item key="sodPlanDetails" name="sauce" section="chainResults.subMenu/chainResults" weight="10">
+    <web-item key="sodPlanDetails" name="sauce" section="chainResults.subMenu/chainResults" weight="50">
         <description key="sodPlanDetails.desc">Provides details of the Sauce OnDemand results</description>
         <label key="Sauce OnDemand Results" />
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>
@@ -87,7 +87,7 @@
         </condition>
     </web-item>
 
-     <web-item key="sodResultsDetails" name="sauce" section="results.subMenu/results" weight="10">
+     <web-item key="sodResultsDetails" name="sauce" section="results.subMenu/results" weight="50">
         <description key="sodPlanDetails.desc">Provides details of the Sauce OnDemand results</description>
         <label key="Sauce OnDemand Results" />
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>

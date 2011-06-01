@@ -12,7 +12,7 @@
             </span>
         </div>
         [@ww.select label='Selenium Version' name='custom.sauceondemand.selenium.version'
-                list="{'1', '2'}" description='The version of Selenium that will be run'/]
+                list="{'1.x', '2.x'}" description='The version of Selenium that will be run'/]
         [@ww.select label="Browser" description="The OS/Browser combination to use for testing" name="custom.sauceondemand.browser" listKey="key" listValue="name" list=browserList /]<br clear="all" />
         [@ww.textfield name='custom.sauceondemand.max-duration' label='Max Duration' description='The maximum time (in seconds) allotted to run tests' /]<br clear="all"/>
         [@ww.textfield name='custom.sauceondemand.idle-timeout' label='Idle Timeout' description='The maximum time (in seconds) for a test to wait for a command' /]<br clear="all"/>
