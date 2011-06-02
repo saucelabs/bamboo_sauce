@@ -26,7 +26,7 @@ this.selenium.setContext(bambooData);
         </div>
         [/@ui.bambooSection]
 
-        [@ui.bambooSection title='Variables for use with SeleniumFactory']
+        [@ui.bambooSection title='Variables for use with <a href="http://selenium-client-factory.infradna.com/">SeleniumFactory</a>']
         <div class="helpTextArea">
             <strong>SELENIUM_DRIVER</strong> - Auto-discovered by SeleniumFactory to configure Sauce OnDemand<br/><br/>
             <strong>SELENIUM_URL</strong> - The initial URL to load when the test begins (auto-discovered)<br/><br/>

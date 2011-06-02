@@ -86,6 +86,11 @@
                             <artifactId>json</artifactId>
                             <version>20080701</version>
                         </libArtifact>
+                        <libArtifact>
+                            <groupId>org.seleniumhq.selenium</groupId>
+                            <artifactId>selenium-api</artifactId>
+                            <version>2.0b3</version>
+                        </libArtifact>
                     </libArtifacts>
                 </configuration>
             </plugin>
@@ -127,6 +132,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20080701</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>2.0b3</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

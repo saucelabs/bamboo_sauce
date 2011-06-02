@@ -7,6 +7,7 @@ import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
+import com.saucelabs.bamboo.sod.SeleniumVersion;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
 import com.saucelabs.bamboo.sod.Browser;
@@ -63,6 +64,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private static final String DEFAULT_SSH_LOCAL_PORT = "8080";
     private static final String DEFAULT_SSH_REMOTE_PORT = "80";
     private static final String DEFAULT_SSH_DOMAIN = "AUTO";
+    private static final String DEFAULT_SELENIUM_VERSION = SeleniumVersion.TWO.getVersionNumber();
 
     @NotNull
     public BuildContext call() throws IOException {
@@ -140,6 +142,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         }
         addDefaultNumberValue(buildConfiguration, SODKeys.MAX_DURATION_KEY, DEFAULT_MAX_DURATION);
         addDefaultNumberValue(buildConfiguration, SODKeys.IDLE_TIMEOUT_KEY, DEFAULT_IDLE_TIMEOUT);
+        addDefaultStringValue(buildConfiguration, SODKeys.SELENIUM_VERSION_KEY, DEFAULT_SELENIUM_VERSION);
         addDefaultStringValue(buildConfiguration, SODKeys.RECORD_VIDEO_KEY, Boolean.TRUE.toString());
         addDefaultStringValue(buildConfiguration, SODKeys.SELENIUM_URL_KEY, DEFAULT_SELENIUM_URL);
         addDefaultStringValue(buildConfiguration, SODKeys.SSH_LOCAL_HOST_KEY, DEFAULT_SSH_LOCAL_HOST);

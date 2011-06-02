@@ -7,7 +7,6 @@ package com.saucelabs.bamboo.sod.config;
  */
 public final class SODKeys
 {
-
     /** Disallow instantiation of class.*/
     private SODKeys() {}
     public static final String CUSTOM_PREFIX = "custom.sauceondemand.";
@@ -48,6 +47,8 @@ public final class SODKeys
     public static final String SELENIUM_HOST_ENV = "SELENIUM_HOST";
     public static final String SELENIUM_PORT_ENV = "SELENIUM_PORT";
     public static final String SELENIUM_BROWSER_ENV = "SELENIUM_BROWSER";
+    public static final String SELENIUM_PLATFORM_ENV = "SELENIUM_PLATFORM";
+    public static final String SELENIUM_VERSION_ENV = "SELENIUM_VERSION";
     public static final String SAUCE_ONDEMAND_HOST = "SAUCE_HOST";
     public static final String SELENIUM_STARTING_URL_ENV = "SELENIUM_STARTING_URL";
     public static final String SAUCE_CUSTOM_DATA = "SAUCE_BAMBOO_BUILDNUMBER";

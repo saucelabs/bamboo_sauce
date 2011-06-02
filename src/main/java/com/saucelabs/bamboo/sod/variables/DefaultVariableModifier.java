@@ -25,7 +25,8 @@ public class DefaultVariableModifier implements VariableModifier {
 
     protected static final String EQUALS = "=\"";
 
-    protected static final String CUSTOM_DATA = "sauce:job-info={\'build\': \'%3$s\'}";
+    protected static final String CUSTOM_DATA = "sauce:job-tags=%3$s";
+//    protected static final String CUSTOM_DATA = "sauce:job-info={\'build\': \'%3$s\'}";
 
     protected SODMappedBuildConfiguration config;
     protected AdministrationConfigurationManager administrationConfigurationManager;
@@ -70,7 +71,6 @@ public class DefaultVariableModifier implements VariableModifier {
     }
 
     /**
-     *
      * @return
      * @throws JSONException
      */
@@ -79,7 +79,6 @@ public class DefaultVariableModifier implements VariableModifier {
     }
 
     /**
-     *
      * @param prefix Prefix for each environment variable (eg '-D'), can be null
      * @return String representing the set of environment variables to apply
      * @throws JSONException if an error occurs generating the Selenium environment variables
@@ -93,23 +92,42 @@ public class DefaultVariableModifier implements VariableModifier {
     }
 
     private String createSelenium2EnvironmentVariables(String prefix) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+
+        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+        StringBuilder envBuffer = new StringBuilder();
+        createCommonEnvironmentVariables(prefix, envBuffer, adminConfig);
+        Browser browser = sauceBrowserFactory.forKey(config.getBrowserKey());
+        //DefaultCapabilities information
+        if (browser != null) {
+            envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append('=').append(browser.getPlatform().toString());
+            envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append('=').append(browser.getBrowserName());
+            envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_VERSION_ENV).append('=').append(browser.getBrowserName());
+        }
+        return envBuffer.toString();
     }
 
     private String createSelenium1EnvironmentVariables(String prefix) throws JSONException {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
+        String browserJson = getSodJson(sodUsername, sodKey, config);
+        String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
+        StringBuilder envBuffer = new StringBuilder();
+        createCommonEnvironmentVariables(prefix, envBuffer, adminConfig);
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
+        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
+        return envBuffer.toString();
+    }
+
+    private void createCommonEnvironmentVariables(String prefix, StringBuilder envBuffer, AdministrationConfiguration adminConfig) {
+
+        String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
+        String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
+        config.setTempUsername(sodUsername);
+        config.setTempApikey(sodKey);
         String host = adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY);
         String port = adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY);
         String browserUrl = config.getSeleniumStartingUrl();
-        String browserJson = getSodJson(sodUsername, sodKey, config);
-        String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
-
-        config.setTempUsername(sodUsername);
-        config.setTempApikey(sodKey);
-
-        StringBuilder envBuffer = new StringBuilder();
 
         String sodHost = config.getSshDomains();
         String finalStartingUrl = browserUrl;
@@ -121,10 +139,8 @@ public class DefaultVariableModifier implements VariableModifier {
 
         envBuffer.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
         envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
-        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
         envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
         envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
-        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
 
         if (buildContext.getParentBuildContext() == null) {
             envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
@@ -133,11 +149,9 @@ public class DefaultVariableModifier implements VariableModifier {
             envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
                     String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey())).append('"');
         }
-        return envBuffer.toString();
     }
 
     /**
-     *
      * @param username
      * @param apiKey
      * @param config
@@ -164,7 +178,7 @@ public class DefaultVariableModifier implements VariableModifier {
      * @param apiKey
      * @param config
      * @param config
-     * @return String repreenting the Sauce OnDemand driver URI
+     * @return String representing the Sauce OnDemand driver URI
      */
     protected String getSodDriverUri(String username, String apiKey, SODMappedBuildConfiguration config) {
         StringBuilder sb = new StringBuilder("sauce-ondemand:?username=");
