@@ -22,15 +22,13 @@ public class DummySelenium2Test {
         DesiredCapabilities capabillities = new DesiredCapabilities(
                 "firefox", "3.6.", Platform.WINDOWS);
         capabillities.setCapability("name", "Selenium 2 Test");
-        capabillities.setCapability("username","rossco_9_9");
-        capabillities.setCapability("access-key","44f0744c-1689-4418-af63-560303cbb37b");
         driver = new RemoteWebDriver(
                 new URL("http://rossco_9_9:44f0744c-1689-4418-af63-560303cbb37b@ondemand.saucelabs.com:80/wd/hub"),
                 capabillities);
     }
 
     @Test
-    public void run() throws Exception {
+    public void invokeGoogle() throws Exception {
         driver.get("http://www.google.com");
         WebElement search = driver.findElement(By.name("q"));
         search.sendKeys("Hello, WebDriver");

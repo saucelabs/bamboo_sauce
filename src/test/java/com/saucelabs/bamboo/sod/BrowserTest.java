@@ -11,13 +11,12 @@ import static org.junit.Assert.assertEquals;
 public class BrowserTest {
 	@Test
 	public void osNames() throws Exception {
-
-        Platform platform = Platform.extractFromSysProperty("Windows 2008");
-        assertEquals("Platform is not Windows", platform, Platform.WINDOWS);
-        platform = Platform.extractFromSysProperty("Windows 2003");
-        assertEquals("Platform is not Windows", platform, Platform.WINDOWS);
-        platform = Platform.extractFromSysProperty("Linux");
-        assertEquals("Platform is not Linux", platform, Platform.LINUX);
+        Browser browser = new Browser(null, "Windows 2008", null, null, null);
+        assertEquals("Platform is not Windows", browser.getPlatform(), Platform.VISTA);
+        browser = new Browser(null, "Windows 2003", null, null, null);
+        assertEquals("Platform is not Windows", browser.getPlatform(), Platform.XP);
+        browser = new Browser(null, "Linux", null, null, null);
+        assertEquals("Platform is not Linux", browser.getPlatform(), Platform.LINUX);
 
 	}
 }

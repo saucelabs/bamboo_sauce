@@ -111,15 +111,23 @@ public class DefaultVariableModifier implements VariableModifier {
         String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
         String browserJson = getSodJson(sodUsername, sodKey, config);
-        String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
+
         StringBuilder envBuffer = new StringBuilder();
         createCommonEnvironmentVariables(prefix, envBuffer, adminConfig);
         envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
-        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
         return envBuffer.toString();
     }
 
-    private void createCommonEnvironmentVariables(String prefix, StringBuilder envBuffer, AdministrationConfiguration adminConfig) {
+    /**
+     * Writes the following environment variables to the <code>stringBuilder</code>:
+     * <ul>
+     * <li></li> 
+     * </ul>
+     * @param prefix
+     * @param stringBuilder
+     * @param adminConfig
+     */
+    private void createCommonEnvironmentVariables(String prefix, StringBuilder stringBuilder, AdministrationConfiguration adminConfig) {
 
         String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
@@ -128,6 +136,7 @@ public class DefaultVariableModifier implements VariableModifier {
         String host = adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY);
         String port = adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY);
         String browserUrl = config.getSeleniumStartingUrl();
+        String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
 
         String sodHost = config.getSshDomains();
         String finalStartingUrl = browserUrl;
@@ -137,16 +146,17 @@ public class DefaultVariableModifier implements VariableModifier {
             finalStartingUrl = "http://" + sodHost + ':' + config.getSshTunnelPorts() + '/';
         }
 
-        envBuffer.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
-        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
-        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
-        envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
+        stringBuilder.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
 
         if (buildContext.getParentBuildContext() == null) {
-            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
                     String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey())).append('"');
         } else {
-            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
                     String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey())).append('"');
         }
     }
