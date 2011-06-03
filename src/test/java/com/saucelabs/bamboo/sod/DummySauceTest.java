@@ -34,7 +34,7 @@ public class DummySauceTest {
                 "\"browser-version\": \"3.6.\"," +
                 "\"name\": \"This is an example test\"}",
                 "http://example.saucelabs.com/");
-//        System.setProperty(SODKeys.SAUCE_CUSTOM_DATA, DUMMY_BUILD_DATA);
+        System.setProperty(SODKeys.SAUCE_CUSTOM_DATA, DUMMY_BUILD_DATA);
         String bambooData = System.getProperty(SODKeys.SAUCE_CUSTOM_DATA);
         selenium.start();
         this.selenium.setContext(bambooData);
@@ -42,7 +42,6 @@ public class DummySauceTest {
     }
 
     @Test
-    @Ignore
     public void sauce() throws Exception {
         this.selenium.open("/");
         assertEquals("Cross browser testing with Selenium - Sauce Labs",

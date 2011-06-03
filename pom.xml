@@ -133,11 +133,6 @@
             <artifactId>json</artifactId>
             <version>20080701</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.seleniumhq.selenium</groupId>-->
-            <!--<artifactId>selenium-api</artifactId>-->
-            <!--<version>2.0b3</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -174,13 +169,6 @@
             <version>4.6</version>
             <scope>test</scope>
         </dependency>
-        <!--Selenium 1 -->
-        <!--<dependency>-->
-            <!--<groupId>org.seleniumhq.selenium.client-drivers</groupId>-->
-            <!--<artifactId>selenium-java-client-driver</artifactId>-->
-            <!--<version>1.0.2</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
         <!-- Selenium 2 -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
