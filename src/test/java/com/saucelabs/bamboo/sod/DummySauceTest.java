@@ -38,7 +38,7 @@ public class DummySauceTest {
 
         String bambooData = System.getProperty(SODKeys.SAUCE_CUSTOM_DATA);
         if (bambooData == null || bambooData.equals("")) {
-            System.setProperty(SODKeys.SAUCE_CUSTOM_DATA, DUMMY_BUILD_DATA);
+            bambooData = DUMMY_BUILD_DATA;
         }
         selenium.start();
         this.selenium.setContext(bambooData);
