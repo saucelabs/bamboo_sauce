@@ -36,7 +36,7 @@ public class DummySauceTest {
                 "http://example.saucelabs.com/");
 
 
-        String bambooData = System.getProperty(SODKeys.SAUCE_CUSTOM_DATA);
+        String bambooData = System.getenv(SODKeys.SAUCE_CUSTOM_DATA);
         if (bambooData == null || bambooData.equals("")) {
             bambooData = DUMMY_BUILD_DATA;
         }
