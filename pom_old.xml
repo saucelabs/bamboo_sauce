@@ -81,6 +81,18 @@
             <version>1.0</version>
         </dependency>
         <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>1.4</version>
+        <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                    <version>r05</version>
+                    <scope>provided</scope>
+                    </dependency>
+        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20080701</version>
