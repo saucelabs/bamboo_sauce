@@ -1,23 +1,22 @@
 package it.com.saucelabs.bamboo.sod;
 
-import com.atlassian.bamboo.results.BuildResults;
+
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.action.BuildConfigurator;
-import com.saucelabs.bamboo.sod.action.SSHTunnelCloser;
+
 import com.saucelabs.bamboo.sod.util.SauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestCase;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.saucelabs.selenium.client.factory.SeleniumFactory;
+import com.thoughtworks.selenium.Selenium;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.After;
-import com.atlassian.selenium.SeleniumClient;
+
 import org.junit.BeforeClass;
 
-import static com.atlassian.selenium.browsers.AutoInstallClient.seleniumClient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,9 +25,7 @@ import static org.mockito.Mockito.when;
  *
  * @author Ross Rowe
  */
-public class IntegrationTestHelper {
-    
-    //protected DefaultSelenium selenium;
+public class IntegrationTestHelper {        
     
     private static SauceTunnelManager sauceTunnelManager;
     
@@ -62,11 +59,11 @@ public class IntegrationTestHelper {
         } 
     }
 
-    protected SeleniumClient selenium;
+    protected Selenium selenium;
 
     @Before
     public void setUp() throws Exception {
-        selenium = seleniumClient();
+        selenium = SeleniumFactory.create();
        
         //selenium = new DefaultSelenium("ondemand.saucelabs.com",
         //        80, generateStartCommand(properties), "http://localhost:8085/");

@@ -1,15 +1,10 @@
 package it.com.saucelabs.bamboo.sod;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Ignore;
+
 import org.junit.Test;
+
 import static org.junit.Assert.assertTrue;
-import com.atlassian.selenium.SeleniumClient;
-import static com.atlassian.selenium.browsers.AutoInstallClient.seleniumClient;
-import static org.junit.Assert.assertTrue;
+
 
 public class AdministrationTest extends IntegrationTestHelper {
 
