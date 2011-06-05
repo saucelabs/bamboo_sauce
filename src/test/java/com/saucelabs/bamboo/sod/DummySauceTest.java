@@ -34,8 +34,12 @@ public class DummySauceTest {
                 "\"browser-version\": \"3.6.\"," +
                 "\"name\": \"This is an example test\"}",
                 "http://example.saucelabs.com/");
-        System.setProperty(SODKeys.SAUCE_CUSTOM_DATA, DUMMY_BUILD_DATA);
+
+
         String bambooData = System.getProperty(SODKeys.SAUCE_CUSTOM_DATA);
+        if (bambooData == null || bambooData.equals("")) {
+            System.setProperty(SODKeys.SAUCE_CUSTOM_DATA, DUMMY_BUILD_DATA);
+        }
         selenium.start();
         this.selenium.setContext(bambooData);
 
