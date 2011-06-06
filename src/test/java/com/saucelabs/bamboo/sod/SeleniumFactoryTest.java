@@ -39,7 +39,7 @@ public class SeleniumFactoryTest {
 //        for (Map.Entry envVar : envVars.entrySet()) {
 //            System.out.println(envVar.getKey() + " : " + envVar.getValue());
 //        }
-        String bambooData = System.getenv(SODKeys.SAUCE_CUSTOM_DATA_ENV);
+        String bambooData = System.getenv(SODKeys.BAMBOO_BUILD_NUMBER_ENV);
         if (bambooData == null || bambooData.equals("")) {
             bambooData = DUMMY_BUILD_DATA;
         }
