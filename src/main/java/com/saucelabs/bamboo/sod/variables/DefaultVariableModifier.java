@@ -148,7 +148,7 @@ public class DefaultVariableModifier implements VariableModifier {
         String sodHost = config.getSshDomains();
         String finalStartingUrl = browserUrl;
 
-        if (config.isAutoDomain()) {
+        if (config.isSshEnabled && config.isAutoDomain()) {
             sodHost = "bamboo-" + buildContext.getPlanKey() + ".bamboo";
             finalStartingUrl = "http://" + sodHost + ':' + config.getSshTunnelPorts() + '/';
         }
