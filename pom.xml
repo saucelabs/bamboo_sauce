@@ -133,11 +133,13 @@
             <artifactId>joda-time</artifactId>
             <version>1.6</version>
         </dependency>
+        <!-- Version 2.0 has not been deployed to a Maven repository yet, so it must be built and installed from source via git@github.com:infradna/saucerest-java.git-->
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce-rest-api</artifactId>
-            <version>1.0</version>
+            <version>1.5</version>
         </dependency>
+        <!-- TODO restore this dependency once we have deployed sauce-connect to a Maven repository-->
         <!--dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce-connect</artifactId>
@@ -196,6 +198,7 @@
             <artifactId>selenium-api</artifactId>
             <version>2.0b3</version>
         </dependency>
+        <!-- Version 2.0 has not been deployed to a Maven repository yet, so it must be built and installed from source via git@github.com:infradna/selenium-client-factory.git-->
         <dependency>
             <groupId>com.saucelabs.selenium</groupId>
             <artifactId>sauce-ondemand-driver</artifactId>
