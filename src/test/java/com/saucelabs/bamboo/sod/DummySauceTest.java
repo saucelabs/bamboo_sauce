@@ -2,19 +2,18 @@ package com.saucelabs.bamboo.sod;
 
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.thoughtworks.selenium.DefaultSelenium;
-
-import static org.junit.Assert.assertEquals;
-
+import com.thoughtworks.selenium.Selenium;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Ross Rowe
  */
 public class DummySauceTest {
-    private DefaultSelenium selenium;
+    private Selenium selenium;
     private static final String DUMMY_CUSTOM_DATA = "sauce:job-info={\"custom-data\": {\"bamboo-buildKey\": \"TEST_PLAN\", \"bamboo-buildNumber\": \"1\", \"bamboo-buildResultKey\": \"TST\"}";
 
     private static final String DUMMY_TAG_DATA ="sauce:job-tags=BSAD-TRUNK-14";
@@ -36,7 +35,7 @@ public class DummySauceTest {
                 "http://example.saucelabs.com/");
 
 
-        String bambooData = System.getenv(SODKeys.SAUCE_CUSTOM_DATA);
+        String bambooData = System.getenv(SODKeys.SAUCE_CUSTOM_DATA_ENV);
         if (bambooData == null || bambooData.equals("")) {
             bambooData = DUMMY_BUILD_DATA;
         }

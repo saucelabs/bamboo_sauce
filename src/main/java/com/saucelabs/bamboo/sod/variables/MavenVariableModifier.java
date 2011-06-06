@@ -1,21 +1,14 @@
 package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.build.BuildDefinition;
-import com.atlassian.bamboo.builder.AbstractMavenBuilder;
-import com.atlassian.bamboo.configuration.AdministrationConfiguration;
-import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.saucelabs.bamboo.sod.BrowserFactory;
-import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
-import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
 
 /**
  * @author Ross Rowe
  */
 public class MavenVariableModifier extends DefaultVariableModifier {
-    
+
     public MavenVariableModifier(SODMappedBuildConfiguration config, BuildDefinition definition, BuildContext buildContext) {
         super(config, definition, buildContext);
     }
@@ -81,10 +74,10 @@ public class MavenVariableModifier extends DefaultVariableModifier {
 ////        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV_LEGACY).append(EQUALS).append(sodDriverURI).append('"');
 ////
 ////        if (buildContext.getParentBuildContext() == null) {
-////            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+////            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA_ENV).append(EQUALS).append(
 ////                    String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey())).append('"');
 ////        } else {
-////            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
+////            envBuffer.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA_ENV).append(EQUALS).append(
 ////                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey())).append('"');
 ////        }
 //        envBuffer.append("\"");

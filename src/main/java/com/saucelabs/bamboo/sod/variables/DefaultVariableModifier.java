@@ -25,8 +25,7 @@ public class DefaultVariableModifier implements VariableModifier {
 
     protected static final String EQUALS = "=\"";
 
-    protected static final String CUSTOM_DATA = "sauce:job-build=%3$s";
-//    protected static final String CUSTOM_DATA = "sauce:job-info={\'build\': \'%3$s\'}";
+    protected static final String CUSTOM_DATA = "sauce:job-build=%1$s";
 
     protected SODMappedBuildConfiguration config;
     protected AdministrationConfigurationManager administrationConfigurationManager;
@@ -94,16 +93,17 @@ public class DefaultVariableModifier implements VariableModifier {
     private String createSelenium2EnvironmentVariables(String prefix) {
 
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
-        StringBuilder envBuffer = new StringBuilder();
-        createCommonEnvironmentVariables(prefix, envBuffer, adminConfig);
+        StringBuilder stringBuilder = new StringBuilder();
+        createCommonEnvironmentVariables(prefix, stringBuilder, adminConfig);
         Browser browser = sauceBrowserFactory.forKey(config.getBrowserKey());
         //DefaultCapabilities information
         if (browser != null) {
-            envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append('=').append(browser.getPlatform().toString());
-            envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append('=').append(browser.getBrowserName());
-            envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_VERSION_ENV).append('=').append(browser.getBrowserName());
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append('=').append(browser.getPlatform().toString());
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append('=').append(browser.getBrowserName());
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_VERSION_ENV).append('=').append(browser.getBrowserName());
         }
-        return envBuffer.toString();
+
+        return stringBuilder.toString();
     }
 
     private String createSelenium1EnvironmentVariables(String prefix) throws JSONException {
@@ -112,16 +112,23 @@ public class DefaultVariableModifier implements VariableModifier {
         String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
         String browserJson = getSodJson(sodUsername, sodKey, config);
 
-        StringBuilder envBuffer = new StringBuilder();
-        createCommonEnvironmentVariables(prefix, envBuffer, adminConfig);
-        envBuffer.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
-        return envBuffer.toString();
+        StringBuilder stringBuilder = new StringBuilder();
+        createCommonEnvironmentVariables(prefix, stringBuilder, adminConfig);
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
+        if (buildContext.getParentBuildContext() == null) {
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA_ENV).append(EQUALS).append(
+                    String.format(CUSTOM_DATA, buildContext.getBuildResultKey())).append('"');
+        } else {
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA_ENV).append(EQUALS).append(
+                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getBuildResultKey())).append('"');
+        }
+        return stringBuilder.toString();
     }
 
     /**
      * Writes the following environment variables to the <code>stringBuilder</code>:
      * <ul>
-     * <li></li> 
+     * <li></li>
      * </ul>
      * @param prefix
      * @param stringBuilder
@@ -151,13 +158,10 @@ public class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
-
         if (buildContext.getParentBuildContext() == null) {
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
-                    String.format(CUSTOM_DATA, buildContext.getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getBuildResultKey())).append('"');
+            stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
         } else {
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA).append(EQUALS).append(
-                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getPlanKey(), Integer.toString(buildContext.getBuildNumber()), buildContext.getParentBuildContext().getBuildResultKey())).append('"');
+            stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getParentBuildContext().getBuildResultKey()).append('"');
         }
     }
 
