@@ -14,10 +14,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Handles invoking the Sauce REST API to retrieve the list of valid Browsers.  The list of browser is cached for
@@ -26,13 +23,17 @@ import java.util.Map;
  * @author Ross Rowe
  */
 public class BrowserFactory {
-    
+
     private static final Logger logger = Logger.getLogger(BrowserFactory.class);
-    
+
     public static final String BROWSER_URL = "http://saucelabs.com/rest/v1/info/browsers";
+
+
 
     private Map<String, Browser> lookup = new HashMap<String, Browser>();
     private Timestamp lastLookup = null;
+    private static final String IEHTA = "iehta";
+    private static final String CHROME = "chrome";
 
     public BrowserFactory() {
         try {
@@ -78,13 +79,17 @@ public class BrowserFactory {
      * @return
      * @throws JSONException
      */
-    private List<Browser> getBrowserListFromJson(String browserListJson) throws JSONException {
+    public List<Browser> getBrowserListFromJson(String browserListJson) throws JSONException {
         List<Browser> browsers = new ArrayList<Browser>();
 
         JSONArray browserArray = new JSONArray(browserListJson);
         for (int i = 0; i < browserArray.length(); i++) {
             JSONObject browserObject = browserArray.getJSONObject(i);
             String seleniumName = browserObject.getString("selenium_name");
+            if (seleniumName.equals(IEHTA) || seleniumName.equals(CHROME)) {
+                //exclude these browsers from the list, as they replicate iexplore and firefox
+                continue;
+            }
             String longName = browserObject.getString("long_name");
             String longVersion = browserObject.getString("long_version");
             String osName = browserObject.getString("os");
@@ -93,6 +98,7 @@ public class BrowserFactory {
             String label = osName + " " + longName + " " + longVersion;
             browsers.add(new Browser(browserKey, osName, seleniumName, shortVersion, label));
         }
+        Collections.sort(browsers);
         return browsers;
     }
 
