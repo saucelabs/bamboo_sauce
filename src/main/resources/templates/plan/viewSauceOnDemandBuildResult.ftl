@@ -5,7 +5,7 @@
     <meta name="tab" content="sauce"/>
 </head>
 <body>
-[@cp.resultsSubMenu selectedTab='sauce' /]
+[#--@cp.resultsSubMenu selectedTab='sauce' /--]
 
 
 [#if jobId?has_content ]

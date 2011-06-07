@@ -5,6 +5,7 @@ import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Map;
@@ -36,10 +37,10 @@ public class DummySauceTest {
                 "\"name\": \"This is an example test\"}",
                 "http://example.saucelabs.com/");
 
-        Map<String, String> envVars = System.getenv();
-        for (Map.Entry envVar : envVars.entrySet()) {
-            System.out.println(envVar.getKey() + " : " + envVar.getValue());
-        }
+//        Map<String, String> envVars = System.getenv();
+//        for (Map.Entry envVar : envVars.entrySet()) {
+//            System.out.println(envVar.getKey() + " : " + envVar.getValue());
+//        }
         String bambooData = System.getenv(SODKeys.SAUCE_CUSTOM_DATA_ENV);
         if (bambooData == null || bambooData.equals("")) {
             bambooData = DUMMY_BUILD_DATA;
@@ -50,6 +51,7 @@ public class DummySauceTest {
     }
 
     @Test
+    @Ignore
     public void sauce() throws Exception {
         this.selenium.open("/");
         assertEquals("Cross browser testing with Selenium - Sauce Labs",
