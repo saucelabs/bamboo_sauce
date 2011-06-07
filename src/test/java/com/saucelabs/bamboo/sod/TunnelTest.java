@@ -72,14 +72,8 @@ public class TunnelTest extends AbstractTestHelper {
                 tunnel.connect(80,"localhost",connector.getLocalPort());
             }
 
-
-//            SauceTunnelFactory tunnelFactory = new SauceTunnelFactory(c);
-//            SauceTunnel t = tunnelFactory.create("test" + code + ".org");
-//            t.waitUntilRunning(90000);
-            assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());
-            tunnel.connect(80, "localhost", connector.getLocalPort());
+            assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());           
             System.out.println("tunnel established");
-
 
             try {
                 String driver = System.getenv("SELENIUM_DRIVER");
@@ -89,7 +83,7 @@ public class TunnelTest extends AbstractTestHelper {
 
                 String url = System.getenv("SELENIUM_STARTING_URL");
                 if (url == null || url.equals("")) {
-                    System.setProperty("SELENIUM_STARTING_URL", "http://www.google.com");
+                    System.setProperty("SELENIUM_STARTING_URL", "http://test" + code + ".org/");
                 }
                 Selenium selenium = SeleniumFactory.create();
                 selenium.start();
@@ -98,6 +92,7 @@ public class TunnelTest extends AbstractTestHelper {
                 assertEquals("test" + code, selenium.getTitle());
                 selenium.stop();
             } finally {
+                tunnel.disconnectAll();
                 tunnel.destroy();
             }
         } finally {
