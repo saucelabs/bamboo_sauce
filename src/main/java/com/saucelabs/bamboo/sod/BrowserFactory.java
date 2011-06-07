@@ -53,6 +53,8 @@ public class BrowserFactory {
         } else {
             browsers = new ArrayList<Browser>(lookup.values());
         }
+        Collections.sort(browsers);
+
         return browsers;
     }
 
@@ -98,7 +100,6 @@ public class BrowserFactory {
             String label = osName + " " + longName + " " + longVersion;
             browsers.add(new Browser(browserKey, osName, seleniumName, shortVersion, label));
         }
-        Collections.sort(browsers);
         return browsers;
     }
 
