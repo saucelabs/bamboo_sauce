@@ -15,10 +15,9 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author Ross Rowe
  */
-public class SeleniumFactoryTest {
+public class SeleniumFactoryTest extends AbstractTestHelper {
     private Selenium selenium;
     private static final String DUMMY_BUILD_DATA ="BSAD-TRUNK-14";
-    private static final String DEFAULT_SAUCE_DRIVER = "sauce-ondemand:?max-duration=30&os=Linux&browser=firefox&browser-version=3.";
 
     @Before
     public void setUp() throws Exception {
@@ -45,7 +44,7 @@ public class SeleniumFactoryTest {
         }
         selenium.start();
         SauceOnDemandSelenium sauce = (SauceOnDemandSelenium) selenium;
-        sauce.setBuildNumber(bambooData);                
+        sauce.setBuildNumber(bambooData);
 
     }
 

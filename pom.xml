@@ -128,11 +128,7 @@
         </plugins>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>1.6</version>
-        </dependency>
+        <!-- Plugin Dependencies-->
         <!-- Version 2.0 has not been deployed to a Maven repository yet, so it must be built and installed from source via git@github.com:infradna/saucerest-java.git-->
         <dependency>
             <groupId>com.saucelabs</groupId>
@@ -150,6 +146,12 @@
             <artifactId>json</artifactId>
             <version>20080701</version>
         </dependency>
+         <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>2.0b3</version>
+        </dependency>
+        <!-- Dependencies included with Bamboo -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -174,6 +176,7 @@
             <version>${bamboo.version}</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Test Dependencies-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
@@ -186,23 +189,23 @@
             <version>4.6</version>
             <scope>test</scope>
         </dependency>
-        <!-- Selenium 2 -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-remote-control</artifactId>
             <version>2.0b3</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <version>2.0b3</version>
-        </dependency>
         <!-- Version 2.0 has not been deployed to a Maven repository yet, so it must be built and installed from source via git@github.com:infradna/selenium-client-factory.git-->
         <dependency>
             <groupId>com.saucelabs.selenium</groupId>
             <artifactId>sauce-ondemand-driver</artifactId>
             <version>2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty</artifactId>
+            <version>7.2.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
