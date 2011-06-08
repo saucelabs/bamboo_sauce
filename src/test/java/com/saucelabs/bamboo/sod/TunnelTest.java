@@ -75,6 +75,7 @@ public class TunnelTest extends AbstractTestHelper {
             assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());           
             System.out.println("tunnel established");
 
+            String originalUrl = System.getenv("SELENIUM_STARTING_URL");
             try {
                 String driver = System.getenv("SELENIUM_DRIVER");
                 if (driver == null || driver.equals("")) {
@@ -91,6 +92,10 @@ public class TunnelTest extends AbstractTestHelper {
             } finally {
                 tunnel.disconnectAll();
                 tunnel.destroy();
+                if (originalUrl != null && !originalUrl.equals("")) {
+                     System.setProperty("SELENIUM_STARTING_URL", originalUrl);
+                } 
+} 
             }
         } finally {
             server.stop();
