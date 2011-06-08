@@ -81,10 +81,7 @@ public class TunnelTest extends AbstractTestHelper {
                     System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
                 }
 
-                String url = System.getenv("SELENIUM_STARTING_URL");
-                if (url == null || url.equals("")) {
-                    System.setProperty("SELENIUM_STARTING_URL", "http://test" + code + ".org/");
-                }
+                System.setProperty("SELENIUM_STARTING_URL", "http://test" + code + ".org/");
                 Selenium selenium = SeleniumFactory.create();
                 selenium.start();
                 selenium.open("/");
