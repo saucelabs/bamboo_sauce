@@ -95,7 +95,6 @@ public class TunnelTest extends AbstractTestHelper {
                 if (originalUrl != null && !originalUrl.equals("")) {
                      System.setProperty("SELENIUM_STARTING_URL", originalUrl);
                 } 
-} 
             }
         } finally {
             server.stop();
