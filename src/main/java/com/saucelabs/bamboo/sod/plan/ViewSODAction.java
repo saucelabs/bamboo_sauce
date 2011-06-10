@@ -1,24 +1,19 @@
 package com.saucelabs.bamboo.sod.plan;
 
-import com.atlassian.bamboo.build.PlanResultsAction;
 import com.atlassian.bamboo.build.ViewBuildResults;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanKeys;
-import com.atlassian.bamboo.plan.PlanManager;
-import com.atlassian.bamboo.plan.PlanResultKey;
-import com.atlassian.bamboo.resultsummary.ResultsSummaryManager;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import org.apache.commons.codec.binary.Hex;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Handles invoking the Sauce REST API to find the Sauce Job id that corresponds to the Bamboo build.
@@ -26,14 +21,14 @@ import javax.crypto.spec.SecretKeySpec;
  * @author Ross Rowe
  */
 public class ViewSODAction extends ViewBuildResults {
-    
+
     private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
-    
+
     private String hmac;
 
     private String jobId;
 
-    private static final String JOB_DETAILS_URL = "https://saucelabs.com/rest/v1/%1$s/jobs?full=true";
+    public static final String JOB_DETAILS_URL = "http://saucelabs.com/rest/v1/%1$s/jobs?full=true";
 
     private AdministrationConfigurationManager administrationConfigurationManager;
 
@@ -72,7 +67,7 @@ public class ViewSODAction extends ViewBuildResults {
                     jobId = jobData.getString("id");
                     Date now = new Date();
                     SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-                    
+
                     hmac = calcHMAC(username + ":" + accessKey + ":" + format.format(now), jobId);
                     break;
                 }
@@ -108,7 +103,7 @@ public class ViewSODAction extends ViewBuildResults {
     public String getJobId() {
         return jobId;
     }
-    
+
     public String getHmac() {
         return hmac;
     }

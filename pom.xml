@@ -60,10 +60,11 @@
                     <!-- The Atlassian SDK doesn't seem to include sub-dependencies, so we have to
                     explictly include them here -->
                     <libArtifacts>
+                        <!-- Sauce Rest API dependencies -->
                         <libArtifact>
                             <groupId>com.saucelabs</groupId>
                             <artifactId>sauce-rest-api</artifactId>
-                            <version>1.0</version>
+                            <version>1.5</version>
                         </libArtifact>
                         <libArtifact>
                             <groupId>org.jvnet.hudson</groupId>
@@ -136,20 +137,16 @@
             <version>1.5</version>
         </dependency>
         <!-- TODO restore this dependency once we have deployed sauce-connect to a Maven repository-->
-        <!--dependency>
+        <!-- Sauce Connect 2 -->
+        <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce-connect</artifactId>
-            <version>2.0</version>
-        </dependency-->
+            <version>2.0r4</version>
+        </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20080701</version>
-        </dependency>
-         <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-api</artifactId>
-            <version>2.0b3</version>
         </dependency>
         <!-- Dependencies included with Bamboo -->
         <dependency>
@@ -174,6 +171,18 @@
             <groupId>com.atlassian.bamboo</groupId>
             <artifactId>atlassian-bamboo-web</artifactId>
             <version>${bamboo.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r05</version>
             <scope>provided</scope>
         </dependency>
         <!-- Test Dependencies-->
@@ -202,12 +211,13 @@
             <version>2.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- Jetty supplied by Sauce Connect 2 
         <dependency>
             <groupId>org.mortbay.jetty</groupId>
             <artifactId>jetty</artifactId>
-            <version>6.1.11</version>
+            <version>5.1.10</version>
             <scope>test</scope>
-        </dependency>
+        </dependency-->
     </dependencies>
     <reporting>
         <plugins>

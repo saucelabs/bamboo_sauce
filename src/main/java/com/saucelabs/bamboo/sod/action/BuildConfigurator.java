@@ -56,6 +56,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * Populated via dependency injection.
      */
     private BrowserFactory sauceBrowserFactory;
+
     private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
     private static final String DEFAULT_IDLE_TIMEOUT = "90";
@@ -69,6 +70,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     @NotNull
     public BuildContext call() throws IOException {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
+        sauceAPIFactory.setupProxy(administrationConfigurationManager);
         if (config.isEnabled() && config.isSshEnabled()) {
             startTunnel(config.getTempUsername(), config.getTempApikey(), config.getSshHost(), config.getSshPorts(), config.getSshTunnelPorts(), config.getSshDomains(), config.isAutoDomain());
         }
@@ -114,6 +116,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
         try {
+            sauceAPIFactory.setupProxy(administrationConfigurationManager);
             context.put("browserList", sauceBrowserFactory.values());
         } catch (IOException e) {
             //TODO are there a set of default browsers that we can use?

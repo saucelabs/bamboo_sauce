@@ -28,8 +28,6 @@ public class BrowserFactory {
 
     public static final String BROWSER_URL = "http://saucelabs.com/rest/v1/info/browsers";
 
-
-
     private Map<String, Browser> lookup = new HashMap<String, Browser>();
     private Timestamp lastLookup = null;
     private static final String IEHTA = "iehta";

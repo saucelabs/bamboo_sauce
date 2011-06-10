@@ -41,6 +41,10 @@ public final class SODKeys
     public static final String SELENIUM_HOST_KEY = "selenium.host";
     public static final String SELENIUM_PORT_KEY = "selenium.port";
     public static final String SELENIUM_BROWSER_KEY = "selenium.browser";
+    public static final String PROXY_HOST_KEY = "sauceondemand.proxyHost";
+    public static final String PROXY_PASSWORD_KEY = "sauceondemand.proxyPassword";
+    public static final String PROXY_USERNAME_KEY = "sauceondemand.proxyUsername";
+    public static final String PROXY_PORT_KEY = "sauceondemand.proxyPort";
 
     /* ENV Vars */
     public static final String SELENIUM_DRIVER_ENV = "SELENIUM_DRIVER";
