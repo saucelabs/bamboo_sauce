@@ -6,7 +6,11 @@ import com.saucelabs.bamboo.sod.action.BuildConfigurator;
 
 import com.saucelabs.bamboo.sod.util.SauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
@@ -40,7 +44,24 @@ public class IntegrationTestHelper {
         properties.load(stream);
         System.setProperties(properties);
         if (properties.getProperty("sauce.ssh").equals("true")) {
-            sauceTunnelManager = new SauceTunnelManager();
+            sauceTunnelManager = new SauceTunnelManager() {
+
+                public void closeTunnelsForPlan(String planKey) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                public void addTunnelToMap(String planKey, Object tunnel) {
+                    //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
+                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                }
+
+                public Map getTunnelMap() {
+                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                }
+            };
             BuildConfigurator buildConfigurator = new BuildConfigurator();
             String username = properties.getProperty("sauce.username");
             String apiKey = properties.getProperty("sauce.accessKey");

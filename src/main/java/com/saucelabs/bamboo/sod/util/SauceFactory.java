@@ -23,45 +23,7 @@ import java.net.URL;
  */
 public class SauceFactory {
 
-    private static final Logger logger = Logger.getLogger(SauceFactory.class);
-    private Thread sauceConnectThread;
-
-    /**
-     * @param username
-     * @param apiKey
-     * @return a new {@link SauceTunnelFactory} instance
-     */
-    public SauceTunnelFactory createSauceTunnelFactory(String username, String apiKey) {
-        return new SauceTunnelFactory(new Credential(username, apiKey));
-    }
-
-    /**
-     * TODO need to ensure that access to SauceConnect is sauceConnectThread safe
-     * @param username
-     * @param apiKey
-     * @param s
-     * @return a new {@link SauceTunnelFactory} instance
-     */
-    public SauceConnect createSauceConnect(String username, String apiKey, String host) {
-        final SauceConnect sauceConnect = new SauceConnect(new String[]{username, apiKey, "-d", "--proxy-host", host,
-//                "--dont-update-proxy-host"
-        });
-        this.sauceConnectThread = new Thread("SauceConnectThread") {
-            @Override
-            public void run() {
-                 sauceConnect.openConnection();
-            }
-        };
-        sauceConnectThread.start();
-
-        try {
-            Thread.sleep(1000 * 60 * 2); //2 minutes
-        } catch (InterruptedException e) {
-            //continue;
-        }
-//        sauceConnect.openConnection();
-        return sauceConnect;
-    }
+    private static final Logger logger = Logger.getLogger(SauceFactory.class);    
 
     public String doREST(String urlText) throws IOException {
         return doREST(urlText, null, null);
@@ -130,9 +92,5 @@ public class SauceFactory {
         }
     }
 
-    public void closeSauceConnect(SauceConnect sauceConnect) {
-        sauceConnect.removeHandler();
-        sauceConnect.closeTunnel();
-        sauceConnectThread.interrupt();
-    }
+
 }

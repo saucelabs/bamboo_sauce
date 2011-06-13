@@ -12,6 +12,7 @@ import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +37,24 @@ public class BuildConfiguratorTest {
     @Before
     public void setUp() throws Exception {
         this.buildConfigurator = new BuildConfigurator();
-        this.tunnelManager = new SauceTunnelManager();
+        this.tunnelManager = new SauceTunnelManager(){
+
+            public void closeTunnelsForPlan(String planKey) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public void addTunnelToMap(String planKey, Object tunnel) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public Map getTunnelMap() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+        };
         buildConfigurator.setSauceTunnelManager(tunnelManager);
 
         BuildContext buildContext = mock(BuildContext.class);
@@ -65,7 +83,7 @@ public class BuildConfiguratorTest {
         //when(sauceTunnel.connect(Integer.parseInt("5678"), "sshhost", Integer.parseInt("1234")));
         when(sauceTunnelFactory.create(any(List.class))).thenReturn(sauceTunnel);
         SauceFactory sauceAPIFactory = mock(SauceFactory.class);
-        when(sauceAPIFactory.createSauceTunnelFactory("tempUser", "apiKey")).thenReturn(sauceTunnelFactory);
+//        when(sauceAPIFactory.createSauceTunnelFactory("tempUser", "apiKey")).thenReturn(sauceTunnelFactory);
         
         buildConfigurator.setSauceAPIFactory(sauceAPIFactory);
         buildConfigurator.init(buildContext);

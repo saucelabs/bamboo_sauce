@@ -44,10 +44,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      */
     private SauceFactory sauceAPIFactory;
     // TODO: set a real timeout
-    /**
-     * Timeout is hard-coded to 180 seconds.
-     */
-    private static final int SSH_TIMEOUT = 180 * 1000;
+    
     /**
      * Populated via dependency injection.
      */
@@ -85,24 +82,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
         int intLocalPort = Integer.parseInt(localPorts);
         int intRemotePort = Integer.parseInt(remotePorts);
-
         List<String> domainList = Collections.singletonList(finalDomain);
-
-        SauceTunnelFactory tunnelFactory = sauceAPIFactory.createSauceTunnelFactory(username, apiKey);
-        SauceTunnel tunnel = tunnelFactory.create(domainList);
-
-        if (tunnel != null) {
-            try {
-                tunnel.waitUntilRunning(SSH_TIMEOUT);
-                if (!tunnel.isRunning()) {
-                    throw new IOException("Sauce OnDemand Tunnel didn't come online. Aborting.");
-                }
-            } catch (InterruptedException e) {
-                throw new IOException("Sauce OnDemand Tunnel Aborted.");
-            }
-            tunnel.connect(intRemotePort, localHost, intLocalPort);
-        }
-
+        Object tunnel = sauceTunnelManager.openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, domainList);
         sauceTunnelManager.addTunnelToMap(buildContext.getPlanKey(), tunnel);
     }
 

@@ -10,7 +10,7 @@ import java.io.IOException;
  * @author Ross Rowe
  */
 public abstract class AbstractTestHelper extends HttpServlet {
-    protected int code;
+    public static int code;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

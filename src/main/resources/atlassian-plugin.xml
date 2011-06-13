@@ -96,7 +96,7 @@
         </condition>
     </web-item>
 
-    <component name="sauceTunnelManager" key="sauceTunnelManager" class="com.saucelabs.bamboo.sod.util.SauceTunnelManager">
+    <component name="sauceTunnelManager" key="sauceTunnelManager" class="com.saucelabs.bamboo.sod.util.SauceConnectOneManager">
         
     </component>
 

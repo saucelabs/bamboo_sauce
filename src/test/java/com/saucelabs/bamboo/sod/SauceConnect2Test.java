@@ -1,6 +1,8 @@
 package com.saucelabs.bamboo.sod;
 
+import com.saucelabs.bamboo.sod.util.SauceConnectTwoManager;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
 import com.saucelabs.sauceconnect.SauceConnect;
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
@@ -49,34 +51,32 @@ public class SauceConnect2Test extends AbstractTestHelper {
                                     c.getUsername(), c.getKey().toCharArray());
                         }
                     }
-            );
-            SauceFactory sauceAPIFactory = new SauceFactory();
+            );            
+            SauceTunnelManager sauceTunnelManager = new SauceConnectTwoManager();
 //            sauceAPIFactory.setupProxy("proxy.immi.local", "80", "exitr6", "abc125");
-            SauceConnect sauceConnect = sauceAPIFactory.createSauceConnect(c.getUsername(), c.getKey(), "testing.org");
-            //assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());
+            SauceConnect sauceConnect = (SauceConnect) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "testing.org", -1, -1, null);
+            sauceTunnelManager.addTunnelToMap("TEST", sauceConnect);
             System.out.println("tunnel established");
             String driver = System.getenv("SELENIUM_DRIVER");
             if (driver == null || driver.equals("")) {
                 System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
             }
 
-            String url = System.getenv("SELENIUM_STARTING_URL");
-            if (url == null || url.equals("")) {
-                System.setProperty("SELENIUM_STARTING_URL", "http://testing.org:8080/");
-            }
-
-            Selenium selenium = SeleniumFactory.create();
+            String originalUrl = System.getenv("SELENIUM_STARTING_URL");
+            System.setProperty("SELENIUM_STARTING_URL", "http://testing.org:8080/");
+            Selenium selenium = SeleniumFactory.create();            
             try {
-
-
                 selenium.start();
                 selenium.open("/");
                 // if the server really hit our Jetty, we should see the same title that includes the secret code.
                 assertEquals("test" + code, selenium.getTitle());
                 selenium.stop();
             } finally {
-                sauceAPIFactory.closeSauceConnect(sauceConnect);
+                sauceTunnelManager.closeTunnelsForPlan("TEST");
                 selenium.stop();
+                if (originalUrl != null && !originalUrl.equals("")) {
+                     System.setProperty("SELENIUM_STARTING_URL", originalUrl);
+                }
             }
         } finally {
             server.stop();

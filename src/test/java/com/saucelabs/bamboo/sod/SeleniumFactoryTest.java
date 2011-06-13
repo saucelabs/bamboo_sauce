@@ -17,7 +17,8 @@ import static org.junit.Assert.assertTrue;
  */
 public class SeleniumFactoryTest extends AbstractTestHelper {
     private Selenium selenium;
-    private static final String DUMMY_BUILD_DATA ="BSAD-TRUNK-14";
+    private static final String DUMMY_BUILD_DATA = "BSAD-TRUNK-14";
+    private String originalUrl;
 
     @Before
     public void setUp() throws Exception {
@@ -26,18 +27,12 @@ public class SeleniumFactoryTest extends AbstractTestHelper {
             System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
         }
 
-        String url = System.getenv("SELENIUM_STARTING_URL");
-        if (url == null || url.equals("")) {
-            System.setProperty("SELENIUM_STARTING_URL", "http://www.google.com");
-        }
+        this.originalUrl = System.getenv("SELENIUM_STARTING_URL");
+        System.setProperty("SELENIUM_STARTING_URL", "http://www.google.com");
+
         this.selenium = SeleniumFactory.create();
 
-        assertTrue("Selenium instance is not SauceSeleniumFactory", selenium instanceof SauceOnDemandSelenium);
-
-        Map<String, String> envVars = System.getenv();
-//        for (Map.Entry envVar : envVars.entrySet()) {
-//            System.out.println(envVar.getKey() + " : " + envVar.getValue());
-//        }
+        assertTrue("Selenium instance is not SauceSeleniumFactory", selenium instanceof SauceOnDemandSelenium);        
         String bambooData = System.getenv(SODKeys.BAMBOO_BUILD_NUMBER_ENV);
         if (bambooData == null || bambooData.equals("")) {
             bambooData = DUMMY_BUILD_DATA;
@@ -52,7 +47,7 @@ public class SeleniumFactoryTest extends AbstractTestHelper {
     public void sauce() throws Exception {
         this.selenium.open("/");
         assertEquals("Google",
-                     this.selenium.getTitle());
+                this.selenium.getTitle());
         SauceOnDemandSelenium sauce = (SauceOnDemandSelenium) selenium;
         sauce.jobPassed();
     }
@@ -60,5 +55,8 @@ public class SeleniumFactoryTest extends AbstractTestHelper {
     @After
     public void tearDown() throws Exception {
         this.selenium.stop();
+        if (originalUrl != null && !originalUrl.equals("")) {
+            System.setProperty("SELENIUM_STARTING_URL", originalUrl);
+        }
     }
 }

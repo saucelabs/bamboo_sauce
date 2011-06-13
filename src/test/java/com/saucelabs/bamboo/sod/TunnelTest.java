@@ -1,6 +1,8 @@
 package com.saucelabs.bamboo.sod;
 
+import com.saucelabs.bamboo.sod.util.SauceConnectOneManager;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
@@ -13,6 +15,7 @@ import org.mortbay.jetty.Server;
 import org.mortbay.jetty.servlet.ServletHttpContext;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -41,22 +44,11 @@ public class TunnelTest extends AbstractTestHelper {
         try {
             // start a tunnel
             System.out.println("Starting a tunnel");
-            Credential c = new Credential();
-            SauceFactory sauceAPIFactory = new SauceFactory();
-            SauceTunnelFactory tunnelFactory = sauceAPIFactory.createSauceTunnelFactory(c.getUsername(), c.getKey());
-            SauceTunnel tunnel = tunnelFactory.create("test"+code+".org");
+            Credential c = new Credential();            
+            SauceTunnelManager sauceTunnelManager = new SauceConnectOneManager();
 
-            if (tunnel != null) {
-                try {
-                    tunnel.waitUntilRunning(90000);
-                    if (!tunnel.isRunning()) {
-                        throw new IOException("Sauce OnDemand Tunnel didn't come online. Aborting.");
-                    }
-                } catch (InterruptedException e) {
-                    throw new IOException("Sauce OnDemand Tunnel Aborted.");
-                }
-                tunnel.connect(80,"localhost",8080);
-            }
+            SauceTunnel tunnel = (SauceTunnel) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "test"+code+".org", 80, 8080, Collections.singletonList("localhost"));
+            sauceTunnelManager.addTunnelToMap("TEST", tunnel);
 
             assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());
             System.out.println("tunnel established");
@@ -76,11 +68,10 @@ public class TunnelTest extends AbstractTestHelper {
                 assertEquals("test" + code, selenium.getTitle());
                 selenium.stop();
             } finally {
-                tunnel.disconnectAll();
-                tunnel.destroy();
+                sauceTunnelManager.closeTunnelsForPlan("TEST");
                 if (originalUrl != null && !originalUrl.equals("")) {
                      System.setProperty("SELENIUM_STARTING_URL", originalUrl);
-                } 
+                }
             }
         } finally {
             server.stop();
