@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,10 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
     private static final Logger logger = Logger.getLogger(SauceConnectTwoManager.class);
     private Thread sauceConnectThread;
     private Map<String, List<SauceConnect>> tunnelMap;
+
+    public SauceConnectTwoManager() {
+        this.tunnelMap = new HashMap<String,List<SauceConnect>>();
+    }
 
     public void closeTunnelsForPlan(String planKey) {
         if (tunnelMap.containsKey(planKey)) {
