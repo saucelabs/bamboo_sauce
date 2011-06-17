@@ -7,11 +7,9 @@ import com.saucelabs.rest.Credential;
 import com.saucelabs.sauceconnect.SauceConnect;
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import com.thoughtworks.selenium.Selenium;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.junit.Test;
-import org.mortbay.http.HttpListener;
-import org.mortbay.http.SocketListener;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.servlet.ServletHttpContext;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
@@ -32,11 +30,14 @@ public class SauceConnect2Test extends AbstractTestHelper {
         this.code = new Random().nextInt();
 
         // start the Jetty locally and have it respond our secret code.
-        Server server = new Server();
-        HttpListener listener = server.addListener("8080");
-        ((SocketListener) listener).setMaxIdleTimeMs(0);
-        ServletHttpContext context = (ServletHttpContext) server.getContext("/");
-        context.addServlet("/", SauceConnect2Test.class.getName());
+         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(8080);
+
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
+        server.setHandler(context);
+
+        context.addServlet(new ServletHolder(this), "/*");
+
         server.start();
         System.out.println("Started Jetty at 8080");
 

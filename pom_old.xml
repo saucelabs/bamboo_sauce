@@ -45,17 +45,7 @@
         <url>scm:git:git://github.com/saucelabs/bambo_sauce.git</url>
     </scm>
     <build>
-        <plugins>
-            <!--plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-bamboo-plugin</artifactId>
-                <version>${atlassian.plugins.version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <productVersion>${bamboo.version}</productVersion>
-                    <productDataVersion>${bamboo.data.version}</productDataVersion>
-                </configuration>
-            </plugin-->
+        <plugins>            
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -69,7 +59,7 @@
         </plugins>
     </build>
     <dependencies>
-         <dependency>
+        <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce-connect</artifactId>
             <version>2.0r4</version>
@@ -79,6 +69,20 @@
             <artifactId>sauce-rest-api</artifactId>
             <version>1.5</version>
         </dependency>
+         <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20080701</version>
+        </dependency>       
+        <!-- Include Jython here because several classes were being excluded from the sauce-connect
+        jar -->
+         <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+        
+        <!-- Mark these dependencies as provided so that they don't clash with Bamboo -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
@@ -90,12 +94,7 @@
             <artifactId>guava</artifactId>
             <version>r05</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20080701</version>
-        </dependency>
+        </dependency>       
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
