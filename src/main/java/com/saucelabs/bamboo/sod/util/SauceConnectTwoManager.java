@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Handles opening a SSH Tunnel using the Sauce Connect 2 logic. The class  maintains a cache of {@link com.saucelabs.rest.SauceTunnel} instances mapped against
+ * the corresponding plan key.  This class can be considered a singleton, and is instantiated via the 'component' element of the atlassian-plugin.xml
+ * file (ie. using Spring).
+ * 
  * @author Ross Rowe
  */
 public class SauceConnectTwoManager implements SauceTunnelManager {
@@ -42,6 +46,18 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         tunnelMap.get(planKey).add((SauceConnect) tunnel);
     }
 
+    /**
+     * Creates a new Thread which creates a SSH Tunnel.
+     * 
+     * @param username
+     * @param apiKey
+     * @param localHost
+     * @param intLocalPort
+     * @param intRemotePort
+     * @param domainList
+     * @return
+     * @throws IOException
+     */
     public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
         final SauceConnect sauceConnect = new SauceConnect(new String[]{username, apiKey, "-d", "--proxy-host", localHost});
         this.sauceConnectThread = new Thread("SauceConnectThread") {

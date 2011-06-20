@@ -30,6 +30,9 @@ public class ViewSODAction extends ViewBuildResults {
 
     public static final String JOB_DETAILS_URL = "http://saucelabs.com/rest/v1/%1$s/jobs?full=true";
 
+    /**
+     * Populated by dependency injection.
+     */
     private AdministrationConfigurationManager administrationConfigurationManager;
 
     /**
@@ -39,9 +42,9 @@ public class ViewSODAction extends ViewBuildResults {
 
     /**
      * Invokes the Sauce REST API to retrieve the details for the jobs the user has access to.  Iterates over the jobs
-     * and attempts to find the job that has custom data matching the build key/number.  If one is found, then the id
+     * and attempts to find the job that has a 'build' field matching the build key/number.  If one is found, then the id
      * of the job is stored in the <code>jobId</code> instance variable, for use by the sodView.ftl template.
-     *
+     * 
      * @return 'default'
      * @throws Exception thrown if an error occurs during the invocation of the Sauce REST API
      */
@@ -58,11 +61,8 @@ public class ViewSODAction extends ViewBuildResults {
         for (int i = 0; i < jobResults.length(); i++) {
             //check custom data to find job that was for build
             JSONObject jobData = jobResults.getJSONObject(i);
-
             if (!jobData.isNull("build")) {
-//                JSONObject customData = (JSONObject) jobData.get("custom-data");
                 String buildResultKey = jobData.getString("build");
-//                String tags = jobData.getString("tags");
                 if (buildResultKey.equals(getResultsSummary().getBuildResultKey())) {
                     jobId = jobData.getString("id");
                     Date now = new Date();
@@ -71,25 +71,19 @@ public class ViewSODAction extends ViewBuildResults {
                     hmac = calcHMAC(username + ":" + accessKey + ":" + format.format(now), jobId);
                     break;
                 }
-                //try to find Bamboo build information
             }
-
         }
-        //set sauce id variable
         return super.doDefault();
     }
 
     public String calcHMAC(String key, String msg) throws Exception {
-
         byte[] keyBytes = key.getBytes();
         SecretKeySpec sks = new SecretKeySpec(keyBytes, "HmacMD5");
         Mac mac = Mac.getInstance("HmacMD5");
         mac.init(sks);
         byte[] hmacBytes = mac.doFinal(msg.getBytes());
         byte[] hexBytes = new Hex().encode(hmacBytes);
-        String hexStr = new String(hexBytes, "ISO-8859-1");
-        return hexStr;
-
+        return new String(hexBytes, "ISO-8859-1");
     }
 
     public void setSauceAPIFactory(SauceFactory sauceAPIFactory) {
@@ -107,5 +101,4 @@ public class ViewSODAction extends ViewBuildResults {
     public String getHmac() {
         return hmac;
     }
-
 }

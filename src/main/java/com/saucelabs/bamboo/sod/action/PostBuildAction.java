@@ -17,6 +17,10 @@ import org.jetbrains.annotations.NotNull;
  * @author Ross Rowe
  */
 public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomBuildProcessorServer {
+    
+    /**
+     * Populated via dependency injection.
+     */
     private PlanManager planManager;
 
     @NotNull
@@ -38,6 +42,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     private void recordSauceJobResult() {
+        //TODO automatically set the pass/fail state of a Sauce Job based on a Bamboo build result?
     }
 
     private void resetEnvironmentVariables(final SODMappedBuildConfiguration config) {

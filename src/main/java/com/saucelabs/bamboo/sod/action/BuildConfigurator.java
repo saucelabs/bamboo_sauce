@@ -7,12 +7,11 @@ import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
-import com.saucelabs.bamboo.sod.SeleniumVersion;
-import com.saucelabs.rest.SauceTunnel;
-import com.saucelabs.rest.SauceTunnelFactory;
 import com.saucelabs.bamboo.sod.Browser;
 import com.saucelabs.bamboo.sod.BrowserFactory;
-import com.saucelabs.bamboo.sod.config.*;
+import com.saucelabs.bamboo.sod.SeleniumVersion;
+import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import org.apache.commons.lang.StringUtils;
@@ -27,7 +26,7 @@ import java.util.Map;
 
 /**
  * Pre-Build Action which will start a SSH Tunnel via the Sauce REST API if the build is configured to run
- * tests via the tunnel.
+ * Selenium tests via the Sauce Connect tunnel.
  *
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
@@ -43,7 +42,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * Populated by dependency injection.
      */
     private SauceFactory sauceAPIFactory;
-    // TODO: set a real timeout
     
     /**
      * Populated via dependency injection.
@@ -64,7 +62,13 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private static final String DEFAULT_SSH_DOMAIN = "AUTO";
     private static final String DEFAULT_SELENIUM_VERSION = SeleniumVersion.TWO.getVersionNumber();
 
+    /**
+     * Entry point into build action.
+     * @return
+     * @throws IOException
+     */
     @NotNull
+    //@Override
     public BuildContext call() throws IOException {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         sauceAPIFactory.setupProxy(administrationConfigurationManager);
@@ -74,6 +78,18 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         return buildContext;
     }
 
+    /**
+     * Opens the tunnel and adds the tunnel instance to the sauceTunnelManager map.
+     * 
+     * @param username
+     * @param apiKey
+     * @param localHost
+     * @param localPorts
+     * @param remotePorts
+     * @param sshDomains
+     * @param autoDomain
+     * @throws IOException
+     */
     public void startTunnel(String username, String apiKey, String localHost, String localPorts, String remotePorts, String sshDomains, boolean autoDomain) throws IOException {
         String finalDomain = sshDomains;
         if (autoDomain) {

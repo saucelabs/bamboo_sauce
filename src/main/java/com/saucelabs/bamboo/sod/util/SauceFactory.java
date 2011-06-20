@@ -29,6 +29,14 @@ public class SauceFactory {
         return doREST(urlText, null, null);
     }
 
+    /**
+     * Invokes a Sauce REST API command 
+     * @param urlText
+     * @param userName
+     * @param password
+     * @return results of REST command
+     * @throws IOException
+     */
     public synchronized String doREST(String urlText, final String userName, final String password) throws IOException {
 
         URL url = new URL(urlText);
@@ -75,6 +83,15 @@ public class SauceFactory {
         String proxyPassword = adminConfig.getSystemProperty(SODKeys.PROXY_PASSWORD_KEY);
         setupProxy(proxyHost, proxyPort, proxyUsername, proxyPassword);
     }
+
+    /**
+     * Populates the http proxy system properties.
+     * 
+     * @param proxyHost
+     * @param proxyPort
+     * @param userName
+     * @param password
+     */
     public void setupProxy(String proxyHost, String proxyPort, final String userName, final String password) {
         if (StringUtils.isNotBlank(proxyHost)) {
             System.setProperty("http.proxyHost", proxyHost);
@@ -91,6 +108,4 @@ public class SauceFactory {
             System.setProperty("https.proxyPassword", password);
         }
     }
-
-
 }

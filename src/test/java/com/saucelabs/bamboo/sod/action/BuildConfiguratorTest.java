@@ -4,11 +4,12 @@ import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
-import com.saucelabs.rest.SauceTunnel;
-import com.saucelabs.rest.SauceTunnelFactory;
+import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.rest.SauceTunnel;
+import com.saucelabs.rest.SauceTunnelFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,9 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -27,7 +26,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Ross Rowe
  */
-public class BuildConfiguratorTest {
+public class BuildConfiguratorTest extends AbstractTestHelper {
 
     private BuildConfigurator buildConfigurator;
     private SauceTunnelManager tunnelManager;

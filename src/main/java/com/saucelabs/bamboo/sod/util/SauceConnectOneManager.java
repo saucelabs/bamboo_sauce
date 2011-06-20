@@ -12,34 +12,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This class can be considered a singleton, and is instantiated via the 'component' element of the atlassian-plugin.xml
- * file (ie. using Spring).  It maintains a cache of {@link com.saucelabs.rest.SauceTunnel} instances mapped against
- * the corresponding plan key.
+ * Handles opening a SSH Tunnel using the Sauce Connect One logic (now considered to be legacy). The class  maintains a cache of {@link com.saucelabs.rest.SauceTunnel} instances mapped against
+ * the corresponding plan key.  This class can be considered a singleton, and is instantiated via the 'component' element of the atlassian-plugin.xml
+ * file (ie. using Spring).
  *
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */
-public class SauceConnectOneManager implements SauceTunnelManager
-{
+public class SauceConnectOneManager implements SauceTunnelManager {
     private static final Logger logger = Logger.getLogger(SauceConnectOneManager.class);
 
     private Map<String, List<SauceTunnel>> tunnelMap;
 
-    public SauceConnectOneManager()
-    {
+    public SauceConnectOneManager() {
         this.tunnelMap = new HashMap<String, List<SauceTunnel>>();
     }
 
-
     /**
-     *
      * @param planKey
      */
-    public void closeTunnelsForPlan(String planKey)
-    {
-        if(tunnelMap.containsKey(planKey)) {
+    public void closeTunnelsForPlan(String planKey) {
+        if (tunnelMap.containsKey(planKey)) {
             List<SauceTunnel> tunnelList = tunnelMap.get(planKey);
-            for(SauceTunnel tunnel : tunnelList) {
+            for (SauceTunnel tunnel : tunnelList) {
                 try {
                     tunnel.disconnectAll();
                     tunnel.destroy();
@@ -55,19 +50,29 @@ public class SauceConnectOneManager implements SauceTunnelManager
     }
 
     /**
-     *
      * @param planKey
      * @param tunnel
      */
-    public void addTunnelToMap(String planKey, Object tunnel)
-    {
-        if(!tunnelMap.containsKey(planKey)) {
+    public void addTunnelToMap(String planKey, Object tunnel) {
+        if (!tunnelMap.containsKey(planKey)) {
             tunnelMap.put(planKey, new ArrayList<SauceTunnel>());
         }
 
         tunnelMap.get(planKey).add((SauceTunnel) tunnel);
     }
 
+    /**
+     * Opens a new SSH Tunnel.
+     * 
+     * @param username
+     * @param apiKey
+     * @param localHost
+     * @param intLocalPort
+     * @param intRemotePort
+     * @param domainList
+     * @return
+     * @throws IOException
+     */
     public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
 
         SauceTunnelFactory tunnelFactory = new SauceTunnelFactory(new Credential(username, apiKey));
@@ -90,6 +95,4 @@ public class SauceConnectOneManager implements SauceTunnelManager
     public Map getTunnelMap() {
         return tunnelMap;
     }
-
-
 }

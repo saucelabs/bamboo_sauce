@@ -1,5 +1,6 @@
-package com.saucelabs.bamboo.sod;
+package com.saucelabs.bamboo.sod.selenium;
 
+import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.Selenium;

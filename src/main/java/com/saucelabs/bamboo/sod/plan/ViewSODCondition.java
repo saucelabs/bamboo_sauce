@@ -7,6 +7,9 @@ import com.atlassian.plugin.web.Condition;
 import java.util.Map;
 
 /**
+ * {@link Condition} instance that controls whether the 'Sauce OnDemand' tab appears for Bamboo build
+ * results. 
+ * 
  * @author Ross Rowe
  */
 public class ViewSODCondition implements Condition {
@@ -20,6 +23,12 @@ public class ViewSODCondition implements Condition {
         this.map = map;        
     }
 
+    /**
+     * Always returns true.
+     * 
+     * @param planMap
+     * @return
+     */
     public boolean shouldDisplay(Map<String, Object> planMap) {
 
         //TODO Sauce custom configuration doesn't appear to be available via plan.getBuildDefinition().getCustomConfiguration(), possible Bamboo bug?

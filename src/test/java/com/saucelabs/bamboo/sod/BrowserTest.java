@@ -16,7 +16,7 @@ import static org.junit.Assert.assertFalse;
 /**
  * @author Ross Rowe
  */
-public class BrowserTest {
+public class BrowserTest extends AbstractTestHelper  {
 	@Test
 	public void osNames() throws Exception {
         Browser browser = new Browser(null, "Windows 2008", null, null, null);
@@ -48,7 +48,6 @@ public class BrowserTest {
     @Test
     public void getJobDetails() throws Exception {
         SauceFactory sauceAPIFactory = new SauceFactory();
-        //sauceAPIFactory.setupProxy("proxy.immi.local", "80", "exitr6", "abc125");
         Credential credential = new Credential();
         String jsonResponse = sauceAPIFactory.doREST(String.format(ViewSODAction.JOB_DETAILS_URL, credential.getUsername()), credential.getUsername(), credential.getKey());
         JSONArray jobResults = new JSONArray(jsonResponse);

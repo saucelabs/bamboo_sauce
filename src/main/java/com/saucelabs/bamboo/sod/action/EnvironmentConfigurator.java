@@ -21,11 +21,26 @@ import org.json.JSONException;
  */
 public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements CustomPreBuildQueuedAction {
 
+    /**
+     * Populated via dependency injection.
+     */
     private AdministrationConfigurationManager administrationConfigurationManager;
+    /**
+     * Populated via dependency injection.
+     */
     private PlanManager planManager;
+    /**
+     * Populated via dependency injection.
+     */
     private BrowserFactory sauceBrowserFactory;
 
+    /**
+     * Entry point into build action.
+     * @return
+     * @throws JSONException if an error occurs generating the Selenium environment variables
+     */
     @NotNull
+    //@Override
     public BuildContext call() throws JSONException {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
 
@@ -36,16 +51,19 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
         return buildContext;
     }
 
+    /**
+     * 
+     * @param config
+     * @throws JSONException if an error occurs generating the Selenium environment variables
+     */
     private void setSeleniumEnvironmentVars(SODMappedBuildConfiguration config) throws JSONException {
         Plan plan = planManager.getPlanByKey(buildContext.getPlanKey());
         if (plan != null) {
             VariableModifier variableModifier = getVariableModifier(config, plan);
             variableModifier.setAdministrationConfigurationManager(administrationConfigurationManager);
             variableModifier.setSauceBrowserFactory(sauceBrowserFactory);
-            if (variableModifier != null) {
-                variableModifier.storeVariables();
-                planManager.savePlan(plan);
-            }
+            variableModifier.storeVariables();
+            planManager.savePlan(plan);
         }
     }
 

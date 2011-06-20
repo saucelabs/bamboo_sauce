@@ -50,18 +50,17 @@ public class ConfigureSODAction extends ConfigurationAction
 
     /**
      * Invoked when a user clicks 'Save' on the Sauce Administration screen.
+     * 
      * @return 'success'
      */
     public String doSave()
     {
 
         final AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
-
         adminConfig.setSystemProperty(SODKeys.SOD_USERNAME_KEY, getUsername());
         adminConfig.setSystemProperty(SODKeys.SOD_ACCESSKEY_KEY, getAccessKey());
         adminConfig.setSystemProperty(SODKeys.SELENIUM_HOST_KEY, getSeleniumHost());
         adminConfig.setSystemProperty(SODKeys.SELENIUM_PORT_KEY, getSeleniumPort());
-
         administrationConfigurationManager.saveAdministrationConfiguration(adminConfig);
         //this is a bit of a hack to support unit testing
         //getBamboo() won't be null at runtime, but we can't mock the method
@@ -70,7 +69,6 @@ public class ConfigureSODAction extends ConfigurationAction
         }
 
         addActionMessage(getText("config.updated"));
-
         return SUCCESS;
     }
 
@@ -154,6 +152,5 @@ public class ConfigureSODAction extends ConfigurationAction
     {
         this.username = username;
     }
-    
     
 }

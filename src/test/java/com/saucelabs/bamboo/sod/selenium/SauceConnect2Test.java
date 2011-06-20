@@ -1,29 +1,27 @@
-package com.saucelabs.bamboo.sod;
+package com.saucelabs.bamboo.sod.selenium;
 
-import com.saucelabs.bamboo.sod.util.SauceConnectOneManager;
+import com.saucelabs.bamboo.sod.AbstractTestHelper;
+import com.saucelabs.bamboo.sod.util.SauceConnectTwoManager;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
-import com.saucelabs.rest.SauceTunnel;
-import com.saucelabs.rest.SauceTunnelFactory;
+import com.saucelabs.sauceconnect.SauceConnect;
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import com.thoughtworks.selenium.Selenium;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.junit.Test;
 
-import java.io.IOException;
-import java.util.Collections;
+import java.net.Authenticator;
+import java.net.PasswordAuthentication;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * @author Ross Rowe
  */
-public class TunnelTest extends AbstractTestHelper {
+public class SauceConnect2Test extends AbstractTestHelper {
 
     /**
      * Start a web server locally, set up an SSH tunnel, and have Sauce OnDemand connect to the local server.
@@ -31,9 +29,9 @@ public class TunnelTest extends AbstractTestHelper {
     @Test
     public void fullRun() throws Exception {
         this.code = new Random().nextInt();
+
         // start the Jetty locally and have it respond our secret code.
-         // start the Jetty locally and have it respond our secret code.
-        Server server = new Server(8080);
+         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(8080);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
@@ -47,24 +45,28 @@ public class TunnelTest extends AbstractTestHelper {
         try {
             // start a tunnel
             System.out.println("Starting a tunnel");
-            Credential c = new Credential();            
-            SauceTunnelManager sauceTunnelManager = new SauceConnectOneManager();
-
-            SauceTunnel tunnel = (SauceTunnel) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "test"+code+".org", 80, 8080, Collections.singletonList("localhost"));
-            sauceTunnelManager.addTunnelToMap("TEST", tunnel);
-
-            assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());
+            final Credential c = new Credential();
+            Authenticator.setDefault(
+                    new Authenticator() {
+                        public PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(
+                                    c.getUsername(), c.getKey().toCharArray());
+                        }
+                    }
+            );            
+            SauceTunnelManager sauceTunnelManager = new SauceConnectTwoManager();
+            SauceConnect sauceConnect = (SauceConnect) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "testing.org", -1, -1, null);
+            sauceTunnelManager.addTunnelToMap("TEST", sauceConnect);
             System.out.println("tunnel established");
+            String driver = System.getenv("SELENIUM_DRIVER");
+            if (driver == null || driver.equals("")) {
+                System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
+            }
 
             String originalUrl = System.getenv("SELENIUM_STARTING_URL");
+            System.setProperty("SELENIUM_STARTING_URL", "http://testing.org:8080/");
+            Selenium selenium = SeleniumFactory.create();            
             try {
-                String driver = System.getenv("SELENIUM_DRIVER");
-                if (driver == null || driver.equals("")) {
-                    System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
-                }
-
-                System.setProperty("SELENIUM_STARTING_URL", "http://test" + code + ".org/");
-                Selenium selenium = SeleniumFactory.create();
                 selenium.start();
                 selenium.open("/");
                 // if the server really hit our Jetty, we should see the same title that includes the secret code.
@@ -72,6 +74,7 @@ public class TunnelTest extends AbstractTestHelper {
                 selenium.stop();
             } finally {
                 sauceTunnelManager.closeTunnelsForPlan("TEST");
+                selenium.stop();
                 if (originalUrl != null && !originalUrl.equals("")) {
                      System.setProperty("SELENIUM_STARTING_URL", originalUrl);
                 }

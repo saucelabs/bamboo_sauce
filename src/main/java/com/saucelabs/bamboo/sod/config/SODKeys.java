@@ -1,7 +1,8 @@
 package com.saucelabs.bamboo.sod.config;
 
 /**
- *
+ * Collection of constants that relate to the Bamboo Sauce OnDemand plugin.
+ * 
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */

@@ -15,6 +15,10 @@ import org.jetbrains.annotations.NotNull;
  * @author Ross Rowe
  */
 public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBuildProcessor {
+    
+    /**
+     * Populated via dependency injection.
+     */
     private BuildContext buildContext;
 
     /**
@@ -34,13 +38,12 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
     @NotNull
     public BuildContext call() {
 
+        //build context should never be null
         assert buildContext != null;
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         sauceTunnelManager.closeTunnelsForPlan(buildContext.getPlanKey());
-
         config.setTempUsername("");
         config.setTempApikey("");
-
         return buildContext;
     }
 

@@ -1,5 +1,6 @@
-package com.saucelabs.bamboo.sod;
+package com.saucelabs.bamboo.sod.selenium;
 
+import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -14,7 +15,7 @@ import java.net.URL;
 /**
  * @author Ross Rowe
  */
-public class DummySelenium2Test {
+public class DummySelenium2Test extends AbstractTestHelper {
     private WebDriver driver;
 
     @Before
@@ -23,7 +24,7 @@ public class DummySelenium2Test {
                 "firefox", "3.6.", Platform.WINDOWS);
         capabillities.setCapability("name", "Selenium 2 Test");
         driver = new RemoteWebDriver(
-                new URL("http://rossco_9_9:44f0744c-1689-4418-af63-560303cbb37b@ondemand.saucelabs.com:80/wd/hub"),
+                new URL("http://" + System.getProperty("sauce.username") + ":" +  System.getProperty("sauce.accessKey") + "@ondemand.saucelabs.com:80/wd/hub"),
                 capabillities);
     }
 

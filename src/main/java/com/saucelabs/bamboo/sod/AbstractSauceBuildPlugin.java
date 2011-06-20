@@ -16,11 +16,21 @@ import com.saucelabs.bamboo.sod.variables.VariableModifier;
  */
 public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlugin {
 
+    /**
+     * Return a new {@link VariableModifier} instance that will be used to construct the environment
+     * variables.
+     *  
+     * @param config
+     * @param plan
+     * @return
+     */
     protected VariableModifier getVariableModifier(SODMappedBuildConfiguration config, Plan plan) {
         VariableModifier variableModifier = null;
         //try the task definitions
         BuildDefinition definition = plan.getBuildDefinition();
         try {
+            //we don't reference the TaskDefinition class explicitly so that the plugin is backwards compatible
+            //with pre-Bamboo 3
             Class taskDefinitionClass = Class.forName("com.atlassian.bamboo.task.TaskDefinition");
             if (taskDefinitionClass != null) {
                 variableModifier = new Bamboo3Modifier(config, definition, buildContext);

@@ -18,13 +18,12 @@ public final class CacheTimeUtil
      * Class can't be constructed.
      */
     private CacheTimeUtil() {
-
     }
+    
     private static Timestamp getMaxTimestampForDuration(Timestamp startTime, String duration) throws InvalidDurationException
     {
         long maxSeconds = DateUtils.getDuration(duration, 24, 7, DateUtils.Duration.DAY);
         long maxMillis = maxSeconds * 1000;
-
         return new Timestamp(startTime.getTime() + maxMillis);
     }
 

@@ -1,26 +1,20 @@
 package com.saucelabs.bamboo.sod.admin.action;
 
-import com.atlassian.bamboo.Bamboo;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.opensymphony.xwork.ActionContext;
-import org.junit.Test;
-import org.junit.Before;
-
+import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
-import java.util.HashMap;
-import java.util.Map;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /**
  * @author Ross Rowe
  */
-public class ConfigureSODActionTest {
+public class ConfigureSODActionTest extends AbstractTestHelper {
 
     private ConfigureSODAction configureSODAction;
     

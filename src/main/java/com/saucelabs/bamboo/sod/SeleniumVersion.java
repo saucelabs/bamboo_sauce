@@ -1,6 +1,7 @@
 package com.saucelabs.bamboo.sod;
 
 /**
+ * Used to represent different versions of Selenium.
  * @author Ross Rowe
  */
 public enum SeleniumVersion {
