@@ -18,6 +18,7 @@ import java.net.*;
 public class SauceFactory {
 
     private static final Logger logger = Logger.getLogger(SauceFactory.class);
+    private static SauceFactory instance;
 
     /**
      * @param username
@@ -75,4 +76,16 @@ public class SauceFactory {
         }
     }
 
+    /**
+     * Returns a singleton instance of SauceFactory.  This is required because
+     * remote agents don't have the Bamboo component plugin available, so the Spring
+     * auto-wiring doesn't work. 
+     * @return
+     */
+    public static SauceFactory getInstance() {
+        if (instance == null) {
+            instance = new SauceFactory();
+        }
+        return instance;
+    }
 }

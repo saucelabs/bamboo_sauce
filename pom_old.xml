@@ -76,7 +76,7 @@
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
+            <artifactId>jackson-mapper-asl</artifactId>
             <version>1.5.0</version>
         </dependency>
         <dependency>

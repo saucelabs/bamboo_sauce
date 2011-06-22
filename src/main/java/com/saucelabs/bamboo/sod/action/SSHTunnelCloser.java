@@ -40,7 +40,7 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
         try {
             assert buildContext != null;
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-            sauceTunnelManager.closeTunnelsForPlan(buildContext.getPlanKey());
+            getSauceTunnelManager().closeTunnelsForPlan(buildContext.getPlanKey());
             config.setTempUsername("");
             config.setTempApikey("");
         } catch (Exception e) {
@@ -61,9 +61,8 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
 
     public SauceTunnelManager getSauceTunnelManager() {
         if (sauceTunnelManager == null) {
-            //this shouldn't happen as the tunnel manager should be injected via Spring
-            logger.warn("No Sauce Tunnel Manager available, setting a new one");
-            setSauceTunnelManager(new SauceTunnelManager());
+            //this will occur when a remote agent runs, as it doesn't have Spring components available
+            setSauceTunnelManager(SauceTunnelManager.getInstance());
         }
         return sauceTunnelManager;
     }

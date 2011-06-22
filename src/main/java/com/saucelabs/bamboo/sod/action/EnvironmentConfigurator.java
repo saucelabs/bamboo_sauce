@@ -28,11 +28,9 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
     @NotNull
     public BuildContext call() throws JSONException {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-
         if (config.isEnabled()) {
             setSeleniumEnvironmentVars(config);
         }
-
         return buildContext;
     }
 
@@ -41,7 +39,7 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
         if (plan != null) {
             VariableModifier variableModifier = getVariableModifier(config, plan);
             variableModifier.setAdministrationConfigurationManager(administrationConfigurationManager);
-            variableModifier.setSauceBrowserFactory(sauceBrowserFactory);
+            variableModifier.setSauceBrowserFactory(getSauceBrowserFactory());
             if (variableModifier != null) {
                 variableModifier.storeVariables();
                 planManager.savePlan(plan);
@@ -63,5 +61,12 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
 
     public void setSauceBrowserFactory(BrowserFactory sauceBrowserFactory) {
         this.sauceBrowserFactory = sauceBrowserFactory;
+    }
+
+    public BrowserFactory getSauceBrowserFactory() {
+        if (sauceBrowserFactory == null) {
+            setSauceBrowserFactory(BrowserFactory.getInstance());
+        }
+        return sauceBrowserFactory;
     }
 }

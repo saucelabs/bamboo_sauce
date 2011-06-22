@@ -211,23 +211,21 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     public SauceTunnelManager getSauceTunnelManager() {
         if (sauceTunnelManager == null) {
-            //this shouldn't happen as the tunnel manager should be injected via Spring
-            logger.warn("No Sauce Tunnel Manager available, setting a new one");
-            setSauceTunnelManager(new SauceTunnelManager());
+            setSauceTunnelManager(SauceTunnelManager.getInstance());
         }
         return sauceTunnelManager;
     }
 
     public SauceFactory getSauceAPIFactory() {
         if (sauceAPIFactory == null) {
-            setSauceAPIFactory(new SauceFactory());
+            setSauceAPIFactory(SauceFactory.getInstance());
         }
         return sauceAPIFactory;
     }
 
     public BrowserFactory getSauceBrowserFactory() {
         if (sauceBrowserFactory == null) {
-            setSauceBrowserFactory(new BrowserFactory());
+            setSauceBrowserFactory(BrowserFactory.getInstance());
         }
         return sauceBrowserFactory;
     }

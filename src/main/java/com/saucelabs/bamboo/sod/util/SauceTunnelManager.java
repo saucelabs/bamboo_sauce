@@ -22,6 +22,7 @@ public class SauceTunnelManager
     private static final Logger logger = Logger.getLogger(SauceTunnelManager.class);
 
     private Map<String, List<SauceTunnel>> tunnelMap;
+    private static SauceTunnelManager instance;
 
     public SauceTunnelManager()
     {
@@ -71,4 +72,16 @@ public class SauceTunnelManager
     }
 
 
+    /**
+     * Returns a singleton instance of SauceTunnelManager.  This is required because
+     * remote agents don't have the Bamboo component plugin available, so the Spring
+     * auto-wiring doesn't work. 
+     * @return
+     */
+    public static SauceTunnelManager getInstance() {
+        if (instance == null) {
+            instance = new SauceTunnelManager();
+        }
+        return instance;
+    }
 }
