@@ -45,7 +45,7 @@
         <url>scm:git:git://github.com/saucelabs/bambo_sauce.git</url>
     </scm>
     <build>
-        <plugins>            
+        <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -69,19 +69,29 @@
             <artifactId>sauce-rest-api</artifactId>
             <version>1.5</version>
         </dependency>
-         <dependency>
+        <dependency>
+            <groupId>org.jvnet.hudson</groupId>
+            <artifactId>trilead-ssh2</artifactId>
+            <version>build212-hudson-5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20080701</version>
-        </dependency>       
+        </dependency>
         <!-- Include Jython here because several classes were being excluded from the sauce-connect
-        jar -->
-         <!--dependency>
+       jar -->
+        <!--dependency>
             <groupId>org.python</groupId>
             <artifactId>jython</artifactId>
             <version>2.5.0</version>
         </dependenc-->
-        
+
         <!-- Mark these dependencies as provided so that they don't clash with Bamboo -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -94,7 +104,7 @@
             <artifactId>guava</artifactId>
             <version>r05</version>
             <scope>provided</scope>
-        </dependency>       
+        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
