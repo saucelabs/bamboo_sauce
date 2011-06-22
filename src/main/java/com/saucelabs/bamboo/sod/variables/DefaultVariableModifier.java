@@ -14,6 +14,8 @@ import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
+import java.text.MessageFormat;
+
 /**
  * Handles writing and restoring the Sauce OnDemand environment variables to the Builder instance (for pre-Bamboo 3 instances).
  * The variables are saved to the plan's configuration by the {@link com.saucelabs.bamboo.sod.action.EnvironmentConfigurator} class,
@@ -32,6 +34,7 @@ public class DefaultVariableModifier implements VariableModifier {
     protected BuildDefinition definition;
     protected BuildContext buildContext;
     private BrowserFactory sauceBrowserFactory;
+    private static final String SAUCE_URL = "http://{1}:{2}@{3}:{4}/wd/hub";
 
     public DefaultVariableModifier(SODMappedBuildConfiguration config, BuildDefinition definition, BuildContext buildContext) {
         this.config = config;
@@ -144,6 +147,7 @@ public class DefaultVariableModifier implements VariableModifier {
         String port = adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY);
         String browserUrl = config.getSeleniumStartingUrl();
         String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
+        String sauceUrl = getSauceUrl(sodUsername, sodKey, host, port);
 
         String sodHost = config.getSshDomains();
         String finalStartingUrl = browserUrl;
@@ -157,12 +161,17 @@ public class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_URL_ENV).append(EQUALS).append(sauceUrl).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
         if (buildContext.getParentBuildContext() == null) {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
         } else {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getParentBuildContext().getBuildResultKey()).append('"');
         }
+    }
+
+    private String getSauceUrl(String username, String apiKey, String host, String port) {
+        return MessageFormat.format(SAUCE_URL, username, apiKey, host, port);
     }
 
     /**
