@@ -34,7 +34,7 @@ public class DefaultVariableModifier implements VariableModifier {
     protected BuildDefinition definition;
     protected BuildContext buildContext;
     private BrowserFactory sauceBrowserFactory;
-    private static final String SAUCE_URL = "http://{1}:{2}@{3}:{4}/wd/hub";
+    private static final String SAUCE_URL = "http://{0}:{1}@{2}:{3}/wd/hub";
 
     public DefaultVariableModifier(SODMappedBuildConfiguration config, BuildDefinition definition, BuildContext buildContext) {
         this.config = config;
