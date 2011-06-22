@@ -7,16 +7,18 @@ import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
-import com.saucelabs.bamboo.sod.SeleniumVersion;
-import com.saucelabs.rest.SauceTunnel;
-import com.saucelabs.rest.SauceTunnelFactory;
 import com.saucelabs.bamboo.sod.Browser;
 import com.saucelabs.bamboo.sod.BrowserFactory;
-import com.saucelabs.bamboo.sod.config.*;
+import com.saucelabs.bamboo.sod.SeleniumVersion;
+import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.rest.SauceTunnel;
+import com.saucelabs.rest.SauceTunnelFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 
@@ -33,6 +35,8 @@ import java.util.Map;
  * @author Ross Rowe
  */
 public class BuildConfigurator extends BaseConfigurableBuildPlugin implements CustomPreBuildAction {
+    
+    private static final Logger logger = Logger.getLogger(BuildConfigurator.class);
 
     /**
      * Populated via dependency injection.
@@ -68,9 +72,14 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     @NotNull
     public BuildContext call() throws IOException {
-        final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-        if (config.isEnabled() && config.isSshEnabled()) {
-            startTunnel(config.getTempUsername(), config.getTempApikey(), config.getSshHost(), config.getSshPorts(), config.getSshTunnelPorts(), config.getSshDomains(), config.isAutoDomain());
+        try {
+            final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
+            if (config.isEnabled() && config.isSshEnabled()) {
+                startTunnel(config.getTempUsername(), config.getTempApikey(), config.getSshHost(), config.getSshPorts(), config.getSshTunnelPorts(), config.getSshDomains(), config.isAutoDomain());
+            }
+        } catch (Exception e) {
+            //catch exceptions so that we don't stop the build from running
+            logger.error("Error running Sauce OnDemand BuildConfigurator, attempting to continue", e);
         }
         return buildContext;
     }
@@ -86,7 +95,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
         List<String> domainList = Collections.singletonList(finalDomain);
 
-        SauceTunnelFactory tunnelFactory = sauceAPIFactory.createSauceTunnelFactory(username, apiKey);
+        SauceTunnelFactory tunnelFactory = getSauceAPIFactory().createSauceTunnelFactory(username, apiKey);
         SauceTunnel tunnel = tunnelFactory.create(domainList);
 
         if (tunnel != null) {
@@ -101,7 +110,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             tunnel.connect(intRemotePort, localHost, intLocalPort);
         }
 
-        sauceTunnelManager.addTunnelToMap(buildContext.getPlanKey(), tunnel);
+        getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
     }
 
 
@@ -114,7 +123,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
         try {
-            context.put("browserList", sauceBrowserFactory.values());
+            context.put("browserList", getSauceBrowserFactory().values());
         } catch (IOException e) {
             //TODO are there a set of default browsers that we can use?
             //TODO detect a proxy exception as opposed to all exceptions?
@@ -200,5 +209,26 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.sauceAPIFactory = sauceAPIFactory;
     }
 
+    public SauceTunnelManager getSauceTunnelManager() {
+        if (sauceTunnelManager == null) {
+            //this shouldn't happen as the tunnel manager should be injected via Spring
+            logger.warn("No Sauce Tunnel Manager available, setting a new one");
+            setSauceTunnelManager(new SauceTunnelManager());
+        }
+        return sauceTunnelManager;
+    }
 
+    public SauceFactory getSauceAPIFactory() {
+        if (sauceAPIFactory == null) {
+            setSauceAPIFactory(new SauceFactory());
+        }
+        return sauceAPIFactory;
+    }
+
+    public BrowserFactory getSauceBrowserFactory() {
+        if (sauceBrowserFactory == null) {
+            setSauceBrowserFactory(new BrowserFactory());
+        }
+        return sauceBrowserFactory;
+    }
 }

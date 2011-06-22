@@ -1,6 +1,5 @@
 package com.saucelabs.bamboo.sod;
 
-import org.openqa.selenium.Platform;
 
 /**
  * Represents a Sauce Browser instance.
@@ -44,13 +43,13 @@ public class Browser implements Comparable<Browser> {
         return version;
     }
 
-    public Platform getPlatform() {
+    public String getPlatform() {
         if (os.equalsIgnoreCase("windows 2008")) {
             //use the 'VISTA' Platform
-            return Platform.VISTA;
+            return "windows vista";
         }
-        //otherwise ask the Platform to find a matching one based on the os
-        return Platform.extractFromSysProperty(os);
+        //otherwise just return the os
+        return os;
     }
 
     public boolean equals(Object object) {

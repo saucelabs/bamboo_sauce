@@ -5,6 +5,7 @@ import com.atlassian.bamboo.v2.build.BaseConfigurablePlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +16,9 @@ import org.jetbrains.annotations.NotNull;
  * @author Ross Rowe
  */
 public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBuildProcessor {
+
+    private static final Logger logger = Logger.getLogger(SSHTunnelCloser.class);
+
     private BuildContext buildContext;
 
     /**
@@ -33,13 +37,16 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
      */
     @NotNull
     public BuildContext call() {
-
-        assert buildContext != null;
-        final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-        sauceTunnelManager.closeTunnelsForPlan(buildContext.getPlanKey());
-
-        config.setTempUsername("");
-        config.setTempApikey("");
+        try {
+            assert buildContext != null;
+            final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
+            sauceTunnelManager.closeTunnelsForPlan(buildContext.getPlanKey());
+            config.setTempUsername("");
+            config.setTempApikey("");
+        } catch (Exception e) {
+            //catch exceptions so that we don't stop the build from running
+            logger.error("Error running Sauce OnDemand SSHTunnelCloser, attempting to continue", e);
+        }
 
         return buildContext;
     }
@@ -50,5 +57,14 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
 
     public void setSauceTunnelManager(SauceTunnelManager sauceTunnelManager) {
         this.sauceTunnelManager = sauceTunnelManager;
+    }
+
+    public SauceTunnelManager getSauceTunnelManager() {
+        if (sauceTunnelManager == null) {
+            //this shouldn't happen as the tunnel manager should be injected via Spring
+            logger.warn("No Sauce Tunnel Manager available, setting a new one");
+            setSauceTunnelManager(new SauceTunnelManager());
+        }
+        return sauceTunnelManager;
     }
 }

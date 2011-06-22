@@ -2,12 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-             
+
     <parent>
         <groupId>com.atlassian.bamboo.plugins.base</groupId>
         <artifactId>bamboo-plugin-base</artifactId>
         <version>10</version>
-        </parent>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
@@ -35,27 +35,17 @@
         </developer>
     </developers>
     <properties>
-        <ci.version>1.2.1</ci.version>
+        <ci.version>1.2.2</ci.version>
         <bamboo.version>3.1</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
     <scm>
-		<connection>scm:git:git://github.com/saucelabs/bambo_sauce.git</connection>
-		<url>scm:git:git://github.com/saucelabs/bambo_sauce.git</url>
-	</scm>
+        <connection>scm:git:git://github.com/saucelabs/bambo_sauce.git</connection>
+        <url>scm:git:git://github.com/saucelabs/bambo_sauce.git</url>
+    </scm>
     <build>
-        <plugins>
-            <!--plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-bamboo-plugin</artifactId>
-                <version>${atlassian.plugins.version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <productVersion>${bamboo.version}</productVersion>
-                    <productDataVersion>${bamboo.data.version}</productDataVersion>                   
-                </configuration>
-            </plugin-->
+        <plugins>            
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -69,34 +59,42 @@
         </plugins>
     </build>
     <dependencies>
-        <!--dependency>
-            <groupId>com.atlassian.selenium</groupId>
-            <artifactId>atlassian-selenium-browsers-auto</artifactId>
-            <version>2.0.0-m19</version>
-            <scope>test</scope>
-        </dependency-->
+        <dependency>
+            <groupId>com.saucelabs</groupId>
+            <artifactId>sauce-connect</artifactId>
+            <version>2.0r4</version>
+        </dependency>
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce-rest-api</artifactId>
             <version>1.5</version>
         </dependency>
-        <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>1.4</version>
-        <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                    <version>r05</version>
-                    <scope>provided</scope>
-                    </dependency>
-        <dependency>
+         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20080701</version>
+        </dependency>       
+        <!-- Include Jython here because several classes were being excluded from the sauce-connect
+        jar -->
+         <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython</artifactId>
+            <version>2.5.0</version>
         </dependency>
+        
+        <!-- Mark these dependencies as provided so that they don't clash with Bamboo -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r05</version>
+            <scope>provided</scope>
+        </dependency>       
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>
@@ -133,29 +131,18 @@
             <version>4.6</version>
             <scope>test</scope>
         </dependency>
-		<dependency>
-	            <groupId>org.seleniumhq.selenium</groupId>
-	            <artifactId>selenium-api</artifactId>
-	            <version>2.0b3</version>
-	        </dependency>	
-		<dependency>
-	            <groupId>org.seleniumhq.selenium</groupId>
-	            <artifactId>selenium-server</artifactId>
-	            <version>2.0b3</version>
-				<scope>test</scope>
-	        </dependency>
-			<dependency>
-	            <groupId>org.mortbay.jetty</groupId>
-	            <artifactId>jetty</artifactId>
-	            <version>6.1.11</version>
-	            <scope>test</scope>
-	        </dependency>
-			<dependency>
-	            <groupId>com.saucelabs.selenium</groupId>
-	            <artifactId>sauce-ondemand-driver</artifactId>
-	            <version>2.0</version>
-	            <scope>test</scope>
-	        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-server</artifactId>
+            <version>2.0b3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.saucelabs.selenium</groupId>
+            <artifactId>sauce-ondemand-driver</artifactId>
+            <version>2.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
