@@ -35,7 +35,7 @@
         </developer>
     </developers>
     <properties>
-        <ci.version>1.3.0-beta</ci.version>
+        <ci.version>1.3.1</ci.version>
         <bamboo.version>3.1</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
@@ -68,6 +68,16 @@
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce-rest-api</artifactId>
             <version>1.5</version>
+        </dependency>
+		<dependency>
+            <groupId>org.jvnet.hudson</groupId>
+            <artifactId>trilead-ssh2</artifactId>
+            <version>build212-hudson-5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.5.0</version>
         </dependency>
          <dependency>
             <groupId>org.json</groupId>

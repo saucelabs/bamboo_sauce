@@ -61,7 +61,7 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
         if (plan != null) {
             VariableModifier variableModifier = getVariableModifier(config, plan);
             variableModifier.setAdministrationConfigurationManager(administrationConfigurationManager);
-            variableModifier.setSauceBrowserFactory(sauceBrowserFactory);
+            variableModifier.setSauceBrowserFactory(getSauceBrowserFactory());
             variableModifier.storeVariables();
             planManager.savePlan(plan);
         }
@@ -81,5 +81,12 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
 
     public void setSauceBrowserFactory(BrowserFactory sauceBrowserFactory) {
         this.sauceBrowserFactory = sauceBrowserFactory;
+    }
+    
+    public BrowserFactory getSauceBrowserFactory() {
+        if (sauceBrowserFactory == null) {
+            setSauceBrowserFactory(BrowserFactory.getInstance());
+        }
+        return sauceBrowserFactory;
     }
 }

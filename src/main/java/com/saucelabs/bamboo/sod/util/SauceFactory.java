@@ -23,7 +23,8 @@ import java.net.URL;
  */
 public class SauceFactory {
 
-    private static final Logger logger = Logger.getLogger(SauceFactory.class);    
+    private static final Logger logger = Logger.getLogger(SauceFactory.class);
+    private static SauceFactory instance;
 
     public String doREST(String urlText) throws IOException {
         return doREST(urlText, null, null);
@@ -107,5 +108,18 @@ public class SauceFactory {
             System.setProperty("http.proxyPassword", password);
             System.setProperty("https.proxyPassword", password);
         }
+    }
+    
+     /**
+     * Returns a singleton instance of SauceFactory.  This is required because
+     * remote agents don't have the Bamboo component plugin available, so the Spring
+     * auto-wiring doesn't work. 
+     * @return
+     */
+    public static SauceFactory getInstance() {
+        if (instance == null) {
+            instance = new SauceFactory();
+        }
+        return instance;
     }
 }

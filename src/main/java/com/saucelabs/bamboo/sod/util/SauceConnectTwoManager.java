@@ -21,6 +21,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
     private static final Logger logger = Logger.getLogger(SauceConnectTwoManager.class);
     private Thread sauceConnectThread;
     private Map<String, List<SauceConnect>> tunnelMap;
+    private static SauceTunnelManager instance;
 
     public SauceConnectTwoManager() {
         this.tunnelMap = new HashMap<String,List<SauceConnect>>();
@@ -60,6 +61,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
      */
     public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
         final SauceConnect sauceConnect = new SauceConnect(new String[]{username, apiKey, "-d", "--proxy-host", localHost});
+		sauceConnect.setStandaloneMode(false);
         this.sauceConnectThread = new Thread("SauceConnectThread") {
             @Override
             public void run() {
@@ -78,5 +80,18 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
 
     public Map getTunnelMap() {
         return tunnelMap;
+    }
+
+    /**
+     * Returns a singleton instance of SauceConnectTwoManager.  This is required because
+     * remote agents don't have the Bamboo component plugin available, so the Spring
+     * auto-wiring doesn't work. 
+     * @return
+     */
+    public static SauceTunnelManager getInstance() {
+        if (instance == null) {
+            instance = new SauceConnectTwoManager();
+        }
+        return instance;
     }
 }

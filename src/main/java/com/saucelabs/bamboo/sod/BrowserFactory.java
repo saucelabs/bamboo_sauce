@@ -32,6 +32,7 @@ public class BrowserFactory {
     private Timestamp lastLookup = null;
     private static final String IEHTA = "iehta";
     private static final String CHROME = "chrome";
+	private static BrowserFactory instance;
 
     public BrowserFactory() {
         try {
@@ -103,6 +104,19 @@ public class BrowserFactory {
 
     public Browser forKey(String key) {
         return lookup.get(key);
+    }
+
+	/**
+     * Returns a singleton instance of SauceFactory.  This is required because
+     * remote agents don't have the Bamboo component plugin available, so the Spring
+     * auto-wiring doesn't work. 
+     * @return
+     */
+    public static BrowserFactory getInstance() {
+        if (instance == null) {
+            instance = new BrowserFactory();
+        }
+        return instance;
     }
 
 }
