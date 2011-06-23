@@ -87,7 +87,7 @@
         <!-- Include Jython here because several classes were being excluded from the sauce-connect
         jar -->
          <dependency>
-            <groupId>org.python</groupId>
+            <groupId>jython</groupId>
             <artifactId>jython</artifactId>
             <version>2.5.0</version>
         </dependency>
