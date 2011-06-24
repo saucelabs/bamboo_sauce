@@ -1,11 +1,8 @@
 package com.saucelabs.bamboo.sod.util;
 
 import com.saucelabs.sauceconnect.SauceConnect;
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
-import org.python.core.Py;
-import org.python.core.PyString;
-import org.python.core.PySystemState;
-import org.python.util.PythonInterpreter;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,31 +23,33 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
 
     private static final Logger logger = Logger.getLogger(SauceConnectTwoManager.class);
     private Thread sauceConnectThread;
-    private Map<String, List<SauceConnect>> tunnelMap;
+    private Map<String, List<Process>> tunnelMap;
     private static SauceTunnelManager instance;
 
     public SauceConnectTwoManager() {
-        this.tunnelMap = new HashMap<String, List<SauceConnect>>();
+        this.tunnelMap = new HashMap<String, List<Process>>();
     }
 
     public void closeTunnelsForPlan(String planKey) {
         if (tunnelMap.containsKey(planKey)) {
-            List<SauceConnect> tunnelList = tunnelMap.get(planKey);
-            for (SauceConnect sauceConnect : tunnelList) {
-                sauceConnect.removeHandler();
-                sauceConnect.closeTunnel();
-                sauceConnectThread.interrupt();
+            List<Process> tunnelList = tunnelMap.get(planKey);
+            for (Process sauceConnect : tunnelList) {
+//                sauceConnect.removeHandler();
+//                sauceConnect.closeTunnel();
+//                sauceConnectThread.interrupt();
+                sauceConnect.destroy();
             }
+
             tunnelMap.remove(planKey);
         }
     }
 
     public void addTunnelToMap(String planKey, Object tunnel) {
         if (!tunnelMap.containsKey(planKey)) {
-            tunnelMap.put(planKey, new ArrayList<SauceConnect>());
+            tunnelMap.put(planKey, new ArrayList<Process>());
         }
 
-        tunnelMap.get(planKey).add((SauceConnect) tunnel);
+        tunnelMap.get(planKey).add((Process) tunnel);
     }
 
     /**
@@ -67,35 +66,65 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
      */
     public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
 
-        PySystemState.initialize();
-        PythonInterpreter interpreter = new PythonInterpreter(null, new PySystemState());
-        PySystemState sys = Py.getSystemState();
+        String separator = System.getProperty("file.separator");
         try {
             File jarFile = new File
                     (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            sys.path.append(new PyString(jarFile.getPath()));
-        } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        interpreter.exec("import sauce_connect");
-        SauceConnect.setInterpreterIfNull(interpreter);
-        //SauceConnect.getInterpreter();
-        final SauceConnect sauceConnect = new SauceConnect(new String[]{username, apiKey, "-d", "--proxy-host", localHost});
-        sauceConnect.setStandaloneMode(false);
-        this.sauceConnectThread = new Thread("SauceConnectThread") {
-            @Override
-            public void run() {
-                sauceConnect.openConnection();
+            String path = System.getProperty("java.home")
+                    + separator + "bin" + separator + "java";
+            ProcessBuilder processBuilder =
+                    new ProcessBuilder(path, "-cp",
+                            jarFile.getPath(),
+                            SauceConnect.class.getName(),
+                            username,
+                            apiKey,
+                            "-d",
+                            "--proxy-host",
+                            localHost);
+            final Process process = processBuilder.start();
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        IOUtils.copy(process.getInputStream(), System.out);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        IOUtils.copy(process.getErrorStream(), System.err);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+            try {
+                Thread.sleep(1000 * 60 * 2); //2 minutes
+            } catch (InterruptedException e) {
+                //continue;
             }
-        };
-        sauceConnectThread.start();
+            return process;
 
-        try {
-            Thread.sleep(1000 * 60 * 2); //2 minutes
-        } catch (InterruptedException e) {
-            //continue;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
-        return sauceConnect;
+
+        //SauceConnect.getInterpreter();
+//        final SauceConnect sauceConnect = new SauceConnect(new String[]{username, apiKey, "-d", "--proxy-host", localHost});
+//        sauceConnect.setStandaloneMode(false);
+//        this.sauceConnectThread = new Thread("SauceConnectThread") {
+//            @Override
+//            public void run() {
+//                sauceConnect.openConnection();
+//            }
+//        };
+//        sauceConnectThread.start();
+
+
+//        return sauceConnect;
+        return null;
     }
 
     public Map getTunnelMap() {
