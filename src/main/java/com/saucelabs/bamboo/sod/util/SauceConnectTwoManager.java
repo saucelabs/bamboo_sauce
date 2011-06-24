@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Handles opening a SSH Tunnel using the Sauce Connect 2 logic. The class  maintains a cache of {@link com.saucelabs.rest.SauceTunnel} instances mapped against
+ * Handles opening a SSH Tunnel using the Sauce Connect 2 logic. The class  maintains a cache of {@link Process } instances mapped against
  * the corresponding plan key.  This class can be considered a singleton, and is instantiated via the 'component' element of the atlassian-plugin.xml
  * file (ie. using Spring).
  *
@@ -22,7 +22,6 @@ import java.util.Map;
 public class SauceConnectTwoManager implements SauceTunnelManager {
 
     private static final Logger logger = Logger.getLogger(SauceConnectTwoManager.class);
-    private Thread sauceConnectThread;
     private Map<String, List<Process>> tunnelMap;
     private static SauceTunnelManager instance;
 
@@ -34,9 +33,6 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         if (tunnelMap.containsKey(planKey)) {
             List<Process> tunnelList = tunnelMap.get(planKey);
             for (Process sauceConnect : tunnelList) {
-//                sauceConnect.removeHandler();
-//                sauceConnect.closeTunnel();
-//                sauceConnectThread.interrupt();
                 sauceConnect.destroy();
             }
 
@@ -53,7 +49,8 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
     }
 
     /**
-     * Creates a new Thread which creates a SSH Tunnel.
+     * Creates a new Java process to run the Sauce Connect 2 library.  We have to launch a separate process
+     * because of a version conflict with Jython (Bamboo includes v2.2 but Sauce Connect requires v 2.5).
      *
      * @param username
      * @param apiKey
@@ -69,7 +66,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         String separator = System.getProperty("file.separator");
         try {
             File jarFile = new File
-                    (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+                    (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());            
             String path = System.getProperty("java.home")
                     + separator + "bin" + separator + "java";
             ProcessBuilder processBuilder =
@@ -78,16 +75,16 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
                             SauceConnect.class.getName(),
                             username,
                             apiKey,
-                            "-d",
-                            "--proxy-host",
-                            localHost);
+                            "-p",
+                            domainList.get(0)
+                    );
             final Process process = processBuilder.start();
             new Thread(new Runnable() {
                 public void run() {
                     try {
                         IOUtils.copy(process.getInputStream(), System.out);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        logger.error("Exception trapped in copying output from Sauce Connect, attempting to continue", e);
                     }
                 }
             }).start();
@@ -96,11 +93,12 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
                     try {
                         IOUtils.copy(process.getErrorStream(), System.err);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        logger.error("Exception trapped in copying error output from Sauce Connect, attempting to continue", e);
                     }
                 }
             }).start();
             try {
+                //TODO check for the Tunnel started message in the Sauce Connect output
                 Thread.sleep(1000 * 60 * 2); //2 minutes
             } catch (InterruptedException e) {
                 //continue;
@@ -108,25 +106,14 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
             return process;
 
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            //shouldn't happen   
+            logger.error("Exception occured during retrieval of bamboo-sauce.jar URL", e);
         }
 
-        //SauceConnect.getInterpreter();
-//        final SauceConnect sauceConnect = new SauceConnect(new String[]{username, apiKey, "-d", "--proxy-host", localHost});
-//        sauceConnect.setStandaloneMode(false);
-//        this.sauceConnectThread = new Thread("SauceConnectThread") {
-//            @Override
-//            public void run() {
-//                sauceConnect.openConnection();
-//            }
-//        };
-//        sauceConnectThread.start();
-
-
-//        return sauceConnect;
         return null;
     }
 
+    
     public Map getTunnelMap() {
         return tunnelMap;
     }

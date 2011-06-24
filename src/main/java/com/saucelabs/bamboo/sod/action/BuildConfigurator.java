@@ -110,8 +110,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         int intLocalPort = Integer.parseInt(localPorts);
         int intRemotePort = Integer.parseInt(remotePorts);
         List<String> domainList = Collections.singletonList(finalDomain);
-        Object tunnel = getSauceTunnelManager().openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, domainList);
-        getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
+        //if (!getSauceTunneManager().getTunnel(buildContext.getPlanKey())) {
+             
+              Object tunnel = getSauceTunnelManager().openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, domainList);
+              getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
+       // }
     }
 
 
