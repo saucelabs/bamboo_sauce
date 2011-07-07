@@ -38,12 +38,14 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         this.buildConfigurator = new BuildConfigurator();
         this.tunnelManager = new SauceTunnelManager(){
 
+            private Map<String,Object> tunnelMap = new HashMap<String,Object>();
+
             public void closeTunnelsForPlan(String planKey) {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
 
             public void addTunnelToMap(String planKey, Object tunnel) {
-                //To change body of implemented methods use File | Settings | File Templates.
+                tunnelMap.put(planKey, tunnel);
             }
 
             public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
@@ -51,7 +53,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             }
 
             public Map getTunnelMap() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return tunnelMap;
             }
         };
         buildConfigurator.setSauceTunnelManager(tunnelManager);

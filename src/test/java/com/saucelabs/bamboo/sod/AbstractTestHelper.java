@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -25,11 +26,13 @@ public abstract class AbstractTestHelper extends HttpServlet {
     }
     
     @BeforeClass
-    public void loadProperties() throws Exception {
+    public static void loadProperties() throws Exception {
         InputStream stream = AbstractTestHelper.class.getClassLoader().getResourceAsStream("test.properties");
         Properties properties = new Properties();
         properties.load(stream);
-        System.setProperties(properties);
+        for (Map.Entry property : properties.entrySet()) {
+            System.setProperty((String) property.getKey(), (String) property.getValue());
+        }
     }
     
     

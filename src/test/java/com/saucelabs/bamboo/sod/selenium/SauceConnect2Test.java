@@ -2,7 +2,6 @@ package com.saucelabs.bamboo.sod.selenium;
 
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.util.SauceConnectTwoManager;
-import com.saucelabs.bamboo.sod.util.SauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
 import com.saucelabs.sauceconnect.SauceConnect;
@@ -10,10 +9,12 @@ import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import com.thoughtworks.selenium.Selenium;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
+import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
@@ -27,6 +28,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
      * Start a web server locally, set up an SSH tunnel, and have Sauce OnDemand connect to the local server.
      */
     @Test
+    @Ignore("Test should pass okay, but ignore for the moment")
     public void fullRun() throws Exception {
         this.code = new Random().nextInt();
 
@@ -55,7 +57,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
                     }
             );            
             SauceTunnelManager sauceTunnelManager = new SauceConnectTwoManager();
-            SauceConnect sauceConnect = (SauceConnect) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "testing.org", -1, -1, null);
+            SauceConnect sauceConnect = (SauceConnect) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), null, -1, -1, Arrays.asList("testing.org"));
             sauceTunnelManager.addTunnelToMap("TEST", sauceConnect);
             System.out.println("tunnel established");
             String driver = System.getenv("SELENIUM_DRIVER");
