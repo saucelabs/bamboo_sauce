@@ -1,7 +1,9 @@
 package com.saucelabs.bamboo.sod.selenium;
 
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Platform;
@@ -29,6 +31,7 @@ public class DummySelenium2Test extends AbstractTestHelper {
     }
 
     @Test
+    @Ignore
     public void invokeGoogle() throws Exception {
         driver.get("http://www.google.com");
         WebElement search = driver.findElement(By.name("q"));
@@ -37,7 +40,9 @@ public class DummySelenium2Test extends AbstractTestHelper {
         System.out.println(driver.getTitle());
     }
 
+    @After
     public void tearDown() throws Exception {
         driver.quit();
+        //driver.close();
     }
 }

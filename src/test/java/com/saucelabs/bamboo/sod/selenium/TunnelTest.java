@@ -30,20 +30,9 @@ public class TunnelTest extends AbstractTestHelper {
      * Start a web server locally, set up an SSH tunnel, and have Sauce OnDemand connect to the local server.
      */
     @Test
-    public void fullRun() throws Exception {
-        this.code = new Random().nextInt();
-        // start the Jetty locally and have it respond our secret code.
+    public void fullRun() throws Exception {               
          // start the Jetty locally and have it respond our secret code.
-        Server server = new Server(8080);
-
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-        server.setHandler(context);
-
-        context.addServlet(new ServletHolder(this), "/*");
-
-        server.start();
-        System.out.println("Started Jetty at 8080");
+        Server server = startWebServer();
 
         try {
             // start a tunnel
@@ -51,7 +40,7 @@ public class TunnelTest extends AbstractTestHelper {
             Credential c = new Credential();            
             SauceTunnelManager sauceTunnelManager = new SauceConnectOneManager();
 
-            SauceTunnel tunnel = (SauceTunnel) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "test"+code+".org", 80, 8080, Collections.singletonList("localhost"));
+            SauceTunnel tunnel = (SauceTunnel) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "localhost", 80, 8080, Collections.singletonList("testin.org"));
             sauceTunnelManager.addTunnelToMap("TEST", tunnel);
 
             assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());
@@ -64,7 +53,7 @@ public class TunnelTest extends AbstractTestHelper {
                     System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
                 }
 
-                System.setProperty("SELENIUM_STARTING_URL", "http://test" + code + ".org/");
+                System.setProperty("SELENIUM_STARTING_URL", "http://testing.org/");
                 Selenium selenium = SeleniumFactory.create();
                 selenium.start();
                 selenium.open("/");

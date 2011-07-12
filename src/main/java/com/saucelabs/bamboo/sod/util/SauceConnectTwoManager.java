@@ -64,9 +64,10 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
     public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
 
         String separator = System.getProperty("file.separator");
-        try {
-            File jarFile = new File
-                    (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());            
+//        try {
+//            File jarFile = new File
+//                    (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            File jarFile = new File("/Developer/workspace/bamboo_sauce/target/bamboo-sauceondemand-plugin-1.3.1.jar");
             String path = System.getProperty("java.home")
                     + separator + "bin" + separator + "java";
             ProcessBuilder processBuilder =
@@ -99,18 +100,18 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
             }).start();
             try {
                 //TODO check for the Tunnel started message in the Sauce Connect output
-                Thread.sleep(1000 * 60 * 2); //2 minutes
+                Thread.sleep(1000 * 60 * 1); //2 minutes
             } catch (InterruptedException e) {
                 //continue;
             }
             return process;
 
-        } catch (URISyntaxException e) {
-            //shouldn't happen   
-            logger.error("Exception occured during retrieval of bamboo-sauce.jar URL", e);
-        }
-
-        return null;
+//        } catch (URISyntaxException e) {
+//            //shouldn't happen
+//            logger.error("Exception occured during retrieval of bamboo-sauce.jar URL", e);
+//        }
+//
+//        return null;
     }
 
     

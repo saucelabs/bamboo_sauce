@@ -4,18 +4,18 @@ import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.util.SauceConnectTwoManager;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
-import com.saucelabs.sauceconnect.SauceConnect;
+
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import com.thoughtworks.selenium.Selenium;
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.junit.Ignore;
+
 import org.junit.Test;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.Arrays;
-import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,26 +23,15 @@ import static org.junit.Assert.assertEquals;
  * @author Ross Rowe
  */
 public class SauceConnect2Test extends AbstractTestHelper {
+    private Server server;
 
     /**
      * Start a web server locally, set up an SSH tunnel, and have Sauce OnDemand connect to the local server.
      */
     @Test
-    @Ignore("Test should pass okay, but ignore for the moment")
+    //@Ignore("Test should pass okay, however invoking Sauce Connect 2 library requires the bamboo_sauce jar file to be on the classpath")
     public void fullRun() throws Exception {
-        this.code = new Random().nextInt();
-
-        // start the Jetty locally and have it respond our secret code.
-         org.eclipse.jetty.server.Server server = new org.eclipse.jetty.server.Server(8080);
-
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-        server.setHandler(context);
-
-        context.addServlet(new ServletHolder(this), "/*");
-
-        server.start();
-        System.out.println("Started Jetty at 8080");
+        Server server = startWebServer();
 
         try {
             // start a tunnel
@@ -57,7 +46,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
                     }
             );            
             SauceTunnelManager sauceTunnelManager = new SauceConnectTwoManager();
-            SauceConnect sauceConnect = (SauceConnect) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), null, -1, -1, Arrays.asList("testing.org"));
+            Process sauceConnect = (Process) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), null, -1, -1, Arrays.asList("testing.org"));
             sauceTunnelManager.addTunnelToMap("TEST", sauceConnect);
             System.out.println("tunnel established");
             String driver = System.getenv("SELENIUM_DRIVER");
@@ -72,8 +61,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
                 selenium.start();
                 selenium.open("/");
                 // if the server really hit our Jetty, we should see the same title that includes the secret code.
-                assertEquals("test" + code, selenium.getTitle());
-                selenium.stop();
+                assertEquals("test" + code, selenium.getTitle());                
             } finally {
                 sauceTunnelManager.closeTunnelsForPlan("TEST");
                 selenium.stop();
@@ -85,4 +73,12 @@ public class SauceConnect2Test extends AbstractTestHelper {
             server.stop();
         }
     }
+
+    public static void main(String[] args) throws Exception {
+        new SauceConnect2Test().startWebServer();
+
+
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package it.com.saucelabs.bamboo.sod;
 
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
@@ -10,6 +11,7 @@ public class AdministrationTest extends IntegrationTestHelper {
 
     
     @Test
+    @Ignore
     public void testAdmin() throws Exception {
         selenium.open("/allPlans.action");
         selenium.waitForPageToLoad("30000");
