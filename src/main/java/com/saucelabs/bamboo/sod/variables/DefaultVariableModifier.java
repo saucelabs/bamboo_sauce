@@ -50,7 +50,7 @@ public class DefaultVariableModifier implements VariableModifier {
 
         String envBuffer = createSeleniumEnvironmentVariables();
         AbstractBuilder builder = (AbstractBuilder) definition.getBuilder();
-        String originalEnv = null;
+        String originalEnv;
         if (builder != null) {
             originalEnv = builder.getEnvironmentVariables();
             config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);

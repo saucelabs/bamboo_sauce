@@ -1,0 +1,39 @@
+- The Bamboo plugin is configured by the src/main/resources/atlassian-plugin.xml file which defines
+the entry points into the plugin.  Further information on the available entry points to Bamboo plugins
+can be found at http://confluence.atlassian.com/display/BAMBOO/Bamboo+Development+Hub
+
+The plugin currently uses the following entry points:
+
+ - Pre Build Action (com.saucelabs.bamboo.sod.action.BuildConfigurator) - invoked before a build is launched
+ - Pre Build Queued Action (com.saucelabs.bamboo.sod.action.EnvironmentConfigurator) - invoked when the build is queued (ie. the first action that is run when a build is triggered)
+ - Build Processor (com.saucelabs.bamboo.sod.action.SSHTunnelCloser) - Run after a build has completed (run on a build agent if agents are used)
+ - Build Processor Server (com.saucelabs.bamboo.sod.action.PostBuildAction) - Run on the Bamboo server after a build has completed
+  
+- Two Maven pom files are specified: pom.xml and pom_old.xml. The pom_old.xml is configured to use an 
+older version of the Atlassian Plugin SDK, and the pom.xml file is used to use the latest version of the 
+Atlassian Plugin SDK.  Jars built with the pom.xml file package the dependancies in a META-INF/lib directory
+within the jar file, however it doesn't look like that Bamboo can load these dependencies into it's class
+loader. However, the latest version of the Atlassian Plugin SDK allows us to run and debug an instance
+of Bamboo with the plugin installed by invoking 'atlas-mvn debug'.
+
+Jars built with the pom_old.xml file extract the dependency contents into the jar itself which works okay
+with Bamboo.  Hence, we keep dependencies in both pom.xml and pom_old.xml in sync.
+
+- To build a new Jar of the plugin, run the following command:
+
+    atlas-mvn -f pom_old.xml clean package
+
+- The plugin includes a dependency on Jython 2.5.0.  Although the plugin does not directly require Jython, it
+is required for the Sauce Connect 2 library, and the dependency is included here due to issues with Jython 
+inner classes not being included in the Sauce Connect 2 jar file. 
+
+- To build and deploy a new version of the plugin:
+ 
+    - Update the 'ci.version' property in the pom.xml and pom_old.xml file to reference the new version
+    - Run atlas-mvn -f pom_old.xml clean package
+    - Attach the jar to the https://studio.plugins.atlassian.com/wiki/display/BSAD/Sauce+OnDemand page
+    - Update the https://studio.plugins.atlassian.com/wiki/display/BSAD/Sauce+OnDemand page to include 
+      details of the new version
+    - Update https://plugins.atlassian.com/plugin/details/30134 to include the details of the new version
+
+If you don't have access to the above pages, email developer-relations@atlassian.com

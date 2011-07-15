@@ -32,7 +32,7 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
                 Method taskDefinitionsMethod = BuildDefinition.class.getMethod("getTaskDefinitions", null);
                 List/*<TaskDefinition>*/ taskDefinitions = (List/*<TaskDefinition>*/) taskDefinitionsMethod.invoke(definition, null);
                 for (Object taskDefinition : taskDefinitions) {
-                    Method method = taskDefinitionClass.getMethod("getConfiguration", null);
+                    Method method = taskDefinitionClass.getMethod("getConfiguration");
                     Map<String, String> configuration = (Map<String, String>) method.invoke(taskDefinition);
                     String originalEnv = configuration.get("environmentVariables");
                     if (StringUtils.isNotBlank(originalEnv)) {
@@ -56,7 +56,7 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
                 Method taskDefinitionsMethod = BuildDefinition.class.getMethod("getTaskDefinitions", null);
                 List/*<TaskDefinition>*/ taskDefinitions = (List/*<TaskDefinition>*/) taskDefinitionsMethod.invoke(definition, null);
                 for (Object taskDefinition : taskDefinitions) {
-                    Method method = taskDefinitionClass.getMethod("getConfiguration", null);
+                    Method method = taskDefinitionClass.getMethod("getConfiguration");
                     Map<String, String> configuration = (Map<String, String>) method.invoke(taskDefinition);
                     configuration.put("environmentVariables", config.getMap().get(SODKeys.TEMP_ENV_VARS));
                     config.getMap().put(SODKeys.TEMP_ENV_VARS, "");

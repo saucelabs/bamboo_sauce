@@ -60,7 +60,8 @@ public final class SODKeys
     public static final String BAMBOO_BUILD_NUMBER_ENV = "BAMBOO_BUILDNUMBER";
 
     public static final String TEMP_ENV_VARS = CUSTOM_PREFIX + "temp.env.vars";
-
     public static final String TEMP_USERNAME = CUSTOM_PREFIX + "temp.username";
     public static final String TEMP_API_KEY = CUSTOM_PREFIX + "temp.apikey";
+    
+    public static final String SAUCE_SESSION_ID = "sauceondemand.sessionId";
 }

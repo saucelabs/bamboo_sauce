@@ -8,12 +8,10 @@
 [#--@cp.resultsSubMenu selectedTab='sauce' /--]
 
 
-[#if jobId?has_content ]
-
-<script type="text/javascript" src="https://saucelabs.com/job-embed/${jobId}.js?auth=${hmac}"></script>
-
-[#--<script type="text/javascript" src="http://saucelabs.com/video-embed/${jobId}.js"></script>--]
-
+[#if jobInformation?exists ]
+[#list jobInformation as jobInfo]
+<script type="text/javascript" src="http://saucelabs.com/job-embed/${jobInfo.jobId}.js?auth=${jobInfo.hmac}"></script>
+[/#list]
 [#else]
 <p>
 Unable to find a Sauce Job result for ${buildKey}.
@@ -26,8 +24,6 @@ selenium context, eg.
 String bambooData = System.getenv("SAUCE_BAMBOO_BUILDNUMBER");
 this.selenium.setContext(bambooData);
 </pre>
-
-
 
 [/#if]
 </body>
