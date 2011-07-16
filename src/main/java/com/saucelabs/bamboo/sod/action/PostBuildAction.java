@@ -70,7 +70,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         for (LogEntry logEntry : buildLogger.getBuildLog()) {
             if (logEntry.getLog().startsWith("SauceOnDemandSessionID")) {
                 //extract session id
-                String sessionId = StringUtils.substringBetween("SauceOnDemandSessionID=", " ");
+                String sessionId = StringUtils.substringBetween(logEntry.getLog(),"SauceOnDemandSessionID=", " ");
                 //TODO extract Sauce Job name (included on log line as 'job-name=')?
                 storeSessionId(sessionId);
                 storeBambooBuildNumberInSauce(sessionId);
@@ -107,7 +107,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             if (buildContext.getBuildResult().getBuildState().equals(BuildState.SUCCESS)) {
                 updates.put("passed", Boolean.TRUE.toString());
             } else if (buildContext.getBuildResult().getBuildState().equals(BuildState.FAILED)) {
-                updates.put("failed", Boolean.TRUE.toString());
+                updates.put("passed", Boolean.FALSE.toString());
             }
             JobFactory jobFactory = new JobFactory(credential);
             jobFactory.update(sessionId, updates);
