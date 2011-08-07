@@ -1,16 +1,21 @@
 package com.saucelabs.bamboo.sod.util;
 
 import com.saucelabs.sauceconnect.SauceConnect;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 /**
  * Handles opening a SSH Tunnel using the Sauce Connect 2 logic. The class  maintains a cache of {@link Process } instances mapped against
@@ -63,16 +68,25 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
      */
     public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
 
-        String separator = System.getProperty("file.separator");
         try {
             File jarFile = new File
                     (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            List<String> jarFiles = extractLibrariesFromJar(jarFile);
+
+            StringBuilder builder = new StringBuilder();
+            String pathSeparator = "";
+            for (String fileName : jarFiles) {
+                builder.append(pathSeparator).append(fileName);
+                pathSeparator = File.pathSeparator;
+            }
+
+            String fileSeparator = File.separator;
             //File jarFile = new File("/Developer/workspace/bamboo_sauce/target/bamboo-sauceondemand-plugin-1.4.0.jar");
             String path = System.getProperty("java.home")
-                    + separator + "bin" + separator + "java";
+                    + fileSeparator + "bin" + fileSeparator + "java";
             ProcessBuilder processBuilder =
                     new ProcessBuilder(path, "-cp",
-                            jarFile.getPath(),
+                            builder.toString(),
                             SauceConnect.class.getName(),
                             username,
                             apiKey,
@@ -114,7 +128,35 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         return null;
     }
 
-    
+    private List<String> extractLibrariesFromJar(File jarFile) throws IOException {
+        List<String> files = new ArrayList<String>();
+        JarFile jar = new JarFile(jarFile);
+        java.util.Enumeration entries = jar.entries();
+        final File destDir = new File(System.getProperty("user.dir"), "sauce-connect");
+        while (entries.hasMoreElements()) {
+            JarEntry file = (JarEntry) entries.nextElement();
+
+            if (file.getName().startsWith("META-INF/lib/") && file.getName().endsWith("jar")) {
+                File f = new File(destDir + java.io.File.separator + file.getName());
+
+                if (f.exists()) {
+                    f.delete();
+                }
+                f.mkdirs();
+                f.createNewFile();
+                f.deleteOnExit();
+                InputStream is = jar.getInputStream(file); // get the input stream
+                FileOutputStream fos = new java.io.FileOutputStream(f);
+                IOUtils.copy(is, fos);
+
+                files.add(f.getPath());
+            }
+
+        }
+        return files;
+    }
+
+
     public Map getTunnelMap() {
         return tunnelMap;
     }
