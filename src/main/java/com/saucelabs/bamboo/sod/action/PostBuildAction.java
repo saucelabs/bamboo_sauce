@@ -15,9 +15,12 @@ import com.saucelabs.rest.Credential;
 import com.saucelabs.rest.JobFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,9 +113,12 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 updates.put("passed", Boolean.FALSE.toString());
             }
             JobFactory jobFactory = new JobFactory(credential);
+            URI uri = ObjectMapper.class.getProtectionDomain().getCodeSource().getLocation().toURI();
             jobFactory.update(sessionId, updates);
         } catch (IOException e) {
             logger.error("Unable to set build number", e);
+        } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
