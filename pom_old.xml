@@ -4,16 +4,16 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <parent>
-        <groupId>com.atlassian.bamboo.plugins.base</groupId>
-        <artifactId>bamboo-plugin-base</artifactId>
-        <version>10</version>
+        <artifactId>atlassian-public-pom</artifactId>
+        <groupId>com.atlassian.pom</groupId>
+        <version>27</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
     <version>${ci.version}</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
-    <packaging>atlassian-plugin</packaging>
+    <!--<packaging>atlassian-plugin</packaging>-->
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
     <organization>
         <name>Sauce Labs</name>
@@ -35,7 +35,7 @@
         </developer>
     </developers>
     <properties>
-        <ci.version>1.4.0</ci.version>
+        <ci.version>1.4.1</ci.version>
         <bamboo.version>3.1</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
@@ -78,6 +78,7 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.5.0</version>
+            <scope>provided</scope>
         </dependency>
          <dependency>
             <groupId>org.json</groupId>

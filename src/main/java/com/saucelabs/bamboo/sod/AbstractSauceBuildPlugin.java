@@ -24,8 +24,7 @@ public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlug
      * @param plan
      * @return
      */
-    protected VariableModifier getVariableModifier(SODMappedBuildConfiguration config, Plan plan) {
-        VariableModifier variableModifier = null;
+    protected VariableModifier getVariableModifier(SODMappedBuildConfiguration config, Plan plan) {        
         //try the task definitions
         BuildDefinition definition = plan.getBuildDefinition();
         try {
@@ -33,17 +32,13 @@ public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlug
             //with pre-Bamboo 3
             Class taskDefinitionClass = Class.forName("com.atlassian.bamboo.task.TaskDefinition");
             if (taskDefinitionClass != null) {
-                variableModifier = new Bamboo3Modifier(config, definition, buildContext);
+                return new Bamboo3Modifier(config, definition, buildContext);
             }
         } catch (Exception e) {
             //ignore and attempt to continue
         }
 
         //legacy,pre-Bamboo 3 support
-        AbstractBuilder builder = (AbstractBuilder) definition.getBuilder();
-        if (builder != null) {
-            variableModifier = new DefaultVariableModifier(config, definition, buildContext);
-        }
-        return variableModifier;
+        return new DefaultVariableModifier(config, definition, buildContext);
     }
 }

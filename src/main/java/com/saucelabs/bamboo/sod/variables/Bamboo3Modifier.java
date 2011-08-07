@@ -2,6 +2,7 @@ package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
+import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.BrowserFactory;
 import com.saucelabs.bamboo.sod.config.SODKeys;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Handles writing and restoring the Sauce OnDemand environment variables to the TaskDefinition instance (for Bamboo 3 instances).  
+ * Handles writing and restoring the Sauce OnDemand environment variables to the TaskDefinition instance (for Bamboo 3 instances).
  * The variables are saved to the plan's configuration, and are removed by the {@link PostBuildAction} class.
  * @author Ross Rowe
  */
@@ -27,7 +28,7 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
     public void storeVariables() throws JSONException {
         String envBuffer = createSeleniumEnvironmentVariables();
         try {
-            Class taskDefinitionClass = Class.forName("com.atlassian.bamboo.task.TaskDefinition");
+            Class taskDefinitionClass = TaskDefinition.class;
             if (taskDefinitionClass != null) {
                 Method taskDefinitionsMethod = BuildDefinition.class.getMethod("getTaskDefinitions", null);
                 List/*<TaskDefinition>*/ taskDefinitions = (List/*<TaskDefinition>*/) taskDefinitionsMethod.invoke(definition, null);

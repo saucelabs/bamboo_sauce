@@ -67,7 +67,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         try {
             File jarFile = new File
                     (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-//            File jarFile = new File("/Developer/workspace/bamboo_sauce/target/bamboo-sauceondemand-plugin-1.3.1.jar");
+            //File jarFile = new File("/Developer/workspace/bamboo_sauce/target/bamboo-sauceondemand-plugin-1.4.0.jar");
             String path = System.getProperty("java.home")
                     + separator + "bin" + separator + "java";
             ProcessBuilder processBuilder =
