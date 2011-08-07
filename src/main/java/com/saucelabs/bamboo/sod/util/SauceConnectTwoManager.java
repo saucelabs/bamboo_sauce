@@ -132,7 +132,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         List<String> files = new ArrayList<String>();
         JarFile jar = new JarFile(jarFile);
         java.util.Enumeration entries = jar.entries();
-        final File destDir = new File(System.getProperty("user.dir"), "sauce-connect");
+        final File destDir = new File(System.getProperty("user.home"), "sauce-connect");
         while (entries.hasMoreElements()) {
             JarEntry file = (JarEntry) entries.nextElement();
 
@@ -142,7 +142,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
                 if (f.exists()) {
                     f.delete();
                 }
-                f.mkdirs();
+                f.getParentFile().mkdirs();
                 f.createNewFile();
                 f.deleteOnExit();
                 InputStream is = jar.getInputStream(file); // get the input stream
