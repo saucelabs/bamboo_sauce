@@ -116,9 +116,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             jobFactory.update(sessionId, updates);
         } catch (IOException e) {
             logger.error("Unable to set build number", e);
-        } catch (URISyntaxException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        } 
     }
 
     private String getBuildNumber() {
