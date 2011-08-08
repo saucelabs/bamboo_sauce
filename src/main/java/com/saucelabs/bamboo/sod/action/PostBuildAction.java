@@ -112,8 +112,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             } else if (buildContext.getBuildResult().getBuildState().equals(BuildState.FAILED)) {
                 updates.put("passed", Boolean.FALSE.toString());
             }
-            JobFactory jobFactory = new JobFactory(credential);
-            URI uri = ObjectMapper.class.getProtectionDomain().getCodeSource().getLocation().toURI();
+            JobFactory jobFactory = new JobFactory(credential);            
             jobFactory.update(sessionId, updates);
         } catch (IOException e) {
             logger.error("Unable to set build number", e);
