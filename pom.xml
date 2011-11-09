@@ -37,7 +37,7 @@
         </developer>
     </developers>
     <properties>
-        <ci.version>1.5.0</ci.version>
+        <ci.version>1.6.0</ci.version>
         <bamboo.version>3.2</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
@@ -72,7 +72,7 @@
                             com.atlassian.plugin;version="2.7.3",
                             javax.crypto.spec;version="0.0",
                             javax.crypto;version="0.0",
-                            de.schlichtherle.truezip.file;version="0.0"
+                            de.schlichtherle.truezip.*;version="0.0"
                         </Import-Package>
                     </instructions>
                 </configuration>
@@ -124,7 +124,7 @@
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>sauce-connect</artifactId>
-            <version>2.0r4</version>
+            <version>3.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -135,7 +135,7 @@
         </dependency>
         <!-- Include Jython here because several classes were being excluded from the sauce-connect
         jar -->
-        <dependency>
+        <!--dependency>
             <groupId>jython</groupId>
             <artifactId>jython</artifactId>
             <version>2.5.0</version>
@@ -146,7 +146,7 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.5.0</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency-->
         <!-- Dependencies included with Bamboo -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -190,7 +190,7 @@
             <version>5.1.10</version>
             <scope>provided</scope>
         </dependency-->
-        <dependency>
+        <!--dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>7.2.1.v20101111</version>
@@ -207,7 +207,7 @@
             <artifactId>jetty-servlet</artifactId>
             <version>7.2.1.v20101111</version>
             <scope>provided</scope>
-        </dependency>
+        </dependency-->
         <!-- Test Dependencies-->
         <dependency>
             <groupId>org.mockito</groupId>

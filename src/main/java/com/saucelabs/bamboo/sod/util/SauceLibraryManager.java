@@ -3,6 +3,9 @@ package com.saucelabs.bamboo.sod.util;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.plugin.PluginAccessor;
 import com.saucelabs.sauceconnect.SauceConnect;
+import de.schlichtherle.truezip.file.TArchiveDetector;
+import de.schlichtherle.truezip.file.TFile;
+import de.schlichtherle.truezip.file.TFileOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -10,11 +13,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -54,17 +53,17 @@ public class SauceLibraryManager {
     private SauceFactory sauceAPIFactory;
 
     private static final int BUFFER = 1024;
-    
+
     private static final String PLUGIN_KEY = "com.saucelabs.bamboo.bamboo-sauceondemand-plugin";
 
     /**
      * Performs a REST request to https://saucelabs.com/versions.json to retrieve the list of
      * sauce connect version information.  If the version information in the response is later
      * than the current version, then return true.
-     * 
+     *
      * @return boolean indicating whether an updated sauce connect jar is available
      * @throws IOException
-     * @throws JSONException thrown if an error occurs during the parsing of the JSON response
+     * @throws JSONException      thrown if an error occurs during the parsing of the JSON response
      * @throws URISyntaxException
      */
     public boolean checkForLaterVersion() throws IOException, JSONException, URISyntaxException {
@@ -82,8 +81,8 @@ public class SauceLibraryManager {
      * Performs a REST request to https://saucelabs.com/versions.json to retrieve the download url
      * to be used to retrieve the latest version of Sauce Connect, then updates the Bamboo Sauce plugin jar
      * to include this jar.
-     * 
-     * @throws JSONException thrown if an error occurs during the parsing of the JSON response
+     *
+     * @throws JSONException      thrown if an error occurs during the parsing of the JSON response
      * @throws IOException
      * @throws URISyntaxException
      */
@@ -110,9 +109,9 @@ public class SauceLibraryManager {
     }
 
     /**
-     * Performs a HTTP GET to retrieve the contents of the download url (assumed to be a zip 
+     * Performs a HTTP GET to retrieve the contents of the download url (assumed to be a zip
      * file), then unzips the zip file to the file system.
-     * 
+     *
      * @param response
      * @return
      * @throws JSONException
@@ -131,7 +130,7 @@ public class SauceLibraryManager {
 
     /**
      * Extracts the contents of the byte array to the temp drive.
-     *  
+     *
      * @param byteArray
      * @return a {@link File} instance pointing to the Sauce Connect jar file
      */
@@ -176,9 +175,9 @@ public class SauceLibraryManager {
 
     /**
      * Retrieves the download url from the JSON response
-     * 
+     *
      * @param response
-     * @return String representing the URL to use to download the sauce connect jar 
+     * @return String representing the URL to use to download the sauce connect jar
      * @throws JSONException thrown if an error occurs during the parsing of the JSON response
      */
     private String extractDownloadUrlFromResponse(String response) throws JSONException {
@@ -191,7 +190,7 @@ public class SauceLibraryManager {
      * Updates the Bamboo Sauce plugin jar file to include the updated Sauce Connect jar file.  We have to
      * use reflection in order to retrieve information about the plugin, as the plugin classes aren't available
      * to our class loader.
-     * 
+     *
      * @param newJarFile the updated sauce connect jar file
      * @throws IOException
      * @throws URISyntaxException
@@ -222,44 +221,43 @@ public class SauceLibraryManager {
         //todo trigger reload of plugin classes?
     }
 
-//    public void addFileToJar(File pluginJarFile, File newJarFile) throws IOException {
-////        JarFile jar = new JarFile(pluginJarFile);
-////        JarOutputStream target = new JarOutputStream(new FileOutputStream(pluginJarFile));
-////        add(newJarFile, target);
-////        target.close();
-//        
-//        TFile.setDefaultArchiveDetector(new TArchiveDetector("ear|jar|war"));
-//        search(new TFile(pluginJarFile), newJarFile); // e.g. "my.ear"
-//        TFile.umount(); // commit changes
-//    }
-//
-//    private void search(TFile entry, File newJarFile) throws IOException {
-//        if (entry.isDirectory()) {
-//            for (TFile member : entry.listFiles())
-//                search(member, newJarFile);
-//        } else if (entry.isFile() && entry.getName().endsWith("sauce-connect-3.0.jar")) {
-//            update(entry, newJarFile);
-//        }
-//    }
-//
-//    private void update(TFile file, File newJarFile) throws IOException {
-//       BufferedInputStream in;
-//        // [your updates here]
-//        OutputStream out = new TFileOutputStream(file);
-//        try {
-//            in = new BufferedInputStream(new FileInputStream(newJarFile));
-//
-//            byte[] buffer = new byte[1024];
-//            while (true) {
-//                int count = in.read(buffer);
-//                if (count == -1)
-//                    break;
-//                out.write(buffer, 0, count);
-//            }
-//        } finally {
-//            out.close();
-//        }
-//    }
+    public void addFileToJar(File pluginJarFile, File newJarFile) throws IOException {
+//        JarFile jar = new JarFile(pluginJarFile);
+//        JarOutputStream target = new JarOutputStream(new FileOutputStream(pluginJarFile));
+//        add(newJarFile, target);
+//        target.close();
+
+        TFile.setDefaultArchiveDetector(new TArchiveDetector("ear|jar|war"));
+        search(new TFile(pluginJarFile), newJarFile); // e.g. "my.ear"
+        TFile.umount(); // commit changes
+    }
+
+    private void search(TFile entry, File newJarFile) throws IOException {
+        if (entry.isDirectory()) {
+            for (TFile member : entry.listFiles())
+                search(member, newJarFile);
+        } else if (entry.isFile() && entry.getName().endsWith("sauce-connect-3.0.jar")) {
+            update(entry, newJarFile);
+        }
+    }
+
+    private void update(TFile file, File newJarFile) throws IOException {
+        BufferedInputStream in;
+        OutputStream out = new TFileOutputStream(file);
+        try {
+            in = new BufferedInputStream(new FileInputStream(newJarFile));
+
+            byte[] buffer = new byte[1024];
+            while (true) {
+                int count = in.read(buffer);
+                if (count == -1)
+                    break;
+                out.write(buffer, 0, count);
+            }
+        } finally {
+            out.close();
+        }
+    }
 
     public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {
         this.administrationConfigurationManager = administrationConfigurationManager;
