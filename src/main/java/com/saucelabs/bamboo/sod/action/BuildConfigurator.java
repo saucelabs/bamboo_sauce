@@ -4,6 +4,7 @@ import com.atlassian.bamboo.build.CustomPreBuildAction;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.Plan;
+import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
@@ -14,6 +15,7 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.SauceConnectTwoManager;
 import com.saucelabs.bamboo.sod.util.SauceFactory;
+import com.saucelabs.bamboo.sod.util.SauceLibraryManager;
 import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
@@ -51,10 +53,21 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * Populated via dependency injection.
      */
     private AdministrationConfigurationManager administrationConfigurationManager;
+
+    /**
+     * Populated via dependency injection.
+     */
+    private SauceLibraryManager sauceLibraryManager;
+    
     /**
      * Populated via dependency injection.
      */
     private BrowserFactory sauceBrowserFactory;
+    
+    /**
+     * Populated via dependency injection.
+     */
+    private PlanManager planManager;
 
     private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
@@ -78,7 +91,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
+            checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
+                checkVersionIsCurrent();
                 startTunnel(config.getTempUsername(), config.getTempApikey(), config.getSshHost(), config.getSshPorts(), config.getSshTunnelPorts(), config.getSshDomains(), config.isAutoDomain());
             }
         }
@@ -87,6 +102,25 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             logger.error("Error running Sauce OnDemand BuildConfigurator, attempting to continue", e);
         }
         return buildContext;
+    }
+
+    /**
+     * Checks whether the version of the Sauce Connect library is up to date, and if not, adds an error message
+     * to the build log. 
+     */
+    private void checkVersionIsCurrent() {
+        try {
+            boolean laterVersionIsAvailable = sauceLibraryManager.checkForLaterVersion();
+            if (laterVersionIsAvailable) {
+                //log a message to the system log and build console
+                Plan plan = planManager.getPlanByKey(buildContext.getPlanKey());
+                plan.getBuildLogger().addErrorLogEntry("A later version of the Sauce Connect library is available");
+                plan.getBuildLogger().addErrorLogEntry("The Sauce Connect library can be updated via the Sauce On Demand link on the Administration page");
+                logger.warn("A later version of the Sauce Connect library is available");
+            }
+        } catch (Exception e) {
+            logger.error("Error attempting to check whether sauce connect is up to date, attempting to continue", e);
+        } 
     }
 
     /**
@@ -110,11 +144,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         int intLocalPort = Integer.parseInt(localPorts);
         int intRemotePort = Integer.parseInt(remotePorts);
         List<String> domainList = Collections.singletonList(finalDomain);
-        //if (!getSauceTunneManager().getTunnel(buildContext.getPlanKey())) {
-             
-              Object tunnel = getSauceTunnelManager().openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, domainList);
-              getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
-       // }
+        Object tunnel = getSauceTunnelManager().openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, domainList);
+        getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
     }
 
 
@@ -216,14 +247,14 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     
     public SauceTunnelManager getSauceTunnelManager() {
         if (sauceTunnelManager == null) {
-            setSauceTunnelManager(SauceConnectTwoManager.getInstance());
+            setSauceTunnelManager(new SauceConnectTwoManager());
         }
         return sauceTunnelManager;
     }
 
     public SauceFactory getSauceAPIFactory() {
         if (sauceAPIFactory == null) {
-            setSauceAPIFactory(SauceFactory.getInstance());
+            setSauceAPIFactory(new SauceFactory());
         }
         return sauceAPIFactory;
     }
@@ -236,4 +267,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     }
 
 
+    public void setSauceLibraryManager(SauceLibraryManager sauceLibraryManager) {
+        this.sauceLibraryManager = sauceLibraryManager;
+    }
+
+    public void setPlanManager(PlanManager planManager) {
+        this.planManager = planManager;
+    }
 }

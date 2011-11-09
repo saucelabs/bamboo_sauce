@@ -1,8 +1,8 @@
-<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+<atlassian-plugin key="com.saucelabs.bamboo.bamboo-sauceondemand-plugin" name="Bamboo Sauce OnDemand Plugin" plugins-version="2">
     <plugin-info>
-        <description>${project.description}</description>
-        <version>${project.version}</version>
-        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <description>This is the Sauce OnDemand plugin for Bamboo</description>
+        <version>1.6.0</version>
+        <vendor name="Sauce Labs" url="http://www.saucelabs.com/"/>
         <bundle-instructions>
             <Import-Package>com.saucelabs.bamboo.sod;resolution:=optional</Import-Package>
         </bundle-instructions>
@@ -63,6 +63,21 @@
                 <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
             </action>
+            
+            <action name="checkSauceConnectVersion" class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
+                    method="default">
+                <result name="success" type="freemarker">/templates/admin/updateSauceConnect.ftl</result>
+                <result name="none" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
+                <result name="error" type="freemarker">/error.ftl</result>
+            </action>
+            
+            <action name="checkSauceConnectVersionSubmit" class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
+                    method="submit">
+                <result name="input" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
+                <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
+                <result name="error" type="freemarker">/error.ftl</result>
+            </action>
+            
         </package>
         <package name="sodPlan" extends="buildView">
             <action name="viewSauceOnDemandPlan" class="com.saucelabs.bamboo.sod.plan.ViewSODAction" method="default">
@@ -115,6 +130,9 @@
     </component>
 
     <component name="sauceAPIFactory" key="sauceAPIFactory" class="com.saucelabs.bamboo.sod.util.SauceFactory">
+
+    </component>
+    <component name="sauceLibraryManager" key="sauceLibraryManager" class="com.saucelabs.bamboo.sod.util.SauceLibraryManager">
 
     </component>
 
