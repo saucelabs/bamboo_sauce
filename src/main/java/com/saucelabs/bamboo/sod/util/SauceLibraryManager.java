@@ -4,8 +4,10 @@ import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.plugin.PluginAccessor;
 import com.saucelabs.sauceconnect.SauceConnect;
 import de.schlichtherle.truezip.file.TArchiveDetector;
+import de.schlichtherle.truezip.file.TConfig;
 import de.schlichtherle.truezip.file.TFile;
 import de.schlichtherle.truezip.file.TFileOutputStream;
+import de.schlichtherle.truezip.fs.FsOutputOption;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -122,7 +124,7 @@ public class SauceLibraryManager {
         String downloadUrl = extractDownloadUrlFromResponse(response);
         SauceFactory sauceFactory = new SauceFactory();
 //        byte[] bytes = sauceFactory.doHTTPGet(downloadUrl);
-        byte[] bytes = FileUtils.readFileToByteArray(new File("C:/Sauce-Connect.zip"));
+        byte[] bytes = FileUtils.readFileToByteArray(new File("/Users/ross/Downloads/Sauce-Connect-latest.zip"));
         //unzip contents to temp directory
         return unzipByteArray(bytes);
 
@@ -210,7 +212,7 @@ public class SauceLibraryManager {
             Class pluginArtifactClass = pluginArtifact.getClass();
             Method toFileMethod = pluginArtifactClass.getDeclaredMethod("toFile");
             File originalJarFile = (File) toFileMethod.invoke(pluginArtifact);
-//            addFileToJar(originalJarFile, newJarFile);   
+            addFileToJar(originalJarFile, new TFile(newJarFile));
         } catch (NoSuchMethodException e) {
             throw new IOException("Unexpected error invoking plugin logic", e);
         } catch (InvocationTargetException e) {
@@ -221,42 +223,24 @@ public class SauceLibraryManager {
         //todo trigger reload of plugin classes?
     }
 
-    public void addFileToJar(File pluginJarFile, File newJarFile) throws IOException {
-//        JarFile jar = new JarFile(pluginJarFile);
-//        JarOutputStream target = new JarOutputStream(new FileOutputStream(pluginJarFile));
-//        add(newJarFile, target);
-//        target.close();
+    public void addFileToJar(File pluginJarFile, TFile newJarFile) throws IOException {
 
-        TFile.setDefaultArchiveDetector(new TArchiveDetector("ear|jar|war"));
+        TFile.setDefaultArchiveDetector(new TArchiveDetector("jar"));
         search(new TFile(pluginJarFile), newJarFile); // e.g. "my.ear"
         TFile.umount(); // commit changes
     }
 
-    private void search(TFile entry, File newJarFile) throws IOException {
-        if (entry.isDirectory()) {
+    private void search(TFile entry, TFile newJarFile) throws IOException {
+        if (entry.getName().endsWith("sauce-connect-3.0.jar")) {
+            update(entry, newJarFile);
+        } else if (entry.isDirectory()) {
             for (TFile member : entry.listFiles())
                 search(member, newJarFile);
-        } else if (entry.isFile() && entry.getName().endsWith("sauce-connect-3.0.jar")) {
-            update(entry, newJarFile);
         }
     }
 
-    private void update(TFile file, File newJarFile) throws IOException {
-        BufferedInputStream in;
-        OutputStream out = new TFileOutputStream(file);
-        try {
-            in = new BufferedInputStream(new FileInputStream(newJarFile));
-
-            byte[] buffer = new byte[1024];
-            while (true) {
-                int count = in.read(buffer);
-                if (count == -1)
-                    break;
-                out.write(buffer, 0, count);
-            }
-        } finally {
-            out.close();
-        }
+    private void update(TFile file, TFile newJarFile) throws IOException {
+        newJarFile.cp_rp(file);
     }
 
     public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {

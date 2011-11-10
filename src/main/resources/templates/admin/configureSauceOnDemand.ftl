@@ -31,5 +31,10 @@
         [/@ui.bambooSection]
 
     [/@ww.form]
+
+    [@ui.bambooSection title="Check for Updates"]
+        <a href="/admin/sauceondemand/checkSauceConnectVersion.action">Check for updates to Sauce Connect</a>
+    [/@ui.bambooSection]
+
 </body>
 </html>
