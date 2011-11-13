@@ -4,10 +4,7 @@ import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.plugin.PluginAccessor;
 import com.saucelabs.sauceconnect.SauceConnect;
 import de.schlichtherle.truezip.file.TArchiveDetector;
-import de.schlichtherle.truezip.file.TConfig;
 import de.schlichtherle.truezip.file.TFile;
-import de.schlichtherle.truezip.file.TFileOutputStream;
-import de.schlichtherle.truezip.fs.FsOutputOption;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
@@ -15,7 +12,11 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
@@ -29,10 +30,9 @@ import java.util.zip.ZipInputStream;
  * <p/>
  * If the version number in the JSON response is greater than the value in the SauceConnect library,
  * we need to perform a HTTP get on the URL specified in the download_url attribute of the JSON response
- * (which will be a ZIP file).  We then unzip the zip file, and add the Sauce-Connect.jar file into the
- * plugin.
+ * (which will be a ZIP file).  We then unzip the zip file, and include the Sauce-Connect.jar file into the
+ * Bamboo plugin.
  * <p/>
- * TODO can we trigger a reload of the plugin's class loader or do we need to enforce a restart?
  *
  * @author Ross Rowe
  */
@@ -72,8 +72,8 @@ public class SauceLibraryManager {
         //retrieve contents of version url and parse as JSON
         getSauceAPIFactory().setupProxy(administrationConfigurationManager);
         SauceFactory sauceFactory = new SauceFactory();
-        //String response = sauceFactory.doREST(VERSION_CHECK_URL);
-        String response = IOUtils.toString(getClass().getResourceAsStream("/versions.json"));
+        String response = sauceFactory.doREST(VERSION_CHECK_URL);
+//        String response = IOUtils.toString(getClass().getResourceAsStream("/versions.json"));
         int version = extractVersionFromResponse(response);
         //compare version attribute against SauceConnect.RELEASE()
         return version > (Integer) SauceConnect.RELEASE();
@@ -90,8 +90,8 @@ public class SauceLibraryManager {
      */
     public void triggerReload() throws JSONException, IOException, URISyntaxException {
         SauceFactory sauceFactory = new SauceFactory();
-//        String response = sauceFactory.doREST(VERSION_CHECK_URL);
-        String response = IOUtils.toString(getClass().getResourceAsStream("/versions.json"));
+        String response = sauceFactory.doREST(VERSION_CHECK_URL);
+//        String response = IOUtils.toString(getClass().getResourceAsStream("/versions.json"));
         File jarFile = retrieveNewVersion(response);
         updatePluginJar(jarFile);
     }
@@ -103,7 +103,7 @@ public class SauceLibraryManager {
         //extract the last digits after the -
         String versionNumber = StringUtils.substringAfter(versionText, "-r");
         if (StringUtils.isBlank(versionNumber)) {
-            //throw an error
+            //TODO throw an error
             return 0;
         } else {
             return Integer.parseInt(versionNumber);
@@ -123,11 +123,10 @@ public class SauceLibraryManager {
         //perform HTTP get for download_url
         String downloadUrl = extractDownloadUrlFromResponse(response);
         SauceFactory sauceFactory = new SauceFactory();
-//        byte[] bytes = sauceFactory.doHTTPGet(downloadUrl);
-        byte[] bytes = FileUtils.readFileToByteArray(new File("/Users/ross/Downloads/Sauce-Connect-latest.zip"));
+        byte[] bytes = sauceFactory.doHTTPGet(downloadUrl);
+//        byte[] bytes = FileUtils.readFileToByteArray(new File("C:/Sauce-Connect.zip"));
         //unzip contents to temp directory
         return unzipByteArray(bytes);
-
     }
 
     /**
@@ -138,6 +137,7 @@ public class SauceLibraryManager {
      */
     private File unzipByteArray(byte[] byteArray) {
         File destPath = new File(System.getProperty("java.io.tmpdir"));
+
         File jarFile = null;
         try {
             ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(byteArray));
@@ -192,17 +192,19 @@ public class SauceLibraryManager {
      * Updates the Bamboo Sauce plugin jar file to include the updated Sauce Connect jar file.  We have to
      * use reflection in order to retrieve information about the plugin, as the plugin classes aren't available
      * to our class loader.
+     * <p/>
+     * We update both the running bamboo plugin jar file (which is contained in the BAMBOO_HOME/caches/plugins/transformed-plugins
+     * directory) and the 'master' plugin jar file  (which is contained in BAMBOO_HOME/plugins).  This means that the update to
+     * the plugin jar file won't require a restart of Bamboo in order to take effect, and will survive across restarts.
      *
      * @param newJarFile the updated sauce connect jar file
-     * @throws IOException
-     * @throws URISyntaxException
+     * @throws IOException        thrown if an error occurs during the Jar file modification
+     * @throws URISyntaxException thrown if an error occurs retrieving the URL for the Bamboo plugin Jar file
      */
     public void updatePluginJar(File newJarFile) throws IOException, URISyntaxException {
-        //update JarEntry to add extracted jar
-        //find url of plugin jar
         File runningJarFile = new File
                 (SauceLibraryManager.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-//        addFileToJar(runningJarFile, newJarFile);
+        addFileToJar(runningJarFile, new TFile(newJarFile));
         Object plugin = pluginAccessor.getPlugin(PLUGIN_KEY);
         Class pluginClass = pluginAccessor.getPlugin(PLUGIN_KEY).getClass();
         try {
@@ -220,27 +222,47 @@ public class SauceLibraryManager {
         } catch (IllegalAccessException e) {
             throw new IOException("Unexpected error invoking plugin logic", e);
         }
-        //todo trigger reload of plugin classes?
     }
 
-    public void addFileToJar(File pluginJarFile, TFile newJarFile) throws IOException {
+    /**
+     * Adds the updatedSauceConnectJarFile to the pluginJarFile.
+     *
+     * @param pluginJarFile
+     * @param updatedSauceConnectJarFile
+     * @throws IOException
+     */
+    public void addFileToJar(File pluginJarFile, TFile updatedSauceConnectJarFile) throws IOException {
 
         TFile.setDefaultArchiveDetector(new TArchiveDetector("jar"));
-        search(new TFile(pluginJarFile), newJarFile); // e.g. "my.ear"
-        TFile.umount(); // commit changes
+        search(new TFile(pluginJarFile), updatedSauceConnectJarFile);
+        TFile.umount();
     }
 
-    private void search(TFile entry, TFile newJarFile) throws IOException {
-        if (entry.getName().endsWith("sauce-connect-3.0.jar")) {
-            update(entry, newJarFile);
-        } else if (entry.isDirectory()) {
-            for (TFile member : entry.listFiles())
-                search(member, newJarFile);
+    /**
+     * Iterates over the contents of the pluginJarFile to find the sauce-connect-3.0.jar file.
+     *
+     * @param jarFileEntry
+     * @param updatedSauceConnectJarFile
+     * @throws IOException
+     */
+    private void search(TFile jarFileEntry, TFile updatedSauceConnectJarFile) throws IOException {
+        if (jarFileEntry.getName().endsWith("sauce-connect-3.0.jar")) {
+            update(jarFileEntry, updatedSauceConnectJarFile);
+        } else if (jarFileEntry.isDirectory()) {
+            for (TFile member : jarFileEntry.listFiles())
+                search(member, updatedSauceConnectJarFile);
         }
     }
 
-    private void update(TFile file, TFile newJarFile) throws IOException {
-        newJarFile.cp_rp(file);
+    /**
+     * Updates the plugin jar file to include the updatedSauceConnectJarFile.
+     *
+     * @param pluginJarFile
+     * @param updatedSauceConnectJarFile
+     * @throws IOException
+     */
+    private void update(TFile pluginJarFile, TFile updatedSauceConnectJarFile) throws IOException {
+        updatedSauceConnectJarFile.cp_rp(pluginJarFile);
     }
 
     public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {

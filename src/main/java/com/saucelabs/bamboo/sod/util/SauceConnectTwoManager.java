@@ -1,19 +1,24 @@
 package com.saucelabs.bamboo.sod.util;
 
 import com.saucelabs.sauceconnect.SauceConnect;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -21,14 +26,22 @@ import java.util.jar.JarFile;
  * Handles opening a SSH Tunnel using the Sauce Connect 2 logic. The class  maintains a cache of {@link Process } instances mapped against
  * the corresponding plan key.  This class can be considered a singleton, and is instantiated via the 'component' element of the atlassian-plugin.xml
  * file (ie. using Spring).
- *
+ * 
  * @author Ross Rowe
  */
 public class SauceConnectTwoManager implements SauceTunnelManager {
 
     private static final Logger logger = Logger.getLogger(SauceConnectTwoManager.class);
     private Map<String, List<Process>> tunnelMap;
-    private static SauceTunnelManager instance;
+    /**
+     * Restricts invocations of Sauce Connect to be single threaded.
+     */
+    private final ReentrantLock accessLock = new ReentrantLock();
+    /**
+     * Semaphore initialized with a single permit that is used to ensure that the main worker thread
+     * waits until the Sauce Connect process is fully initialized before tests are run. 
+     */
+    private final Semaphore semaphore = new Semaphore(1);
 
     public SauceConnectTwoManager() {
         this.tunnelMap = new HashMap<String, List<Process>>();
@@ -39,6 +52,8 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
             List<Process> tunnelList = tunnelMap.get(planKey);
             for (Process sauceConnect : tunnelList) {
                 sauceConnect.destroy();
+                //release lock
+                accessLock.unlock();
             }
 
             tunnelMap.remove(planKey);
@@ -69,9 +84,12 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
     public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
 
         try {
+            //only allow one thread to launch Sauce Connect
+            accessLock.lock();
             File jarFile = new File
                     (SauceConnect.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            List<String> jarFiles = extractLibrariesFromJar(jarFile);
+
+            List<String> jarFiles = extractSauceConnectJar(jarFile);
 
             StringBuilder builder = new StringBuilder();
             String pathSeparator = "";
@@ -94,27 +112,18 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
                             domainList.get(0)
                     );
             final Process process = processBuilder.start();
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        IOUtils.copy(process.getInputStream(), System.out);
-                    } catch (IOException e) {
-                        logger.error("Exception trapped in copying output from Sauce Connect, attempting to continue", e);
-                    }
-                }
-            }).start();
-            new Thread(new Runnable() {
-                public void run() {
-                    try {
-                        IOUtils.copy(process.getErrorStream(), System.err);
-                    } catch (IOException e) {
-                        logger.error("Exception trapped in copying error output from Sauce Connect, attempting to continue", e);
-                    }
-                }
-            }).start();
             try {
-                //TODO check for the Tunnel started message in the Sauce Connect output
-                Thread.sleep(1000 * 60 * 1); //2 minutes
+                semaphore.acquire();
+                StreamGobbler errorGobbler = new SystemErrorGobbler("ErrorGobbler", process.getErrorStream());
+                errorGobbler.start();
+                StreamGobbler outputGobbler = new SystemOutGobbler("OutputGobbler", process.getInputStream());
+                outputGobbler.start();
+
+                boolean sauceConnectStarted = semaphore.tryAcquire(2, TimeUnit.MINUTES);
+                if (!sauceConnectStarted) {
+                    //log an error message
+                    logger.error("Time out while waiting for Sauce Connect to start, attempting to continue");
+                }
             } catch (InterruptedException e) {
                 //continue;
             }
@@ -123,21 +132,24 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         } catch (URISyntaxException e) {
             //shouldn't happen
             logger.error("Exception occured during retrieval of bamboo-sauce.jar URL", e);
+        } finally {
+            //release the semaphore when we're finished
+            semaphore.release();
         }
 
         return null;
     }
 
-    private List<String> extractLibrariesFromJar(File jarFile) throws IOException {
+    private List<String> extractSauceConnectJar(File jarFile) throws IOException {
         List<String> files = new ArrayList<String>();
         JarFile jar = new JarFile(jarFile);
         java.util.Enumeration entries = jar.entries();
-        final File destDir = new File(System.getProperty("user.home"), "sauce-connect");
+        final File destDir = new File(System.getProperty("java.io.tmpdir"));
         while (entries.hasMoreElements()) {
             JarEntry file = (JarEntry) entries.nextElement();
 
-            if (file.getName().startsWith("META-INF/lib/") && file.getName().endsWith("jar")) {
-                File f = new File(destDir + java.io.File.separator + file.getName());
+            if (file.getName().endsWith("sauce-connect-3.0.jar")) {
+                File f = new File(destDir, file.getName());
 
                 if (f.exists()) {
                     f.delete();
@@ -148,10 +160,8 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
                 InputStream is = jar.getInputStream(file); // get the input stream
                 FileOutputStream fos = new java.io.FileOutputStream(f);
                 IOUtils.copy(is, fos);
-
                 files.add(f.getPath());
             }
-
         }
         return files;
     }
@@ -161,17 +171,67 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         return tunnelMap;
     }
 
-    /**
-     * Returns a singleton instance of SauceConnectTwoManager.  This is required because
-     * remote agents don't have the Bamboo component plugin available, so the Spring
-     * auto-wiring doesn't work.
-     *
-     * @return
-     */
-    public static SauceTunnelManager getInstance() {
-        if (instance == null) {
-            instance = new SauceConnectTwoManager();
+    private abstract class StreamGobbler extends Thread {
+        private InputStream is;
+
+        private StreamGobbler(String name, InputStream is) {
+            super(name);
+            this.is = is;
         }
-        return instance;
+
+        public void run() {
+            try {
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                String line;
+                while ((line = br.readLine()) != null) {
+                    processLine(line);
+                }
+            } catch (IOException ioe) {
+                ioe.printStackTrace();
+            }
+        }
+
+        protected void processLine(String line) {
+            getPrintStream().println(line);
+        }
+
+        public abstract PrintStream getPrintStream();
     }
+
+    private class SystemOutGobbler extends StreamGobbler {
+
+        SystemOutGobbler(String name, InputStream is) {
+            super(name, is);
+        }
+
+        @Override
+        public PrintStream getPrintStream() {
+            return System.out;
+        }
+
+        @Override
+        protected void processLine(String line) {
+            super.processLine(line);
+            if (line.contains("started")) {
+                //unlock processMonitor
+                semaphore.release();
+            }
+        }
+
+    }
+
+    private class SystemErrorGobbler extends StreamGobbler {
+
+        SystemErrorGobbler(String name, InputStream is) {
+            super(name, is);
+        }
+
+        @Override
+        public PrintStream getPrintStream() {
+            return System.err;
+        }
+    }
+
+
 }
