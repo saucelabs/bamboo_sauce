@@ -1,40 +1,36 @@
-package com.saucelabs.bamboo.sod.util;
+package com.saucelabs.ci;
 
-import com.atlassian.bamboo.configuration.AdministrationConfiguration;
-import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.saucelabs.bamboo.sod.config.SODKeys;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import sun.misc.BASE64Encoder;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Delegates requests to the Sauce API.
- *
  * @author Ross Rowe
  */
 public class SauceFactory {
-
     private static final Logger logger = Logger.getLogger(SauceFactory.class);
-    private static SauceFactory instance;
 
     public String doREST(String urlText) throws IOException {
         return doREST(urlText, null, null);
     }
 
     /**
-     * Invokes a Sauce REST API command
-     *
+     * Invokes a Sauce REST API command 
      * @param urlText
      * @param userName
      * @param password
      * @return results of REST command
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public synchronized String doREST(String urlText, final String userName, final String password) throws IOException {
 
@@ -74,18 +70,9 @@ public class SauceFactory {
         }
     }
 
-    public void setupProxy(AdministrationConfigurationManager administrationConfigurationManager) {
-        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
-        String proxyHost = adminConfig.getSystemProperty(SODKeys.PROXY_HOST_KEY);
-        String proxyPort = adminConfig.getSystemProperty(SODKeys.PROXY_PORT_KEY);
-        String proxyUsername = adminConfig.getSystemProperty(SODKeys.PROXY_USERNAME_KEY);
-        String proxyPassword = adminConfig.getSystemProperty(SODKeys.PROXY_PASSWORD_KEY);
-        setupProxy(proxyHost, proxyPort, proxyUsername, proxyPassword);
-    }
-
     /**
      * Populates the http proxy system properties.
-     *
+     * 
      * @param proxyHost
      * @param proxyPort
      * @param userName
@@ -109,22 +96,15 @@ public class SauceFactory {
     }
 
     /**
-     * Returns a singleton instance of SauceFactory.  This is required because
-     * remote agents don't have the Bamboo component plugin available, so the Spring
-     * auto-wiring doesn't work.
-     *
+     * 
+     * @param downloadUrl
      * @return
+     * @throws IOException
      */
-    public static SauceFactory getInstance() {
-        if (instance == null) {
-            instance = new SauceFactory();
-        }
-        return instance;
-    }
-
     public byte[] doHTTPGet(String downloadUrl) throws IOException {
-        URL u;
+         URL u;
         InputStream is = null;
+        OutputStream stream = null;
 
         try {
             u = new URL(downloadUrl.replaceAll(" ", "+"));
@@ -132,7 +112,10 @@ public class SauceFactory {
             con.addRequestProperty("Accept", "text/plain");
             con.addRequestProperty("Accept-Charset", "ISO-8859-1,utf-8");
             con.connect();
-            is = con.getInputStream();
+
+            is = con.getInputStream(); // throws an IOException
+            
+
         }
         catch (MalformedURLException mue) {
             logger.warn("Error in doHTTPGet", mue);

@@ -10,7 +10,7 @@ import com.saucelabs.bamboo.sod.variables.DefaultVariableModifier;
 import com.saucelabs.bamboo.sod.variables.VariableModifier;
 
 /**
- * Contains common logic for Sauce OnDemand plugin classes. 
+ * Contains common logic for Sauce OnDemand plugin classes.
  *
  * @author Ross Rowe
  */
@@ -19,26 +19,16 @@ public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlug
     /**
      * Return a new {@link VariableModifier} instance that will be used to construct the environment
      * variables.
-     *  
+     *
      * @param config
      * @param plan
      * @return
      */
-    protected VariableModifier getVariableModifier(SODMappedBuildConfiguration config, Plan plan) {        
+    protected VariableModifier getVariableModifier(SODMappedBuildConfiguration config, Plan plan) {
         //try the task definitions
         BuildDefinition definition = plan.getBuildDefinition();
-        try {
-            //we don't reference the TaskDefinition class explicitly so that the plugin is backwards compatible
-            //with pre-Bamboo 3
-            Class taskDefinitionClass = Class.forName("com.atlassian.bamboo.task.TaskDefinition");
-            if (taskDefinitionClass != null) {
-                return new Bamboo3Modifier(config, definition, buildContext);
-            }
-        } catch (Exception e) {
-            //ignore and attempt to continue
-        }
 
-        //legacy,pre-Bamboo 3 support
-        return new DefaultVariableModifier(config, definition, buildContext);
+        return new Bamboo3Modifier(config, definition, buildContext);
+
     }
 }

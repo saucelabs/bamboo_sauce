@@ -1,7 +1,9 @@
 package com.saucelabs.bamboo.sod;
 
-import com.saucelabs.bamboo.sod.util.SauceLibraryManager;
+import com.saucelabs.ci.SauceLibraryManager;
 import org.apache.commons.io.IOUtils;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Ross Rowe

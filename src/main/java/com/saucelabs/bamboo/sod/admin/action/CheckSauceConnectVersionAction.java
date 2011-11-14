@@ -2,7 +2,7 @@ package com.saucelabs.bamboo.sod.admin.action;
 
 import com.atlassian.bamboo.configuration.ConfigurationAction;
 import com.atlassian.bamboo.configuration.SystemInfo;
-import com.saucelabs.bamboo.sod.util.SauceLibraryManager;
+import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
 import org.apache.log4j.Logger;
 
 /**
@@ -18,7 +18,7 @@ public class CheckSauceConnectVersionAction extends ConfigurationAction {
     /**
      * Populated via dependency injection.
      */
-    private transient SauceLibraryManager sauceLibraryManager;
+    private transient BambooSauceLibraryManager sauceLibraryManager;
 
     /**
      * Invoked when the 'Check for updates to Sauce Connect' link is clicked.  
@@ -43,7 +43,7 @@ public class CheckSauceConnectVersionAction extends ConfigurationAction {
         return ERROR;
     }
 
-    public void setSauceLibraryManager(SauceLibraryManager sauceLibraryManager) {
+    public void setSauceLibraryManager(BambooSauceLibraryManager sauceLibraryManager) {
         this.sauceLibraryManager = sauceLibraryManager;
     }
 

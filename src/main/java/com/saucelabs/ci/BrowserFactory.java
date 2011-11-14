@@ -3,10 +3,8 @@
  * and open the template in the editor.
  */
 
-package com.saucelabs.bamboo.sod;
+package com.saucelabs.ci;
 
-import com.saucelabs.bamboo.sod.util.CacheTimeUtil;
-import com.saucelabs.bamboo.sod.util.SauceFactory;
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,7 +12,12 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Handles invoking the Sauce REST API to retrieve the list of valid Browsers.  The list of browser is cached for
@@ -29,7 +32,7 @@ public class BrowserFactory {
     public static final String BROWSER_URL = "http://saucelabs.com/rest/v1/info/browsers";
 
     private Map<String, Browser> lookup = new HashMap<String, Browser>();
-    private Timestamp lastLookup = null;
+    protected Timestamp lastLookup = null;
     private static final String IEHTA = "iehta";
     private static final String CHROME = "chrome";
 	private static BrowserFactory instance;
@@ -47,7 +50,7 @@ public class BrowserFactory {
 
     public  List<Browser> values() throws IOException, JSONException {
         List<Browser> browsers;
-        if (lastLookup == null || CacheTimeUtil.pastAcceptableDuration(lastLookup, "1h")) {
+        if (shouldRetrieveBrowsers()) {
             browsers = initializeBrowsers();
         } else {
             browsers = new ArrayList<Browser>(lookup.values());
@@ -57,24 +60,31 @@ public class BrowserFactory {
         return browsers;
     }
 
+    public boolean shouldRetrieveBrowsers() {
+        return lastLookup == null;
+    }
+
     private List<Browser> initializeBrowsers() throws IOException, JSONException {
         List<Browser> browsers = getBrowsersFromSauceLabs();
         lookup = new HashMap<String,Browser>();
         for (Browser browser : browsers) {
             lookup.put(browser.getKey(), browser);
         }
-        lastLookup = CacheTimeUtil.getCurrentTimestamp();
+        lastLookup = new Timestamp(new Date().getTime());
         return browsers;
     }
 
     private List<Browser> getBrowsersFromSauceLabs() throws IOException, JSONException {
-         SauceFactory sauceFactory = new SauceFactory();
-         String response = sauceFactory.doREST(BROWSER_URL);
+         String response = getSauceAPIFactory().doREST(BROWSER_URL);
          return getBrowserListFromJson(response);
+    }
+    
+    public SauceFactory getSauceAPIFactory() {
+        return new SauceFactory();
     }
 
     /**
-     * Parses the JSON response and constructs a List of {@link com.saucelabs.bamboo.sod.Browser} instances.
+     * Parses the JSON response and constructs a List of {@link Browser} instances.
      *
      * @param browserListJson
      * @return

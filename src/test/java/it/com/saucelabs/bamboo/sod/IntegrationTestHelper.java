@@ -4,8 +4,7 @@ package it.com.saucelabs.bamboo.sod;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.action.BuildConfigurator;
 
-import com.saucelabs.bamboo.sod.util.SauceFactory;
-import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import com.thoughtworks.selenium.Selenium;
 import org.junit.AfterClass;
@@ -54,7 +54,7 @@ public class IntegrationTestHelper {
                     //To change body of implemented methods use File | Settings | File Templates.
                 }
 
-                public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
+                public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, String domainList) throws IOException {
                     return null;  //To change body of implemented methods use File | Settings | File Templates.
                 }
 
@@ -71,7 +71,7 @@ public class IntegrationTestHelper {
             String domain = properties.getProperty("sauce.domain");
             boolean autoDomain = true;
             buildConfigurator.setSauceTunnelManager(sauceTunnelManager);
-            buildConfigurator.setSauceAPIFactory(new SauceFactory());
+            buildConfigurator.setSauceAPIFactory(new BambooSauceFactory());
             BuildContext buildContext = mock(BuildContext.class);
             when(buildContext.getPlanKey()).thenReturn(DUMMY_PLAN_KEY);
             buildConfigurator.init(buildContext);

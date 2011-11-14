@@ -1,7 +1,9 @@
 package com.saucelabs.bamboo.sod;
 
 import com.saucelabs.bamboo.sod.plan.ViewSODAction;
-import com.saucelabs.bamboo.sod.util.SauceFactory;
+import com.saucelabs.ci.Browser;
+import com.saucelabs.ci.BrowserFactory;
+import com.saucelabs.ci.SauceFactory;
 import com.saucelabs.rest.Credential;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;

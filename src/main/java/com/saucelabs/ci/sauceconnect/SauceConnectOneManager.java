@@ -1,4 +1,4 @@
-package com.saucelabs.bamboo.sod.util;
+package com.saucelabs.ci.sauceconnect;
 
 import com.saucelabs.rest.Credential;
 import com.saucelabs.rest.SauceTunnel;
@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,10 +74,10 @@ public class SauceConnectOneManager implements SauceTunnelManager {
      * @return
      * @throws IOException
      */
-    public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
+    public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, String domain) throws IOException {
 
         SauceTunnelFactory tunnelFactory = new SauceTunnelFactory(new Credential(username, apiKey));
-        SauceTunnel tunnel = tunnelFactory.create(domainList);
+        SauceTunnel tunnel = tunnelFactory.create(Collections.singletonList(domain));
 
         if (tunnel != null) {
             try {

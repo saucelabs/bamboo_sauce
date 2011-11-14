@@ -1,6 +1,6 @@
 package com.saucelabs.bamboo.sod.config;
 
-import com.saucelabs.bamboo.sod.SeleniumVersion;
+import com.saucelabs.ci.SeleniumVersion;
 import org.apache.commons.lang.math.NumberUtils;
 
 import java.util.Map;

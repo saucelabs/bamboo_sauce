@@ -1,7 +1,7 @@
 package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.saucelabs.bamboo.sod.BrowserFactory;
+import com.saucelabs.ci.BrowserFactory;
 import org.json.JSONException;
 
 /**

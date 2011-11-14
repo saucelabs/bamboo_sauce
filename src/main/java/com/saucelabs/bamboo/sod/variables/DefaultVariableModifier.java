@@ -1,16 +1,15 @@
 package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.build.BuildDefinition;
-import com.atlassian.bamboo.builder.AbstractBuilder;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.saucelabs.bamboo.sod.Browser;
-import com.saucelabs.bamboo.sod.BrowserFactory;
 import com.saucelabs.bamboo.sod.SODSeleniumConfiguration;
-import com.saucelabs.bamboo.sod.SeleniumVersion;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.ci.Browser;
+import com.saucelabs.ci.BrowserFactory;
+import com.saucelabs.ci.SeleniumVersion;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 
@@ -21,7 +20,7 @@ import org.json.JSONException;
  *
  * @author Ross Rowe
  */
-public class DefaultVariableModifier implements VariableModifier {
+public abstract class DefaultVariableModifier implements VariableModifier {
 
     protected static final String EQUALS = "=\"";
 
@@ -37,36 +36,6 @@ public class DefaultVariableModifier implements VariableModifier {
         this.config = config;
         this.definition = definition;
         this.buildContext = buildContext;
-    }
-
-    /**
-     * Stores the Sauce configuration values as environment variables.  Ideally, we would rather use system properties
-     * instead of environment variables however there is a <a href="https://jira.atlassian.com/browse/BAM-7265">defect</a> in Bamboo
-     * which causes quotes inside the -DargLine argument to be dropped.
-     *
-     * @throws JSONException if an error occurs generating the Selenium environment variables
-     */
-    public void storeVariables() throws JSONException {
-
-        String envBuffer = createSeleniumEnvironmentVariables();
-        AbstractBuilder builder = (AbstractBuilder) definition.getBuilder();
-        String originalEnv;
-        if (builder != null) {
-            originalEnv = builder.getEnvironmentVariables();
-            config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
-            if (StringUtils.isNotBlank(originalEnv)) {
-                envBuffer = " " + envBuffer;
-            }
-            builder.setEnvironmentVariables(builder.getEnvironmentVariables() + envBuffer);
-        }
-    }
-
-    public void restoreVariables() {
-        AbstractBuilder builder = (AbstractBuilder) definition.getBuilder();
-        if (builder != null) {
-            builder.setEnvironmentVariables(config.getMap().get(SODKeys.TEMP_ENV_VARS));
-        }
-        config.getMap().put(SODKeys.TEMP_ENV_VARS, "");
     }
 
     /**

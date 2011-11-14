@@ -8,15 +8,15 @@ import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
-import com.saucelabs.bamboo.sod.Browser;
-import com.saucelabs.bamboo.sod.BrowserFactory;
-import com.saucelabs.bamboo.sod.SeleniumVersion;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
-import com.saucelabs.bamboo.sod.util.SauceConnectTwoManager;
-import com.saucelabs.bamboo.sod.util.SauceFactory;
-import com.saucelabs.bamboo.sod.util.SauceLibraryManager;
-import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
+import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
+import com.saucelabs.ci.Browser;
+import com.saucelabs.ci.BrowserFactory;
+import com.saucelabs.ci.SeleniumVersion;
+import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
+import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
@@ -25,7 +25,6 @@ import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,7 +46,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     /**
      * Populated by dependency injection.
      */
-    private SauceFactory sauceAPIFactory;
+    private BambooSauceFactory sauceAPIFactory;
 
     /**
      * Populated via dependency injection.
@@ -57,7 +56,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     /**
      * Populated via dependency injection.
      */
-    private SauceLibraryManager sauceLibraryManager;
+    private BambooSauceLibraryManager sauceLibraryManager;
     
     /**
      * Populated via dependency injection.
@@ -143,8 +142,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
         int intLocalPort = Integer.parseInt(localPorts);
         int intRemotePort = Integer.parseInt(remotePorts);
-        List<String> domainList = Collections.singletonList(finalDomain);
-        Object tunnel = getSauceTunnelManager().openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, domainList);
+        Object tunnel = getSauceTunnelManager().openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, finalDomain);
         getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
     }
 
@@ -241,7 +239,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.sauceBrowserFactory = sauceBrowserFactory;
     }
 
-    public void setSauceAPIFactory(SauceFactory sauceAPIFactory) {
+    public void setSauceAPIFactory(BambooSauceFactory sauceAPIFactory) {
         this.sauceAPIFactory = sauceAPIFactory;
     }
     
@@ -252,9 +250,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         return sauceTunnelManager;
     }
 
-    public SauceFactory getSauceAPIFactory() {
+    public BambooSauceFactory getSauceAPIFactory() {
         if (sauceAPIFactory == null) {
-            setSauceAPIFactory(new SauceFactory());
+            setSauceAPIFactory(new BambooSauceFactory());
         }
         return sauceAPIFactory;
     }
@@ -267,7 +265,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     }
 
 
-    public void setSauceLibraryManager(SauceLibraryManager sauceLibraryManager) {
+    public void setSauceLibraryManager(BambooSauceLibraryManager sauceLibraryManager) {
         this.sauceLibraryManager = sauceLibraryManager;
     }
 

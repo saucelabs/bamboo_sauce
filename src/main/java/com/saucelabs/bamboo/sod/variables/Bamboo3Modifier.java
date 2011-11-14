@@ -1,10 +1,8 @@
 package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.build.BuildDefinition;
-import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.saucelabs.bamboo.sod.BrowserFactory;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.apache.commons.lang.StringUtils;
@@ -49,7 +47,7 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
         }
     }
 
-    @Override
+    //@Override
     public void restoreVariables() {
         try {
             Class taskDefinitionClass = Class.forName("com.atlassian.bamboo.task.TaskDefinition");

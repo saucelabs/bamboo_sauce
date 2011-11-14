@@ -6,8 +6,9 @@ import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
-import com.saucelabs.bamboo.sod.util.SauceFactory;
-import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
+import com.saucelabs.ci.SauceFactory;
+import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
 import org.junit.Before;
@@ -48,7 +49,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
                 tunnelMap.put(planKey, tunnel);
             }
 
-            public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
+            public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, String domainList) throws IOException {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
@@ -83,7 +84,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
 //        when(sauceTunnel.isRunning()).thenReturn(true);
         //when(sauceTunnel.connect(Integer.parseInt("5678"), "sshhost", Integer.parseInt("1234")));
         when(sauceTunnelFactory.create(any(List.class))).thenReturn(sauceTunnel);
-        SauceFactory sauceAPIFactory = mock(SauceFactory.class);
+        BambooSauceFactory sauceAPIFactory = mock(BambooSauceFactory.class);
 //        when(sauceAPIFactory.createSauceTunnelFactory("tempUser", "apiKey")).thenReturn(sauceTunnelFactory);
         
         buildConfigurator.setSauceAPIFactory(sauceAPIFactory);

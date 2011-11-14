@@ -1,4 +1,4 @@
-package com.saucelabs.bamboo.sod.util;
+package com.saucelabs.ci.sauceconnect;
 
 import com.saucelabs.sauceconnect.SauceConnect;
 import org.apache.commons.io.IOUtils;
@@ -51,6 +51,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         if (tunnelMap.containsKey(planKey)) {
             List<Process> tunnelList = tunnelMap.get(planKey);
             for (Process sauceConnect : tunnelList) {
+                logger.info("Closing Sauce Connect");
                 sauceConnect.destroy();
                 //release lock
                 accessLock.unlock();
@@ -81,7 +82,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
      * @return
      * @throws IOException
      */
-    public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, List<String> domainList) throws IOException {
+    public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, String domain) throws IOException {
 
         try {
             //only allow one thread to launch Sauce Connect
@@ -109,8 +110,9 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
                             username,
                             apiKey,
                             "-p",
-                            domainList.get(0)
+                            domain
                     );
+            logger.info("Launching Sauce Connect");
             final Process process = processBuilder.start();
             try {
                 semaphore.acquire();
@@ -127,6 +129,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
             } catch (InterruptedException e) {
                 //continue;
             }
+            logger.info("Sauce Connect now launched");
             return process;
 
         } catch (URISyntaxException e) {

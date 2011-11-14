@@ -1,12 +1,8 @@
-package com.saucelabs.bamboo.sod.util;
+package com.saucelabs.ci;
 
-import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.atlassian.plugin.PluginAccessor;
 import com.saucelabs.sauceconnect.SauceConnect;
 import de.schlichtherle.truezip.file.TArchiveDetector;
 import de.schlichtherle.truezip.file.TFile;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -17,46 +13,21 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * Handles checking for and installing updates to the SauceConnect library.  Updates are checked by
- * sending a request to https://saucelabs.com/versions.json, and comparing the version attribute of the
- * 'Sauce Connect 2' entry in the JSON response to the SauceConnect.RELEASE() variable.
- * <p/>
- * If the version number in the JSON response is greater than the value in the SauceConnect library,
- * we need to perform a HTTP get on the URL specified in the download_url attribute of the JSON response
- * (which will be a ZIP file).  We then unzip the zip file, and include the Sauce-Connect.jar file into the
- * Bamboo plugin.
- * <p/>
- *
  * @author Ross Rowe
  */
-public class SauceLibraryManager {
-
+public abstract class SauceLibraryManager {
+    
     private static final Logger logger = Logger.getLogger(SauceLibraryManager.class);
-
     private static final String VERSION_CHECK_URL = "https://saucelabs.com/versions.json";
-
-    /**
-     * Populated via dependency injection.
-     */
-    private AdministrationConfigurationManager administrationConfigurationManager;
-
-    private PluginAccessor pluginAccessor;
-
-    /**
-     * Populated by dependency injection.
-     */
-    private SauceFactory sauceAPIFactory;
-
     private static final int BUFFER = 1024;
-
-    private static final String PLUGIN_KEY = "com.saucelabs.bamboo.bamboo-sauceondemand-plugin";
+    private static final String SAUCE_CONNECT_KEY = "Sauce Connect 2";
+    private static final String VERSION_KEY = "version";
+    private static final String DOWNLOAD_URL_KEY = "download_url";
 
     /**
      * Performs a REST request to https://saucelabs.com/versions.json to retrieve the list of
@@ -64,15 +35,14 @@ public class SauceLibraryManager {
      * than the current version, then return true.
      *
      * @return boolean indicating whether an updated sauce connect jar is available
-     * @throws IOException
-     * @throws JSONException      thrown if an error occurs during the parsing of the JSON response
-     * @throws URISyntaxException
+     * @throws java.io.IOException
+     * @throws org.json.JSONException      thrown if an error occurs during the parsing of the JSON response
+     * @throws java.net.URISyntaxException
      */
     public boolean checkForLaterVersion() throws IOException, JSONException, URISyntaxException {
-        //retrieve contents of version url and parse as JSON
-        getSauceAPIFactory().setupProxy(administrationConfigurationManager);
-        SauceFactory sauceFactory = new SauceFactory();
-        String response = sauceFactory.doREST(VERSION_CHECK_URL);
+        
+        logger.info("Checking for updates to Sauce Connect");
+        String response = getSauceAPIFactory().doREST(VERSION_CHECK_URL);
 //        String response = IOUtils.toString(getClass().getResourceAsStream("/versions.json"));
         int version = extractVersionFromResponse(response);
         //compare version attribute against SauceConnect.RELEASE()
@@ -84,22 +54,28 @@ public class SauceLibraryManager {
      * to be used to retrieve the latest version of Sauce Connect, then updates the Bamboo Sauce plugin jar
      * to include this jar.
      *
-     * @throws JSONException      thrown if an error occurs during the parsing of the JSON response
-     * @throws IOException
-     * @throws URISyntaxException
+     * @throws org.json.JSONException      thrown if an error occurs during the parsing of the JSON response
+     * @throws java.io.IOException
+     * @throws java.net.URISyntaxException
      */
     public void triggerReload() throws JSONException, IOException, URISyntaxException {
-        SauceFactory sauceFactory = new SauceFactory();
-        String response = sauceFactory.doREST(VERSION_CHECK_URL);
+        logger.info("Updating Sauce Connect");
+        String response = getSauceAPIFactory().doREST(VERSION_CHECK_URL);
 //        String response = IOUtils.toString(getClass().getResourceAsStream("/versions.json"));
         File jarFile = retrieveNewVersion(response);
         updatePluginJar(jarFile);
     }
 
-    private int extractVersionFromResponse(String response) throws JSONException {
+    public SauceFactory getSauceAPIFactory() {
+        return new SauceFactory();
+    }
+
+    public abstract void updatePluginJar(File jarFile) throws IOException, URISyntaxException;
+
+    public int extractVersionFromResponse(String response) throws JSONException {
         JSONObject versionObject = new JSONObject(response);
-        JSONObject sauceConnect2 = versionObject.getJSONObject("Sauce Connect 2");
-        String versionText = sauceConnect2.getString("version");
+        JSONObject sauceConnect2 = versionObject.getJSONObject(SAUCE_CONNECT_KEY);
+        String versionText = sauceConnect2.getString(VERSION_KEY);
         //extract the last digits after the -
         String versionNumber = StringUtils.substringAfter(versionText, "-r");
         if (StringUtils.isBlank(versionNumber)) {
@@ -116,24 +92,25 @@ public class SauceLibraryManager {
      *
      * @param response
      * @return
-     * @throws JSONException
-     * @throws IOException
+     * @throws org.json.JSONException
+     * @throws java.io.IOException
      */
     public File retrieveNewVersion(String response) throws JSONException, IOException {
         //perform HTTP get for download_url
         String downloadUrl = extractDownloadUrlFromResponse(response);
-        SauceFactory sauceFactory = new SauceFactory();
-        byte[] bytes = sauceFactory.doHTTPGet(downloadUrl);
+        byte[] bytes = getSauceAPIFactory().doHTTPGet(downloadUrl);
 //        byte[] bytes = FileUtils.readFileToByteArray(new File("C:/Sauce-Connect.zip"));
         //unzip contents to temp directory
         return unzipByteArray(bytes);
     }
+    
+    
 
     /**
      * Extracts the contents of the byte array to the temp drive.
      *
      * @param byteArray
-     * @return a {@link File} instance pointing to the Sauce Connect jar file
+     * @return a {@link java.io.File} instance pointing to the Sauce Connect jar file
      */
     private File unzipByteArray(byte[] byteArray) {
         File destPath = new File(System.getProperty("java.io.tmpdir"));
@@ -174,54 +151,17 @@ public class SauceLibraryManager {
         return jarFile;
     }
 
-
     /**
      * Retrieves the download url from the JSON response
      *
      * @param response
      * @return String representing the URL to use to download the sauce connect jar
-     * @throws JSONException thrown if an error occurs during the parsing of the JSON response
+     * @throws org.json.JSONException thrown if an error occurs during the parsing of the JSON response
      */
     private String extractDownloadUrlFromResponse(String response) throws JSONException {
         JSONObject versionObject = new JSONObject(response);
-        JSONObject sauceConnect2 = versionObject.getJSONObject("Sauce Connect 2");
-        return sauceConnect2.getString("download_url");
-    }
-
-    /**
-     * Updates the Bamboo Sauce plugin jar file to include the updated Sauce Connect jar file.  We have to
-     * use reflection in order to retrieve information about the plugin, as the plugin classes aren't available
-     * to our class loader.
-     * <p/>
-     * We update both the running bamboo plugin jar file (which is contained in the BAMBOO_HOME/caches/plugins/transformed-plugins
-     * directory) and the 'master' plugin jar file  (which is contained in BAMBOO_HOME/plugins).  This means that the update to
-     * the plugin jar file won't require a restart of Bamboo in order to take effect, and will survive across restarts.
-     *
-     * @param newJarFile the updated sauce connect jar file
-     * @throws IOException        thrown if an error occurs during the Jar file modification
-     * @throws URISyntaxException thrown if an error occurs retrieving the URL for the Bamboo plugin Jar file
-     */
-    public void updatePluginJar(File newJarFile) throws IOException, URISyntaxException {
-        File runningJarFile = new File
-                (SauceLibraryManager.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        addFileToJar(runningJarFile, new TFile(newJarFile));
-        Object plugin = pluginAccessor.getPlugin(PLUGIN_KEY);
-        Class pluginClass = pluginAccessor.getPlugin(PLUGIN_KEY).getClass();
-        try {
-            //have to use reflection here as the plugin API classes aren't available to the plugin
-            Method getPluginArtifactMethod = pluginClass.getDeclaredMethod("getPluginArtifact");
-            Object pluginArtifact = getPluginArtifactMethod.invoke(plugin);
-            Class pluginArtifactClass = pluginArtifact.getClass();
-            Method toFileMethod = pluginArtifactClass.getDeclaredMethod("toFile");
-            File originalJarFile = (File) toFileMethod.invoke(pluginArtifact);
-            addFileToJar(originalJarFile, new TFile(newJarFile));
-        } catch (NoSuchMethodException e) {
-            throw new IOException("Unexpected error invoking plugin logic", e);
-        } catch (InvocationTargetException e) {
-            throw new IOException("Unexpected error invoking plugin logic", e);
-        } catch (IllegalAccessException e) {
-            throw new IOException("Unexpected error invoking plugin logic", e);
-        }
+        JSONObject sauceConnect2 = versionObject.getJSONObject(SAUCE_CONNECT_KEY);
+        return sauceConnect2.getString(DOWNLOAD_URL_KEY);
     }
 
     /**
@@ -229,7 +169,7 @@ public class SauceLibraryManager {
      *
      * @param pluginJarFile
      * @param updatedSauceConnectJarFile
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public void addFileToJar(File pluginJarFile, TFile updatedSauceConnectJarFile) throws IOException {
 
@@ -243,7 +183,7 @@ public class SauceLibraryManager {
      *
      * @param jarFileEntry
      * @param updatedSauceConnectJarFile
-     * @throws IOException
+     * @throws java.io.IOException
      */
     private void search(TFile jarFileEntry, TFile updatedSauceConnectJarFile) throws IOException {
         if (jarFileEntry.getName().endsWith("sauce-connect-3.0.jar")) {
@@ -259,32 +199,10 @@ public class SauceLibraryManager {
      *
      * @param pluginJarFile
      * @param updatedSauceConnectJarFile
-     * @throws IOException
+     * @throws java.io.IOException
      */
     private void update(TFile pluginJarFile, TFile updatedSauceConnectJarFile) throws IOException {
+        logger.info("Modifying plugin jar file");
         updatedSauceConnectJarFile.cp_rp(pluginJarFile);
-    }
-
-    public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {
-        this.administrationConfigurationManager = administrationConfigurationManager;
-    }
-
-    public SauceFactory getSauceAPIFactory() {
-        if (sauceAPIFactory == null) {
-            setSauceAPIFactory(new SauceFactory());
-        }
-        return sauceAPIFactory;
-    }
-
-    public void setSauceAPIFactory(SauceFactory sauceAPIFactory) {
-        this.sauceAPIFactory = sauceAPIFactory;
-    }
-
-    public PluginAccessor getPluginAccessor() {
-        return pluginAccessor;
-    }
-
-    public void setPluginAccessor(PluginAccessor pluginAccessor) {
-        this.pluginAccessor = pluginAccessor;
     }
 }

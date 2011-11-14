@@ -1,6 +1,5 @@
-package com.saucelabs.bamboo.sod;
+package com.saucelabs.ci;
 
-import com.saucelabs.ci.Browser;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;

@@ -6,9 +6,9 @@ import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
-import com.saucelabs.bamboo.sod.BrowserFactory;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.variables.VariableModifier;
+import com.saucelabs.ci.BrowserFactory;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 

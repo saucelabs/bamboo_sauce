@@ -1,4 +1,4 @@
-package com.saucelabs.bamboo.sod;
+package com.saucelabs.ci;
 
 /**
  * Used to represent different versions of Selenium.

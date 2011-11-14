@@ -4,8 +4,8 @@ import com.atlassian.bamboo.build.CustomBuildProcessor;
 import com.atlassian.bamboo.v2.build.BaseConfigurablePlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
-import com.saucelabs.bamboo.sod.util.SauceConnectTwoManager;
-import com.saucelabs.bamboo.sod.util.SauceTunnelManager;
+import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
+import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
@@ -67,7 +67,7 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
     public SauceTunnelManager getSauceTunnelManager() {
         if (sauceTunnelManager == null) {
             //this will occur when a remote agent runs, as it doesn't have Spring components available
-            setSauceTunnelManager(SauceConnectTwoManager.getInstance());
+            setSauceTunnelManager(new SauceConnectTwoManager());
         }
         return sauceTunnelManager;
     }
