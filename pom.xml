@@ -200,26 +200,26 @@
             <groupId>jetty</groupId>
             <artifactId>jetty</artifactId>
             <version>5.1.10</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency-->
-        <!--dependency>
+        <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
             <version>7.2.1.v20101111</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-http</artifactId>
             <version>7.2.1.v20101111</version>
-            <scope>provided</scope>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
             <version>7.2.1.v20101111</version>
-            <scope>provided</scope>
-        </dependency-->
+            <scope>test</scope>
+        </dependency>
         <!-- Test Dependencies-->
         <dependency>
             <groupId>org.mockito</groupId>

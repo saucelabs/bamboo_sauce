@@ -26,7 +26,7 @@ import java.util.jar.JarFile;
  * Handles opening a SSH Tunnel using the Sauce Connect 2 logic. The class  maintains a cache of {@link Process } instances mapped against
  * the corresponding plan key.  This class can be considered a singleton, and is instantiated via the 'component' element of the atlassian-plugin.xml
  * file (ie. using Spring).
- * 
+ *
  * @author Ross Rowe
  */
 public class SauceConnectTwoManager implements SauceTunnelManager {
@@ -39,7 +39,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
     private final ReentrantLock accessLock = new ReentrantLock();
     /**
      * Semaphore initialized with a single permit that is used to ensure that the main worker thread
-     * waits until the Sauce Connect process is fully initialized before tests are run. 
+     * waits until the Sauce Connect process is fully initialized before tests are run.
      */
     private final Semaphore semaphore = new Semaphore(1);
 
@@ -145,26 +145,31 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
 
     private List<String> extractSauceConnectJar(File jarFile) throws IOException {
         List<String> files = new ArrayList<String>();
-        JarFile jar = new JarFile(jarFile);
-        java.util.Enumeration entries = jar.entries();
-        //ran into problems on OSX using java.io.tmpdir, using user.home instead
-        final File destDir = new File(System.getProperty("user.home"));
-        while (entries.hasMoreElements()) {
-            JarEntry file = (JarEntry) entries.nextElement();
+        if (jarFile.getName().equals("sauce-connect-3.0.jar")) {
+            files.add(jarFile.getPath());
 
-            if (file.getName().endsWith("sauce-connect-3.0.jar")) {
-                File f = new File(destDir, file.getName());
+        } else {
+            JarFile jar = new JarFile(jarFile);
+            java.util.Enumeration entries = jar.entries();
+            //ran into problems on OSX using java.io.tmpdir, using user.home instead
+            final File destDir = new File(System.getProperty("user.home"));
+            while (entries.hasMoreElements()) {
+                JarEntry file = (JarEntry) entries.nextElement();
 
-                if (f.exists()) {
-                    f.delete();
+                if (file.getName().endsWith("sauce-connect-3.0.jar")) {
+                    File f = new File(destDir, file.getName());
+
+                    if (f.exists()) {
+                        f.delete();
+                    }
+                    f.getParentFile().mkdirs();
+                    f.createNewFile();
+                    f.deleteOnExit();
+                    InputStream is = jar.getInputStream(file); // get the input stream
+                    FileOutputStream fos = new java.io.FileOutputStream(f);
+                    IOUtils.copy(is, fos);
+                    files.add(f.getPath());
                 }
-                f.getParentFile().mkdirs();
-                f.createNewFile();
-                f.deleteOnExit();
-                InputStream is = jar.getInputStream(file); // get the input stream
-                FileOutputStream fos = new java.io.FileOutputStream(f);
-                IOUtils.copy(is, fos);
-                files.add(f.getPath());
             }
         }
         return files;
