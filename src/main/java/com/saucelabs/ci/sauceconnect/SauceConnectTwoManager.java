@@ -78,7 +78,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
      * @param localHost
      * @param intLocalPort
      * @param intRemotePort
-     * @param domainList
+     * @param domain
      * @return
      * @throws IOException
      */
@@ -147,7 +147,8 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         List<String> files = new ArrayList<String>();
         JarFile jar = new JarFile(jarFile);
         java.util.Enumeration entries = jar.entries();
-        final File destDir = new File(System.getProperty("java.io.tmpdir"));
+        //ran into problems on OSX using java.io.tmpdir, using user.home instead
+        final File destDir = new File(System.getProperty("user.home"));
         while (entries.hasMoreElements()) {
             JarEntry file = (JarEntry) entries.nextElement();
 
@@ -216,7 +217,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         @Override
         protected void processLine(String line) {
             super.processLine(line);
-            if (line.contains("started")) {
+            if (line.contains("Connected!")) {
                 //unlock processMonitor
                 semaphore.release();
             }
