@@ -49,7 +49,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
                 tunnelMap.put(planKey, tunnel);
             }
 
-            public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, String domainList) throws IOException {
+            public Object openConnection(String username, String apiKey) throws IOException {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
 
