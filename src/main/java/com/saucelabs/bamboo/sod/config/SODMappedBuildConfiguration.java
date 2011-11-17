@@ -111,16 +111,6 @@ public class SODMappedBuildConfiguration
         map.put(SSH_ENABLED_KEY,Boolean.toString(enabled));
     }
 
-    public boolean isAutoDomain()
-    {
-        return Boolean.parseBoolean(map.get(SSH_AUTO_DOMAIN_KEY));
-    }
-
-    public void setAutoDomain(boolean auto)
-    {
-        map.put(SSH_AUTO_DOMAIN_KEY,Boolean.toString(auto));
-    }
-
     public boolean useSshDefaults()
     {
         return Boolean.parseBoolean(map.get(SSH_USE_DEFAULTS_KEY));
@@ -151,21 +141,6 @@ public class SODMappedBuildConfiguration
         map.put(SSH_LOCAL_PORTS_KEY,ports);
     }
 
-    public String getSshTunnelPorts()
-    {
-        return map.get(SSH_REMOTE_PORTS_KEY);
-    }
-
-    public void setSshTunnelPorts(String ports)
-    {
-        map.put(SSH_REMOTE_PORTS_KEY,ports);
-    }
-
-    public String getSshDomains()
-    {
-        return map.get(SSH_DOMAINS_KEY);
-    }
-
     public String getTempApikey()
     {
         return map.get(TEMP_API_KEY);
@@ -184,11 +159,6 @@ public class SODMappedBuildConfiguration
     public void setTempApikey(String key)
     {
         map.put(TEMP_API_KEY,key);
-    }
-
-    public void setSshDomains(String domains)
-    {
-        map.put(SSH_DOMAINS_KEY,domains);
     }
 
     public Map<String, String> getMap()

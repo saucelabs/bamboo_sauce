@@ -73,9 +73,6 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
         customConfiguration.put(SODKeys.SSH_LOCAL_HOST_KEY, "sshhost");
         customConfiguration.put(SODKeys.SSH_LOCAL_PORTS_KEY, "1234");
-        customConfiguration.put(SODKeys.SSH_REMOTE_PORTS_KEY, "5678");
-        customConfiguration.put(SODKeys.SSH_DOMAINS_KEY, "sshDomains");
-        customConfiguration.put(SODKeys.SSH_AUTO_DOMAIN_KEY, "true");
 
         when(buildDefinition.getCustomConfiguration()).thenReturn(customConfiguration);
         

@@ -1,7 +1,7 @@
 package com.saucelabs.bamboo.sod.selenium;
 
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
-import com.saucelabs.ci.sauceconnect.SauceConnectOneManager;
+import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
 import com.saucelabs.rest.SauceTunnel;
@@ -9,8 +9,6 @@ import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import com.thoughtworks.selenium.Selenium;
 import org.eclipse.jetty.server.Server;
 import org.junit.Test;
-
-import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,9 +30,9 @@ public class TunnelTest extends AbstractTestHelper {
             // start a tunnel
             System.out.println("Starting a tunnel");
             Credential c = new Credential();            
-            SauceTunnelManager sauceTunnelManager = new SauceConnectOneManager();
+            SauceTunnelManager sauceTunnelManager = new SauceConnectTwoManager();
 
-            SauceTunnel tunnel = (SauceTunnel) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), "localhost", 80, 8080, "testing.org");
+            SauceTunnel tunnel = (SauceTunnel) sauceTunnelManager.openConnection(c.getUsername(), c.getKey());
             sauceTunnelManager.addTunnelToMap("TEST", tunnel);
 
             assertTrue("tunnel id=" + tunnel.getId() + " isn't coming online", tunnel.isRunning());
@@ -47,7 +45,7 @@ public class TunnelTest extends AbstractTestHelper {
                     System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
                 }
 
-                System.setProperty("SELENIUM_STARTING_URL", "http://testing.org/");
+                System.setProperty("SELENIUM_STARTING_URL", "http://localhost:8080/");
                 Selenium selenium = SeleniumFactory.create();
                 selenium.start();
                 selenium.open("/");

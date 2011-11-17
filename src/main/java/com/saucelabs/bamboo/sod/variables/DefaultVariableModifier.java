@@ -111,21 +111,10 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         config.setTempApikey(sodKey);
         String host = adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY);
         String port = adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY);
-        String browserUrl = config.getSeleniumStartingUrl();
         String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
-
-        String sodHost = config.getSshDomains();
-        String finalStartingUrl = browserUrl;
-
-        if (config.isSshEnabled() && config.isAutoDomain()) {
-            sodHost = "bamboo-" + buildContext.getPlanKey() + ".bamboo";
-            finalStartingUrl = "http://" + sodHost + ':' + config.getSshTunnelPorts() + '/';
-        }
 
         stringBuilder.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
-        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(finalStartingUrl).append('"');
-        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_ONDEMAND_HOST).append(EQUALS).append(sodHost).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
         if (buildContext.getParentBuildContext() == null) {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');

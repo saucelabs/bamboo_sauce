@@ -28,13 +28,10 @@ public final class SODKeys
 
     /* SSH BASIC TUNNEL OPTIONS */
     public static final String SSH_ENABLED_KEY = SSH_PREFIX + "enabled";
-    public static final String SSH_AUTO_DOMAIN_KEY = SSH_PREFIX + "auto-domain";
     public static final String SSH_USE_DEFAULTS_KEY = SSH_PREFIX + "defaults";
     public static final String SSH_LOCAL_HOST_KEY = SSH_PREFIX + "local.host";
     //NOTE: ports and tunnel ports must be same length
     public static final String SSH_LOCAL_PORTS_KEY = SSH_PREFIX + "local.ports";
-    public static final String SSH_REMOTE_PORTS_KEY = SSH_PREFIX + "remote.ports";
-    public static final String SSH_DOMAINS_KEY = SSH_PREFIX + "domains";
 
     /* ADMIN CONFIG KEYS */
     public static final String SOD_USERNAME_KEY = "sauceondemand.username";

@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,12 +78,10 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
      * @param apiKey
      * @param localHost
      * @param intLocalPort
-     * @param intRemotePort
-     * @param domain
      * @return
      * @throws IOException
      */
-    public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, String domain) throws IOException {
+    public Object openConnection(String username, String apiKey) throws IOException {
 
         try {
             //only allow one thread to launch Sauce Connect
@@ -103,16 +102,16 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
             //File jarFile = new File("/Developer/workspace/bamboo_sauce/target/bamboo-sauceondemand-plugin-1.4.0.jar");
             String path = System.getProperty("java.home")
                     + fileSeparator + "bin" + fileSeparator + "java";
-            ProcessBuilder processBuilder =
-                    new ProcessBuilder(path, "-cp",
-                            builder.toString(),
-                            SauceConnect.class.getName(),
-                            username,
-                            apiKey,
-                            "-p",
-                            domain
-                    );
-            logger.info("Launching Sauce Connect");
+            String[] args = new String[]{path, "-cp",
+                    builder.toString(),
+                    SauceConnect.class.getName(),
+                    username,
+                    apiKey
+            };
+            ProcessBuilder processBuilder = new ProcessBuilder(args);
+            if (logger.isInfoEnabled()) {
+                logger.info("Launching Sauce Connect " + Arrays.toString(args));
+            }
             final Process process = processBuilder.start();
             try {
                 semaphore.acquire();
@@ -147,11 +146,9 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         List<String> files = new ArrayList<String>();
         if (jarFile.getName().equals("sauce-connect-3.0.jar")) {
             files.add(jarFile.getPath());
-
         } else {
             JarFile jar = new JarFile(jarFile);
             java.util.Enumeration entries = jar.entries();
-            //ran into problems on OSX using java.io.tmpdir, using user.home instead
             final File destDir = new File(System.getProperty("user.home"));
             while (entries.hasMoreElements()) {
                 JarEntry file = (JarEntry) entries.nextElement();
@@ -222,7 +219,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         @Override
         protected void processLine(String line) {
             super.processLine(line);
-            if (line.contains("Connected!")) {
+            if (line.contains("started")) {
                 //unlock processMonitor
                 semaphore.release();
             }

@@ -44,7 +44,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
                     }
             );            
             SauceTunnelManager sauceTunnelManager = new SauceConnectTwoManager();
-            Process sauceConnect = (Process) sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), null, -1, -1, "testing.org");
+            Process sauceConnect = (Process) sauceTunnelManager.openConnection(c.getUsername(), c.getKey());
             sauceTunnelManager.addTunnelToMap("TEST", sauceConnect);
             System.out.println("tunnel established");
             String driver = System.getenv("SELENIUM_DRIVER");
@@ -53,7 +53,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
             }
 
             String originalUrl = System.getenv("SELENIUM_STARTING_URL");
-            System.setProperty("SELENIUM_STARTING_URL", "http://testing.org:8080/");
+            System.setProperty("SELENIUM_STARTING_URL", "http://localhost:8080/");
             Selenium selenium = SeleniumFactory.create();            
             try {
                 selenium.start();
@@ -71,12 +71,5 @@ public class SauceConnect2Test extends AbstractTestHelper {
             server.stop();
         }
     }
-
-    public static void main(String[] args) throws Exception {
-        new SauceConnect2Test().startWebServer();
-
-
-    }
-
 
 }

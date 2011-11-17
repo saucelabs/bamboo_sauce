@@ -54,7 +54,7 @@ public class IntegrationTestHelper {
                     //To change body of implemented methods use File | Settings | File Templates.
                 }
 
-                public Object openConnection(String username, String apiKey, String localHost, int intLocalPort, int intRemotePort, String domainList) throws IOException {
+                public Object openConnection(String username, String apiKey) throws IOException {
                     return null;  //To change body of implemented methods use File | Settings | File Templates.
                 }
 
@@ -75,7 +75,7 @@ public class IntegrationTestHelper {
             BuildContext buildContext = mock(BuildContext.class);
             when(buildContext.getPlanKey()).thenReturn(DUMMY_PLAN_KEY);
             buildConfigurator.init(buildContext);
-            buildConfigurator.startTunnel(username, apiKey, sshHost, sshPort, tunnelPort, domain, autoDomain);
+            buildConfigurator.startTunnel(username, apiKey);
             
         } 
     }

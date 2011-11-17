@@ -41,7 +41,6 @@ public class BrowserTest extends AbstractTestHelper  {
     @Test
 	public void browserFromSaucelabs() throws Exception {
         SauceFactory sauceAPIFactory = new SauceFactory();
-        sauceAPIFactory.setupProxy("proxy.immi.local", "80", "exitr6", "abc125");
         BrowserFactory factory = new BrowserFactory();
         List<Browser> browsers = factory.values();
         assertFalse("browsers is empty", browsers.isEmpty());

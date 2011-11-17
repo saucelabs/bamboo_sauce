@@ -74,8 +74,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private static final String DEFAULT_SELENIUM_URL = "http://saucelabs.com";
     private static final String DEFAULT_SSH_LOCAL_HOST = "localhost";
     private static final String DEFAULT_SSH_LOCAL_PORT = "8080";
-    private static final String DEFAULT_SSH_REMOTE_PORT = "80";
-    private static final String DEFAULT_SSH_DOMAIN = "AUTO";
     private static final String DEFAULT_SELENIUM_VERSION = SeleniumVersion.TWO.getVersionNumber();
 
     /**
@@ -93,7 +91,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
                 checkVersionIsCurrent();
-                startTunnel(config.getTempUsername(), config.getTempApikey(), config.getSshHost(), config.getSshPorts(), config.getSshTunnelPorts(), config.getSshDomains(), config.isAutoDomain());
+                startTunnel(config.getTempUsername(), config.getTempApikey());
             }
         }
         catch (Exception e) {
@@ -127,22 +125,10 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      *
      * @param username
      * @param apiKey
-     * @param localHost
-     * @param localPorts
-     * @param remotePorts
-     * @param sshDomains
-     * @param autoDomain
      * @throws IOException
      */
-    public void startTunnel(String username, String apiKey, String localHost, String localPorts, String remotePorts, String sshDomains, boolean autoDomain) throws IOException {
-        String finalDomain = sshDomains;
-        if (autoDomain) {
-            finalDomain = "bamboo-" + buildContext.getPlanKey() + ".bamboo";
-        }
-
-        int intLocalPort = Integer.parseInt(localPorts);
-        int intRemotePort = Integer.parseInt(remotePorts);
-        Object tunnel = getSauceTunnelManager().openConnection(username, apiKey, localHost, intLocalPort, intRemotePort, finalDomain);
+    public void startTunnel(String username, String apiKey) throws IOException {
+        Object tunnel = getSauceTunnelManager().openConnection(username, apiKey);
         getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
     }
 
@@ -190,9 +176,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         addDefaultStringValue(buildConfiguration, SODKeys.SELENIUM_URL_KEY, DEFAULT_SELENIUM_URL);
         addDefaultStringValue(buildConfiguration, SODKeys.SSH_LOCAL_HOST_KEY, DEFAULT_SSH_LOCAL_HOST);
         addDefaultStringValue(buildConfiguration, SODKeys.SSH_LOCAL_PORTS_KEY, DEFAULT_SSH_LOCAL_PORT);
-        addDefaultStringValue(buildConfiguration, SODKeys.SSH_REMOTE_PORTS_KEY, DEFAULT_SSH_REMOTE_PORT);
-        addDefaultStringValue(buildConfiguration, SODKeys.SSH_AUTO_DOMAIN_KEY, Boolean.TRUE.toString());
-        addDefaultStringValue(buildConfiguration, SODKeys.SSH_DOMAINS_KEY, DEFAULT_SSH_DOMAIN);
 
     }
 
@@ -263,7 +246,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         }
         return sauceBrowserFactory;
     }
-
 
     public void setSauceLibraryManager(BambooSauceLibraryManager sauceLibraryManager) {
         this.sauceLibraryManager = sauceLibraryManager;
