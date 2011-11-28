@@ -14,7 +14,9 @@ import com.saucelabs.rest.SauceTunnelFactory;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +44,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             private Map<String,Object> tunnelMap = new HashMap<String,Object>();
 
             public void closeTunnelsForPlan(String planKey) {
-                //To change body of implemented methods use File | Settings | File Templates.
+
             }
 
             public void addTunnelToMap(String planKey, Object tunnel) {
@@ -50,11 +52,19 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             }
 
             public Object openConnection(String username, String apiKey) throws IOException {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+                return null;
             }
 
             public Map getTunnelMap() {
                 return tunnelMap;
+            }
+
+            public void setPrintStream(PrintStream logger) {
+
+            }
+
+            public void setSauceConnectJar(File sauceConnectJar) {
+
             }
         };
         buildConfigurator.setSauceTunnelManager(tunnelManager);

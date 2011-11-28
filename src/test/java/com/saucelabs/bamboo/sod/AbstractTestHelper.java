@@ -1,5 +1,6 @@
 package com.saucelabs.bamboo.sod;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -22,7 +23,7 @@ import com.saucelabs.rest.Credential;
  * @author Ross Rowe
  */
 public abstract class AbstractTestHelper extends HttpServlet {
-    
+
     protected static final String DEFAULT_SAUCE_DRIVER = "sauce-ondemand:?max-duration=60&os=windows 2008&browser=firefox&browser-version=4.";
     public static int code;
     private Server server;
@@ -32,7 +33,7 @@ public abstract class AbstractTestHelper extends HttpServlet {
         resp.setContentType("text/html");
         resp.getWriter().println("<html><head><title>test" + code + "</title></head><body>it works</body></html>");
     }
-    
+
     @BeforeClass
     public static void loadProperties() throws Exception {
         InputStream stream = AbstractTestHelper.class.getClassLoader().getResourceAsStream("test.properties");
@@ -41,13 +42,15 @@ public abstract class AbstractTestHelper extends HttpServlet {
         for (Map.Entry property : properties.entrySet()) {
             System.setProperty((String) property.getKey(), (String) property.getValue());
         }
-        File sauceSettings = new File(new File(System.getProperty("user.home")),".sauce-ondemand");
-		if (!sauceSettings.exists()) {
-			String userName = System.getProperty("sauce.user");
-			String accessKey = System.getProperty("access.key");
-			Credential credential = new Credential(userName, accessKey);
-			credential.saveTo(sauceSettings);
-		}
+        File sauceSettings = new File(new File(System.getProperty("user.home")), ".sauce-ondemand");
+        if (!sauceSettings.exists()) {
+            String userName = System.getProperty("sauce.user");
+            String accessKey = System.getProperty("access.key");
+            if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(accessKey)) {
+                Credential credential = new Credential(userName, accessKey);
+                credential.saveTo(sauceSettings);
+            }
+        }
     }
 
     protected Server startWebServer() throws Exception {
@@ -66,7 +69,6 @@ public abstract class AbstractTestHelper extends HttpServlet {
         System.out.println("Started Jetty at 8080");
         return server;
     }
-    
-    
-    
+
+
 }

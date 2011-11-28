@@ -6,8 +6,10 @@ import com.saucelabs.bamboo.sod.action.BuildConfigurator;
 
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -47,29 +49,32 @@ public class IntegrationTestHelper {
             sauceTunnelManager = new SauceTunnelManager() {
 
                 public void closeTunnelsForPlan(String planKey) {
-                    //To change body of implemented methods use File | Settings | File Templates.
+
                 }
 
                 public void addTunnelToMap(String planKey, Object tunnel) {
-                    //To change body of implemented methods use File | Settings | File Templates.
+
                 }
 
                 public Object openConnection(String username, String apiKey) throws IOException {
-                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                    return null;
                 }
 
                 public Map getTunnelMap() {
-                    return null;  //To change body of implemented methods use File | Settings | File Templates.
+                    return null;
+                }
+
+                public void setPrintStream(PrintStream logger) {
+
+                }
+
+                public void setSauceConnectJar(File sauceConnectJar) {
+
                 }
             };
             BuildConfigurator buildConfigurator = new BuildConfigurator();
             String username = properties.getProperty("sauce.username");
             String apiKey = properties.getProperty("sauce.accessKey");
-            String sshHost = properties.getProperty("sauce.sshHost");
-            String sshPort = properties.getProperty("sauce.sshPort");
-            String tunnelPort = properties.getProperty("sauce.tunnelPort");
-            String domain = properties.getProperty("sauce.domain");
-            boolean autoDomain = true;
             buildConfigurator.setSauceTunnelManager(sauceTunnelManager);
             buildConfigurator.setSauceAPIFactory(new BambooSauceFactory());
             BuildContext buildContext = mock(BuildContext.class);
