@@ -1,4 +1,4 @@
-<project name="Sauce Property File" default="create.file" basedir=".">
+<project name="Sauce Property File" default="check.file" basedir=".">
   <property name="username" value="test"/>
   <property name="access.key" value="test"/>
 
@@ -8,16 +8,11 @@
 username=${username}
 key=${access.key}
 	</echo>
-	<if>
-	<available file="${user.home}/.sauce-ondemand"/>
-	<then>
-		<echo>File has been created</echo>
-	</then>
-	<else>
-		<echo>File was not created</echo>
-	</else>
-</if>
-	
+	<available file="${user.home}/.sauce-ondemand" property="sauce.present"/>
+  </target>
+
+  <target name="check.file" depends="create.file" if="sauce.present">
+	 <echo message="File present"/>
   </target>
 
 </project>
