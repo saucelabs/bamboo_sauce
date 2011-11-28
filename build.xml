@@ -3,6 +3,7 @@
   <property name="access.key" value="test"/>
 
   <target name="create.file">
+	<echo message="Writing to ${user.home}/.sauce-ondemand"/>
 	<echo file="${user.home}/.sauce-ondemand">
 username=${username}
 key=${access.key}
