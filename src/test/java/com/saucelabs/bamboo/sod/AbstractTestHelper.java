@@ -14,6 +14,9 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+import java.io.File;
+
+import com.saucelabs.rest.Credential;
 
 /**
  * @author Ross Rowe
@@ -38,6 +41,13 @@ public abstract class AbstractTestHelper extends HttpServlet {
         for (Map.Entry property : properties.entrySet()) {
             System.setProperty((String) property.getKey(), (String) property.getValue());
         }
+        File sauceSettings = new File(new File(System.getProperty("user.home")),".sauce-ondemand");
+		if (!sauceSettings.exists()) {
+			String userName = System.getProperty("sauce.user");
+			String accessKey = System.getProperty("access.key");
+			Credential credential = new Credential(userName, accessKey);
+			credential.saveTo(sauceSettings);
+		}
     }
 
     protected Server startWebServer() throws Exception {
