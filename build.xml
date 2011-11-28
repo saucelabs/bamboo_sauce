@@ -8,6 +8,16 @@
 username=${username}
 key=${access.key}
 	</echo>
+	<if>
+	<available file="${user.home}/.sauce-ondemand"/>
+	<then>
+		<echo>File has been created</echo>
+	</then>
+	<else>
+		<echo>File was not created</echo>
+	</else>
+</if>
+	
   </target>
 
 </project>
