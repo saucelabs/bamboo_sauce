@@ -59,7 +59,7 @@ public class IntegrationTeztHelper {
             System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
         }
 
-        System.setProperty("SELENIUM_STARTING_URL", "http://localhost:8080/bamboo/");
+        System.setProperty("SELENIUM_STARTING_URL", "http://localhost:8080/bamboo/start.action");
         selenium = SeleniumFactory.createWebDriver();
         selenium.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -68,8 +68,9 @@ public class IntegrationTeztHelper {
 
     @After
     public void tearDown() throws Exception {
-        selenium.close();
         sauceTunnelManager.closeTunnelsForPlan(DUMMY_PLAN_KEY);
+        selenium.close();
+
     }
 
 }
