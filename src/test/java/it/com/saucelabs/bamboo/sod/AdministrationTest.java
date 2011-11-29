@@ -7,11 +7,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 
-public class AdministrationTest extends IntegrationTestHelper {
+public class AdministrationTest extends IntegrationTeztHelper {
 
     
-    @Test
-    @Ignore
+    @Test    
     public void testAdmin() throws Exception {
         selenium.open("/allPlans.action");
         selenium.waitForPageToLoad("30000");

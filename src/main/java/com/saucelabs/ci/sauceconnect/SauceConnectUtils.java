@@ -40,7 +40,7 @@ public final class SauceConnectUtils {
         } else {
             JarFile jar = new JarFile(jarFile);
             java.util.Enumeration entries = jar.entries();
-            final File destDir = new File(System.getProperty("user.home"));
+            final File destDir = jarFile.getParentFile();
             while (entries.hasMoreElements()) {
                 JarEntry file = (JarEntry) entries.nextElement();
 

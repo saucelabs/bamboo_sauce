@@ -2,6 +2,7 @@ package com.saucelabs.ci.sauceconnect;
 
 import com.saucelabs.sauceconnect.SauceConnect;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -212,7 +213,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
         @Override
         protected void processLine(String line) {
             super.processLine(line);
-            if (line.contains("started")) {
+            if (StringUtils.containsIgnoreCase(line, "Connected! You may start your tests")) {
                 //unlock processMonitor
                 semaphore.release();
             }

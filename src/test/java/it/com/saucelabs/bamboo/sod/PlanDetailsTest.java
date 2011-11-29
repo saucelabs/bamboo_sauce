@@ -1,13 +1,9 @@
 package it.com.saucelabs.bamboo.sod;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.SeleneseTestCase;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-public class PlanDetailsTest extends IntegrationTestHelper {
+public class PlanDetailsTest extends IntegrationTeztHelper {
 
     @Test
     @Ignore

@@ -37,7 +37,7 @@
         </developer>
     </developers>
     <properties>
-        <ci.version>1.6.0</ci.version>
+        <ci.version>1.6.1</ci.version>
         <bamboo.version>3.2</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
@@ -58,8 +58,8 @@
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
                     <instructions>
-                        <Export-Package>org.codehaus.jackson*</Export-Package>                        
-                        <Import-Package>                            
+                        <Export-Package>org.codehaus.jackson*</Export-Package>
+                        <Import-Package>
                             org.json;version="0.0",
                             org.apache.commons.io;version="1.4",
                             org.apache.log4j;version="1.2.15",
@@ -120,13 +120,13 @@
             <version>7.4</version>
             <scope>compile</scope>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>de.schlichtherle.truezip</groupId>
             <artifactId>truezip-driver-file</artifactId>
             <version>7.4</version>
             <scope>compile</scope>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>de.schlichtherle.truezip</groupId>
             <artifactId>truezip-driver-zip</artifactId>
             <version>7.4</version>
@@ -151,7 +151,7 @@
             <version>1.5.0</version>
             <scope>compile</scope>
         </dependency>
-       
+
         <!-- Dependencies included with Bamboo -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -189,12 +189,6 @@
             <version>r05</version>
             <scope>provided</scope>
         </dependency>
-        <!--dependency>
-            <groupId>jetty</groupId>
-            <artifactId>jetty</artifactId>
-            <version>5.1.10</version>
-            <scope>test</scope>
-        </dependency-->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
@@ -261,42 +255,42 @@
             </plugin>
         </plugins>
     </reporting>
-<profiles>
-	<profile>
-       <id>defaultProfile</id>
-       <activation>
-         <activeByDefault>true</activeByDefault>
-       </activation>
- 
-       <repositories>
-         <repository>
-           <id>atlassian-public</id>
-           <url>https://m2proxy.atlassian.com/repository/public</url>
-           <snapshots>
-             <enabled>true</enabled>
-             <updatePolicy>daily</updatePolicy>
-             <checksumPolicy>warn</checksumPolicy>
-           </snapshots>
-           <releases>
-             <enabled>true</enabled>
-             <checksumPolicy>warn</checksumPolicy>
-           </releases>
-         </repository>
-       </repositories>
- 
-       <pluginRepositories>
-         <pluginRepository>
-           <id>atlassian-public</id>
-           <url>https://m2proxy.atlassian.com/repository/public</url>
-           <releases>
-             <enabled>true</enabled>
-             <checksumPolicy>warn</checksumPolicy>
-           </releases>
-           <snapshots>
-             <checksumPolicy>warn</checksumPolicy>
-           </snapshots>
-         </pluginRepository>
-       </pluginRepositories>
-    </profile>
-  </profiles>
+    <profiles>
+        <profile>
+            <id>defaultProfile</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <repositories>
+                <repository>
+                    <id>atlassian-public</id>
+                    <url>https://m2proxy.atlassian.com/repository/public</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>daily</updatePolicy>
+                        <checksumPolicy>warn</checksumPolicy>
+                    </snapshots>
+                    <releases>
+                        <enabled>true</enabled>
+                        <checksumPolicy>warn</checksumPolicy>
+                    </releases>
+                </repository>
+            </repositories>
+
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>atlassian-public</id>
+                    <url>https://m2proxy.atlassian.com/repository/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <checksumPolicy>warn</checksumPolicy>
+                    </releases>
+                    <snapshots>
+                        <checksumPolicy>warn</checksumPolicy>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
 </project>
