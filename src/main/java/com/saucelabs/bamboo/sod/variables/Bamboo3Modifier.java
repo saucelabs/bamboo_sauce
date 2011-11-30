@@ -35,11 +35,11 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
                     Map<String, String> configuration = (Map<String, String>) method.invoke(taskDefinition);
                     String originalEnv = configuration.get("environmentVariables");
                     if (StringUtils.isNotBlank(originalEnv)) {
-                        envBuffer = " " + envBuffer;
+                        envBuffer = originalEnv + " " + envBuffer;
                     }
 
                     config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
-                    configuration.put("environmentVariables", originalEnv + envBuffer);
+                    configuration.put("environmentVariables", envBuffer);
                 }
             }
         } catch (Exception e) {

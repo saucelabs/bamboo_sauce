@@ -25,8 +25,6 @@ public class ConfigureSODActionTest extends AbstractTestHelper {
         AdministrationConfiguration adminConfig = mock(AdministrationConfiguration.class);
         when(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY)).thenReturn("defaultUser");
         when(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY)).thenReturn("defaultAccessKey");
-//        when(adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY)).thenReturn("");
-//        when(adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY)).thenReturn("");
         when(adminConfigManager.getAdministrationConfiguration()).thenReturn(adminConfig);
         configureSODAction.setAdministrationConfigurationManager(adminConfigManager);
     }

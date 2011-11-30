@@ -189,6 +189,7 @@ public class SauceConnectTwoManager implements SauceTunnelManager {
 
         protected void processLine(String line) {
             getPrintStream().println(line);
+            logger.info(line);
 
         }
 
