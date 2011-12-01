@@ -12,6 +12,7 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
+import org.openqa.selenium.Platform;
 
 import java.io.StringBufferInputStream;
 import java.util.*;
@@ -81,13 +82,7 @@ public class EnvironmentConfiguratorTest {
         environmentConfigurator.call();
         String variables = updatedConfiguration.get("environmentVariables");
         assertNotNull("Variables not set", variables);
-
-        Map<String, String> mp = new HashMap<String, String>();
-        String[] split = variables.split(" ");
-        for (String string : split) {
-            int index = string.indexOf('=');
-            mp.put(string.substring(0, index), string.substring(index + 1));
-        }
+		Map<String, String> map = convertVariablesToMap(variables);
     }
 
     @Test
@@ -95,16 +90,32 @@ public class EnvironmentConfiguratorTest {
         customConfiguration.put(SODKeys.SELENIUM_VERSION_KEY, "2.x");
         environmentConfigurator.call();
         String variables = updatedConfiguration.get("environmentVariables");
-        assertNotNull("Variables not set", variables);
-//        Map<String, String> mp = new HashMap<String, String>();
-//        String[] split = variables.split(" ");
-//        for (String string : split) {
-//            int index = string.indexOf('=');
-//            mp.put(string.substring(0, index), string.substring(index + 1));
-//        }
-//        String platform = mp.get(SODKeys.SELENIUM_PLATFORM_ENV);
-//        assertNotNull("Platform not set", platform);
-//        assertEquals("Platfom not WINDOWS", platform, "WINDOWS");
+        assertNotNull("Variables not set", variables);	
+		Map<String, String> map = convertVariablesToMap(variables);
+
+        String platform = map.get(SODKeys.SELENIUM_PLATFORM_ENV);
+        assertNotNull("Platform not set", platform);
+        assertEquals("Platfom not WINDOWS", platform, "WINDOWS");
+		assertEquals("Platform not valid", Platform.extractFromSysProperty(platform), Platform.WINDOWS);
+		
+		String browser = map.get(SODKeys.SELENIUM_BROWSER_ENV);
+		assertNotNull("Browser not set", browser);
+        assertEquals("Browser not firefox", browser, "7");
+
+		String version = map.get(SODKeys.SELENIUM_VERSION_ENV);
+		assertNotNull("Version not set", version);
+        assertEquals("Version not 7", version, "7");
 
     }
+
+	private Map<String,String> convertVariablesToMap(String variables) {
+		Map<String, String> map = new HashMap<String, String>();
+		StringTokenizer tokenizer = new StringTokenizer(variables, "\"");
+		while (tokenizer.hasMoreTokens()) {
+				String key = tokenizer.nextToken();
+				String value = tokenizer.nextToken();
+				map.put(key.replaceAll("=", "").trim(), value);
+		}
+		return map;
+	}
 }
