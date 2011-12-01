@@ -67,9 +67,9 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         Browser browser = sauceBrowserFactory.forKey(config.getBrowserKey());
         //DefaultCapabilities information
         if (browser != null) {
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append('=').append(browser.getPlatform());
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append('=').append(browser.getBrowserName());
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_VERSION_ENV).append('=').append(browser.getBrowserName());
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append(EQUALS).append(browser.getPlatform()).append('"');
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browser.getBrowserName()).append('"');
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_VERSION_ENV).append(EQUALS).append(browser.getVersion()).append('"');
         }
 
         return stringBuilder.toString();
@@ -114,8 +114,9 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
 
         stringBuilder.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
-        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append('=').append(port);
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append(EQUALS).append(port).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(config.getSeleniumStartingUrl()).append('"');
         if (buildContext.getParentBuildContext() == null) {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
         } else {

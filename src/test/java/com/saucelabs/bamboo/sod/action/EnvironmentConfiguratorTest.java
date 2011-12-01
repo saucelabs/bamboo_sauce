@@ -9,15 +9,14 @@ import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.saucelabs.bamboo.sod.config.SODKeys;
-import org.apache.commons.lang.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.Platform;
 
-import java.io.StringBufferInputStream;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -59,6 +58,7 @@ public class EnvironmentConfiguratorTest {
         when(adminConfigManager.getAdministrationConfiguration()).thenReturn(adminConfig);
         environmentConfigurator.setAdministrationConfigurationManager(adminConfigManager);
         this.customConfiguration = new HashMap<String, String>();
+        customConfiguration.put(SODKeys.SELENIUM_URL_KEY, "http://localhost");
         customConfiguration.put(SODKeys.TEMP_USERNAME, "tempUser");
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
         customConfiguration.put(SODKeys.ENABLED_KEY, "true");
@@ -83,6 +83,10 @@ public class EnvironmentConfiguratorTest {
         String variables = updatedConfiguration.get("environmentVariables");
         assertNotNull("Variables not set", variables);
 		Map<String, String> map = convertVariablesToMap(variables);
+
+        String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV);
+        assertNotNull("Starting URL not set", startingUrl);
+        assertEquals("Starting URL not localhost", startingUrl, "http://localhost");
     }
 
     @Test
@@ -95,16 +99,20 @@ public class EnvironmentConfiguratorTest {
 
         String platform = map.get(SODKeys.SELENIUM_PLATFORM_ENV);
         assertNotNull("Platform not set", platform);
-        assertEquals("Platfom not WINDOWS", platform, "WINDOWS");
-		assertEquals("Platform not valid", Platform.extractFromSysProperty(platform), Platform.WINDOWS);
+        assertEquals("Platfom not WINDOWS", platform, "windows vista");
+		assertEquals("Platform not valid", Platform.extractFromSysProperty(platform), Platform.VISTA);
 		
 		String browser = map.get(SODKeys.SELENIUM_BROWSER_ENV);
 		assertNotNull("Browser not set", browser);
-        assertEquals("Browser not firefox", browser, "7");
+        assertEquals("Browser not firefox", browser, "firefox");
 
 		String version = map.get(SODKeys.SELENIUM_VERSION_ENV);
 		assertNotNull("Version not set", version);
         assertEquals("Version not 7", version, "7");
+
+        String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV);
+        assertNotNull("Starting URL not set", startingUrl);
+        assertEquals("Starting URL not localhost", startingUrl, "http://localhost");
 
     }
 
