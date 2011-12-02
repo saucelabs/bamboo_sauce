@@ -1,5 +1,7 @@
 package com.saucelabs.ci;
 
+import org.openqa.selenium.Platform;
+
 
 /**
  * Represents a Sauce Browser instance.
@@ -43,13 +45,13 @@ public class Browser implements Comparable<Browser> {
         return version;
     }
 
-    public String getPlatform() {
+    public Platform getPlatform() {
         if (os.equalsIgnoreCase("windows 2008")) {
             //use the 'VISTA' Platform
-            return "windows vista";
+            return Platform.extractFromSysProperty("windows vista");
         }
         //otherwise just return the os
-        return os;
+        return Platform.extractFromSysProperty(os);
     }
 
     public boolean equals(Object object) {

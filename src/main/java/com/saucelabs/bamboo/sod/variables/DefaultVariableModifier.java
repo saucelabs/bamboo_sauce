@@ -67,7 +67,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         Browser browser = sauceBrowserFactory.forKey(config.getBrowserKey());
         //DefaultCapabilities information
         if (browser != null) {
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append(EQUALS).append(browser.getPlatform()).append('"');
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append(EQUALS).append(browser.getPlatform().toString()).append('"');
             stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browser.getBrowserName()).append('"');
             stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_VERSION_ENV).append(EQUALS).append(browser.getVersion()).append('"');
         }
