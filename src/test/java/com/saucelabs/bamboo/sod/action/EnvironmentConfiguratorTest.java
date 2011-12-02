@@ -99,8 +99,7 @@ public class EnvironmentConfiguratorTest {
 
         String platform = map.get(SODKeys.SELENIUM_PLATFORM_ENV);
         assertNotNull("Platform not set", platform);
-        assertEquals("Platfom not WINDOWS", platform, "windows vista");
-		assertEquals("Platform not valid", Platform.extractFromSysProperty(platform), Platform.VISTA);
+        assertEquals("Platfom not WINDOWS", platform, Platform.VISTA.toString());
 		
 		String browser = map.get(SODKeys.SELENIUM_BROWSER_ENV);
 		assertNotNull("Browser not set", browser);
