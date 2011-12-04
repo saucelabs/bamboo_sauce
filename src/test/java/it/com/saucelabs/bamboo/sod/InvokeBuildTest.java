@@ -1,25 +1,22 @@
 package it.com.saucelabs.bamboo.sod;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlPage;
-import com.saucelabs.ci.SauceFactory;
-import org.junit.Ignore;
-import org.junit.Test;
-
+import com.saucelabs.bamboo.sod.plan.ViewSODAction;
+import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
+import com.saucelabs.rest.Credential;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 import org.jaxen.JaxenException;
-import org.jaxen.SimpleNamespaceContext;
 import org.jaxen.XPath;
 import org.jaxen.dom4j.Dom4jXPath;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.Test;
 import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
@@ -28,53 +25,52 @@ import static org.junit.Assert.assertTrue;
 public class InvokeBuildTest {
     private static final String BASE_URL = "http://localhost:8081/bamboo/rest/api/latest/%1$s?os_authType=basic";
     private static final int MAX_RETRIES = 10;
-    //private static final String BASE_URL = "http://localhost:8081/bamboo/rest/api/latest/%1$s?os_authType=basic&os_username=admin&os_password=admin";
-
-    /**
-     * We use HtmlUnit for this test, rather than Selenium/Sauce Connect, as we want to invoke a build that will itself run
-     * a Selenium test under Sauce OnDemand.  Once the build is completed, we verify that it was successful by connecting
-     * to Sauce OnDemand to see if the corresponding Sauce Job exists.
-     *
-     * @throws Exception
-     */
-    @Test
-    public void dashboardIsOkay() throws Exception {
-        //using HtmlUnit, log in
-        final WebClient webClient = new WebClient();
-        final HtmlPage page = webClient.getPage("http://localhost:8081/bamboo/start.action?os_username=admin&os_password=admin");
-
-        final String pageAsText = page.asText();
-        assertTrue(pageAsText.contains("Master"));
-
-        webClient.closeAllWindows();
-    }
 
     @Test
     public void runBuild() throws Exception {
 
         boolean foundSauceResult = false;
-        String response = doGet("latest/result/TEST-MASTER");
+        String response = doGet("result/TEST-MASTER");
         Document document = parseXml(response);
         String initialSize = getValueForNode(document, "/results/results/@size");
         response = doPost("queue/TEST-MASTER");
-        //wait a few minutes or loop until timeout
         for (int i = 0; i < MAX_RETRIES; i++) {
-
-            response = doGet("latest/result/TEST-MASTER");
+            response = doGet("result/TEST-MASTER");
             document = parseXml(response);
             String size = getValueForNode(document, "/results/results/@size");
-            if (size.equals(initialSize)) {
-                String buildKey = getValueForNode(document, "//results/@key");
-                //assert job was successful
-                //query sauce to see if job has been recorded
-                foundSauceResult = true;
+            if (!(size.equals(initialSize))) {
+                //assert build was successful
+                String buildState = getValueForNode(document, "/results/results/result[1]/@state");
+                assertEquals("Build was not successful", buildState, "Successful");
+                String buildKey = getValueForNode(document, "/results/results/result[1]/@key");
+                String jobId = findJobWithBuildKey(buildKey);
+                if (jobId != null) {
+                    foundSauceResult = true;
+                    break;
+                }
             }
             Thread.sleep(1000 * 60);
             i++;
         }
-        //check to s
         assertTrue("Unable to find sauce result", foundSauceResult);
 
+    }
+
+    private String findJobWithBuildKey(String buildKey) throws IOException, JSONException {
+        Credential credential = new Credential();
+        String jsonResponse = new BambooSauceFactory().doREST(String.format(ViewSODAction.JOB_DETAILS_URL, credential.getUsername()), credential.getUsername(), credential.getKey());
+        JSONArray jobResults = new JSONArray(jsonResponse);
+        for (int i = 0; i < jobResults.length(); i++) {
+            //check custom data to find job that was for build
+            JSONObject jobData = jobResults.getJSONObject(i);
+            if (!jobData.isNull("build")) {
+                String buildResultKey = jobData.getString("build");
+                if (buildResultKey.equals(buildKey)) {
+                    return jobData.getString("id");
+                }
+            }
+        }
+        return null;
     }
 
     public Document parseXml(String xml) throws DocumentException {
@@ -88,7 +84,6 @@ public class InvokeBuildTest {
     private String getValueForNode(Document document, String xpathExpression) throws JaxenException {
 
         XPath xpath = new Dom4jXPath(xpathExpression);
-//        xpath.setNamespaceContext(new SimpleNamespaceContext(contextMap));
         return xpath.stringValueOf(document);
 
     }
