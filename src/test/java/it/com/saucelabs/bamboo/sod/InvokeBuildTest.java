@@ -23,7 +23,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class InvokeBuildTest {
-    private static final String BASE_URL = "http://localhost:8081/bamboo/rest/api/latest/%1$s?os_authType=basic";
+    private static final String BASE_URL = "http://localhost:5000/bamboo/rest/api/latest/%1$s?os_authType=basic";
     private static final int MAX_RETRIES = 10;
 
     @Test

@@ -10,11 +10,11 @@ public class AdministrationTest extends IntegrationTeztHelper {
 
     @Test
     public void testAdmin() throws Exception {
-        selenium.get("http://localhost:8081/bamboo/admin/sauceondemand/configureSauceOnDemand.action?os_username=admin&os_password=admin");
-        selenium.findElement(By.id("sauceOnDemandConfigurationForm_username")).clear();
-        selenium.findElement(By.id("sauceOnDemandConfigurationForm_username")).sendKeys("admin");
-        selenium.findElement(By.id("sauceOnDemandConfigurationForm_accessKey")).clear();
-        selenium.findElement(By.id("sauceOnDemandConfigurationForm_accessKey")).sendKeys("admin");
+        selenium.get("http://localhost:5000/bamboo/admin/sauceondemand/configureSauceOnDemand.action?os_username=admin&os_password=admin");
+//        selenium.findElement(By.id("sauceOnDemandConfigurationForm_username")).clear();
+//        selenium.findElement(By.id("sauceOnDemandConfigurationForm_username")).sendKeys("admin");
+//        selenium.findElement(By.id("sauceOnDemandConfigurationForm_accessKey")).clear();
+//        selenium.findElement(By.id("sauceOnDemandConfigurationForm_accessKey")).sendKeys("admin");
         selenium.findElement(By.id("sauceOnDemandConfigurationForm_seleniumHost")).clear();
         selenium.findElement(By.id("sauceOnDemandConfigurationForm_seleniumHost")).sendKeys("saucelabs.com");
         selenium.findElement(By.id("sauceOnDemandConfigurationForm_seleniumPort")).clear();

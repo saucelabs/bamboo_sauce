@@ -5,17 +5,15 @@ import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
-import com.thoughtworks.selenium.SeleneseTestCase;
-import com.thoughtworks.selenium.Selenium;
 import org.apache.commons.lang.StringUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
 import java.io.File;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
-import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 
@@ -59,7 +57,7 @@ public class IntegrationTeztHelper {
             System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
         }
 
-        System.setProperty("SELENIUM_STARTING_URL", "http://localhost:8080/bamboo/start.action");
+        System.setProperty("SELENIUM_STARTING_URL", "http://localhost:5000/bamboo/allPlans.action");
         selenium = SeleniumFactory.createWebDriver();
         selenium.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
@@ -72,5 +70,9 @@ public class IntegrationTeztHelper {
         selenium.close();
 
     }
+
+    @Test
+    public void empty() {}
+    
 
 }

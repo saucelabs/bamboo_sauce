@@ -4,16 +4,13 @@ import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
-
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import com.thoughtworks.selenium.Selenium;
 import org.eclipse.jetty.server.Server;
-
 import org.junit.Test;
 
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
-import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
 
@@ -53,7 +50,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
             }
 
             String originalUrl = System.getenv("SELENIUM_STARTING_URL");
-            System.setProperty("SELENIUM_STARTING_URL", "http://localhost:8080/");
+            System.setProperty("SELENIUM_STARTING_URL", "http://localhost:5000/");
             Selenium selenium = SeleniumFactory.create();            
             try {
                 selenium.start();
