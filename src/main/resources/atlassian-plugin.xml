@@ -1,7 +1,7 @@
 <atlassian-plugin key="com.saucelabs.bamboo.bamboo-sauceondemand-plugin" name="Bamboo Sauce OnDemand Plugin" plugins-version="2">
     <plugin-info>
         <description>This is the Sauce OnDemand plugin for Bamboo</description>
-        <version>1.6.0</version>
+        <version>1.6.2</version>
         <vendor name="Sauce Labs" url="http://www.saucelabs.com/"/>
         <bundle-instructions>
             <Import-Package>com.saucelabs.bamboo.sod;resolution:=optional</Import-Package>
