@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.junit.BeforeClass;
+import org.junit.Before;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,23 +35,17 @@ public abstract class AbstractTestHelper extends HttpServlet {
         resp.getWriter().println("<html><head><title>test" + code + "</title></head><body>it works</body></html>");
     }
 
-    @BeforeClass
-    public static void loadProperties() throws Exception {
-        InputStream stream = AbstractTestHelper.class.getClassLoader().getResourceAsStream("test.properties");
-        Properties properties = new Properties();
-        properties.load(stream);
-        for (Map.Entry property : properties.entrySet()) {
-            System.setProperty((String) property.getKey(), (String) property.getValue());
-        }
+    @Before
+    public void loadProperties() throws Exception {
+
         File sauceSettings = new File(new File(System.getProperty("user.home")), ".sauce-ondemand");
-        if (!sauceSettings.exists()) {
-            String userName = System.getProperty("sauce.user");
-            String accessKey = System.getProperty("access.key");
-            if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(accessKey)) {
-                Credential credential = new Credential(userName, accessKey);
-                credential.saveTo(sauceSettings);
-            }
+        String userName = System.getProperty("sauce.user");
+        String accessKey = System.getProperty("access.key");
+        if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(accessKey)) {
+            Credential credential = new Credential(userName, accessKey);
+            credential.saveTo(sauceSettings);
         }
+
     }
 
     protected Server startWebServer() throws Exception {
