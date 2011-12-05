@@ -1,5 +1,6 @@
 package com.saucelabs.bamboo.sod;
 
+import com.saucelabs.rest.Credential;
 import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -10,14 +11,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
-import java.io.File;
-
-import com.saucelabs.rest.Credential;
 
 /**
  * @author Ross Rowe
@@ -57,7 +56,7 @@ public abstract class AbstractTestHelper extends HttpServlet {
         this.code = new Random().nextInt();
 
         // start the Jetty locally and have it respond our secret code.
-        this.server = new Server(8080);
+        this.server = new Server(5000);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
