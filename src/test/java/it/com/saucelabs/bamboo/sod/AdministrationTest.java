@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import com.saucelabs.rest.Credential;
 
+import static org.junit.Assert.assertEquals;
+
 
 public class AdministrationTest extends IntegrationTeztHelper {
 
