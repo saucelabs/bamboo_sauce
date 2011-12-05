@@ -50,7 +50,7 @@ public class SauceConnect2Test extends AbstractTestHelper {
             }
 
             String originalUrl = System.getenv("SELENIUM_STARTING_URL");
-            System.setProperty("SELENIUM_STARTING_URL", "http://localhost:5000/");
+            System.setProperty("SELENIUM_STARTING_URL", "http://localhost:" + AbstractTestHelper.PORT + "/");
             Selenium selenium = SeleniumFactory.create();            
             try {
                 selenium.start();

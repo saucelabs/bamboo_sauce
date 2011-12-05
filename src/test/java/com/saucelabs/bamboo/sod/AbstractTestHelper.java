@@ -23,6 +23,7 @@ import java.util.Random;
  */
 public abstract class AbstractTestHelper extends HttpServlet {
 
+    public static final int PORT = 5000;
     protected static final String DEFAULT_SAUCE_DRIVER = "sauce-ondemand:?max-duration=60&os=windows 2008&browser=firefox&browser-version=4.";
     public static int code;
     private Server server;
@@ -56,7 +57,8 @@ public abstract class AbstractTestHelper extends HttpServlet {
         this.code = new Random().nextInt();
 
         // start the Jetty locally and have it respond our secret code.
-        this.server = new Server(5000);
+
+        this.server = new Server(PORT);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");

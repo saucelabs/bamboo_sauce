@@ -1,6 +1,7 @@
 package it.com.saucelabs.bamboo.sod;
 
 
+import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
@@ -57,7 +58,7 @@ public class IntegrationTeztHelper {
             System.setProperty("SELENIUM_DRIVER", DEFAULT_SAUCE_DRIVER);
         }
 
-        System.setProperty("SELENIUM_STARTING_URL", "http://localhost:5000/bamboo/allPlans.action");
+        System.setProperty("SELENIUM_STARTING_URL", "http://localhost:" + AbstractTestHelper.PORT + "/bamboo/allPlans.action");
         selenium = SeleniumFactory.createWebDriver();
         selenium.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 

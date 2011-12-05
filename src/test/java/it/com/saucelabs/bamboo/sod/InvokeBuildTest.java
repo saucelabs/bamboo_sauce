@@ -1,5 +1,6 @@
 package it.com.saucelabs.bamboo.sod;
 
+import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.plan.ViewSODAction;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.rest.Credential;
@@ -23,9 +24,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class InvokeBuildTest {
-    private static final String BASE_URL = "http://localhost:5000/bamboo/rest/api/latest/%1$s?os_authType=basic";
-    private static final int MAX_RETRIES = 10;
+    private static final String BASE_URL = "http://localhost:" + AbstractTestHelper.PORT + "/bamboo/rest/api/latest/%1$s?os_authType=basic";
+    private static final int MAX_RETRIES = 5;
 
+    /**
+    * Invokes a build via the Bamboo REST API. The Bamboo project has been previously setup to run a test
+    * using Sauce Connect.
+    * 
+    * Checks to see if the build was successful, and if so, query
+    * Sauce OnDemand via the REST interface to verify that a job was registered with the build key.
+    */
     @Test
     public void runBuild() throws Exception {
 
