@@ -6,12 +6,12 @@
   <buildNumber>2600</buildNumber>
   <properties>
     <property name="bamboo.artifacts.directory">${bambooHome}/artifacts</property>
-    <property name="bamboo.config.directory">/Developer/workspace/bamboo_sauce/target/bamboo/home/xml-data/configuration</property>
+    <property name="bamboo.config.directory">/scratch/hudson/workspace/Integration Tests/workspace/bamboo_sauce/target/bamboo/home/xml-data/configuration</property>
     <property name="bamboo.jms.broker.client.uri">failover:(tcp://localhost:54663?wireFormat.maxInactivityDuration=300000)?maxReconnectAttempts=10&amp;initialReconnectDelay=15000</property>
     <property name="bamboo.jms.broker.uri">tcp://0.0.0.0:54663?wireFormat.maxInactivityDuration=300000</property>
-    <property name="bamboo.project.directory">/Developer/workspace/bamboo_sauce/target/bamboo/home/xml-data/builds</property>
-    <property name="buildWorkingDir">/Developer/workspace/bamboo_sauce/target/bamboo/home/xml-data/build-dir</property>
-    <property name="daily.backup.dir">/Developer/workspace/bamboo_sauce/target/bamboo/home/backups</property>
+    <property name="bamboo.project.directory">/scratch/hudson/workspace/Integration Tests/target/bamboo/home/xml-data/builds</property>
+    <property name="buildWorkingDir">/scratch/hudson/workspace/Integration Tests/target/bamboo/home/xml-data/build-dir</property>
+    <property name="daily.backup.dir">/scratch/hudson/workspace/Integration Tests/target/bamboo/home/backups</property>
     <property name="hibernate.c3p0.acquire_increment">1</property>
     <property name="hibernate.c3p0.idle_test_period">100</property>
     <property name="hibernate.c3p0.max_size">25</property>
@@ -20,13 +20,13 @@
     <property name="hibernate.c3p0.timeout">30</property>
     <property name="hibernate.connection.driver_class">org.hsqldb.jdbcDriver</property>
     <property name="hibernate.connection.password"></property>
-    <property name="hibernate.connection.url">jdbc:hsqldb:/Developer/workspace/bamboo_sauce/target/bamboo/home/database/defaultdb</property>
+    <property name="hibernate.connection.url">jdbc:hsqldb:/scratch/hudson/workspace/Integration Tests/target/bamboo/home/database/defaultdb</property>
     <property name="hibernate.connection.username">sa</property>
     <property name="hibernate.dialect">net.sf.hibernate.dialect.HSQLDialect</property>
     <property name="hibernate.setup">true</property>
     <property name="license.string">AAABdw0ODAoPeNp1Ul1vgjAUfedXNNkzBt3MpkkfVLrp5gdRdIvZSy0X7YItuQU3/v0QJQPikj6dnnvOuR93M63IIN2TtpO/frfTdx4JW/mk4zg9a8ePO61bUylAGWCBTKRWlM19tvSWkxWzQmkOkEHJ8LMY6HOOsQw++8SFE0Q6BrREpE+ANdqogGqseXrcAS7CtQE0tGsJrcIWF4k8AU0wBctLURy4AZcnQM8JbefJbjtWRXfOj0BdtmHThceW5Q/7iSVmRZl3Py77qkqvAPM4E5cOX3q+/bHePNhv2+3YHjrtd+tLIq+Ff50sB4SpBDBGaRq9nlPXOs2BKAUlbvDKlkdRanK1uQ7AUKcx+EJlWED/mVYT3tiTwFTIXVRf1OgK1oRmXOYOiudpG0MTqL+DhkCO1KoXuOdKGl74D5KIGyO5+rOvTnyEUPCay7z4VJnllVUxF4xAGRdGPpiERJdgJNRI4ijdS0WCMpe5zKdaf73IKvQLilcUtTAuAhUAkoLsCS05YrhfcC3nLa0SoS8xzJwCFQCB2DEOJMJ3Uv1QVNMWx79xz4hMag==X02ie</property>
-    <property name="lucene.index.dir">/Developer/workspace/bamboo_sauce/target/bamboo/home/index</property>
+    <property name="lucene.index.dir">/scratch/hudson/workspace/Integration Tests/target/bamboo/home/index</property>
     <property name="serverId">BV68-45ZM-VWHH-55F0</property>
-    <property name="webwork.multipart.saveDir">/Developer/workspace/bamboo_sauce/target/bamboo/home/temp</property>
+    <property name="webwork.multipart.saveDir">/scratch/hudson/workspace/Integration Tests/target/bamboo/home/temp</property>
   </properties>
 </application-configuration>
