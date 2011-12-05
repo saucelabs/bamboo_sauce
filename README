@@ -2,9 +2,11 @@ This folder contains the source code for the Bamboo Sauce OnDemand plugin.
 
 To build the plugin, you will need the <a href="http://confluence.atlassian.com/display/DEVNET/Developing+your+Plugin+using+the+Atlassian+Plugin+SDK">Atlassian Plugin SDK</a>, which includes a self-contained Maven 2 instance.  
 
-The plugin also references the Sauce Connect 2 library, which is not yet hosted in a Maven repository.  At the moment, it must be built from source and can be obtained from git@github.com:saucelabs/sauce-connect.git.  Once the source has been obtained, it can be built by running 'mvn package' and installed by running:
+The plugin also references the Sauce Connect 2 library, which is hosted in the Sauce Labs Cloudbees Maven repository (https://repository-saucelabs.forge.cloudbees.com/release).  
 
-	mvn install:install-file -DgroupId=com.saucelabs -DartifactId=sauce-connect -Dversion=2.0r4 -Dpackaging=jar -Dfile=/path/to/sauce-connect.jar
+It can also be built from source and can be obtained from git@github.com:saucelabs/sauce-connect.git.  Once the source has been obtained, it can be built by running 'mvn package' and installed by running:
+
+	mvn install:install-file -DgroupId=com.saucelabs -DartifactId=sauce-connect -Dversion=3.0 -Dpackaging=jar -Dfile=/path/to/sauce-connect.jar
 
 To build (compile,test,jar) the plugin run: 
 
@@ -20,7 +22,7 @@ To run the local instance of Bamboo in debug mode, run:
 
 To run the integration (Selenium) tests for the plugin, run:
 
-	atlas-integration-test
+	atlas-integration-test -Dhttp.port=5000
 
 To specify a different version of Bamboo to use, run:
 
