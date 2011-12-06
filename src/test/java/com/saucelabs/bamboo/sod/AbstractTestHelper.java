@@ -41,7 +41,6 @@ public abstract class AbstractTestHelper extends HttpServlet {
         File sauceSettings = new File(new File(System.getProperty("user.home")), ".sauce-ondemand");
         String userName = System.getProperty("sauce.user");
         String accessKey = System.getProperty("access.key");
-		System.out.println("User Name: " + userName + " Key: " + accessKey);
         if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(accessKey)) {
             Credential credential = new Credential(userName, accessKey);
             credential.saveTo(sauceSettings);

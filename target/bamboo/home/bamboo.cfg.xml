@@ -6,7 +6,7 @@
   <buildNumber>2600</buildNumber>
   <properties>
     <property name="bamboo.artifacts.directory">${bambooHome}/artifacts</property>
-    <property name="bamboo.config.directory">/scratch/hudson/workspace/Integration Tests/workspace/bamboo_sauce/target/bamboo/home/xml-data/configuration</property>
+    <property name="bamboo.config.directory">/scratch/hudson/workspace/Integration Tests/target/bamboo/home/xml-data/configuration</property>
     <property name="bamboo.jms.broker.client.uri">failover:(tcp://localhost:54663?wireFormat.maxInactivityDuration=300000)?maxReconnectAttempts=10&amp;initialReconnectDelay=15000</property>
     <property name="bamboo.jms.broker.uri">tcp://0.0.0.0:54663?wireFormat.maxInactivityDuration=300000</property>
     <property name="bamboo.project.directory">/scratch/hudson/workspace/Integration Tests/target/bamboo/home/xml-data/builds</property>
