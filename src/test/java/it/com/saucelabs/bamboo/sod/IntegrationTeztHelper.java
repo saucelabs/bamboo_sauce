@@ -7,8 +7,8 @@ import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
 import org.apache.commons.lang.StringUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
@@ -29,8 +29,8 @@ public class IntegrationTeztHelper {
     protected WebDriver selenium;
     private SauceTunnelManager sauceTunnelManager;
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() throws Exception {
         File sauceSettings = new File(new File(System.getProperty("user.home")), ".sauce-ondemand");
         if (!sauceSettings.exists()) {
             String userName = System.getProperty("sauce.user");
@@ -65,15 +65,12 @@ public class IntegrationTeztHelper {
     }
 
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         sauceTunnelManager.closeTunnelsForPlan(DUMMY_PLAN_KEY);
         selenium.close();
 
     }
-
-    @Test
-    public void empty() {}
     
 
 }
