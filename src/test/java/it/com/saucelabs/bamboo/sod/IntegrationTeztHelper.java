@@ -71,6 +71,9 @@ public class IntegrationTeztHelper {
         selenium.close();
 
     }
+
+    @Test
+	public void empty() throws Exception {}
     
 
 }
