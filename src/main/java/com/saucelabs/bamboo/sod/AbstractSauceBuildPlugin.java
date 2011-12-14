@@ -1,7 +1,6 @@
 package com.saucelabs.bamboo.sod;
 
 import com.atlassian.bamboo.build.BuildDefinition;
-import com.atlassian.bamboo.builder.AbstractBuilder;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
