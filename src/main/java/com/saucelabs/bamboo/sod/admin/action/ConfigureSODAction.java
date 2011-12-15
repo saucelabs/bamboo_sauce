@@ -20,8 +20,8 @@ import org.apache.commons.lang.StringUtils;
  */
 public class ConfigureSODAction extends ConfigurationAction
 {
-    public static final String DEFAULT_SELENIUM_HOST = "saucelabs.com";
-    public static final String DEFAULT_SELENIUM_PORT = "4444";
+    public static final String DEFAULT_SELENIUM_HOST = "localhost";
+    public static final String DEFAULT_SELENIUM_PORT = "4445";
     private String username;
     private String accessKey;
     private String seleniumHost;
