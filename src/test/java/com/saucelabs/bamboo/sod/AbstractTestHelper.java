@@ -5,7 +5,6 @@ import org.apache.commons.lang.StringUtils;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.junit.BeforeClass;
 import org.junit.Before;
 
 import javax.servlet.ServletException;
@@ -14,9 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Properties;
 import java.util.Random;
 
 /**
@@ -37,15 +33,16 @@ public abstract class AbstractTestHelper extends HttpServlet {
 
     @Before
     public void loadProperties() throws Exception {
-
+        
         File sauceSettings = new File(new File(System.getProperty("user.home")), ".sauce-ondemand");
-        String userName = System.getProperty("sauce.user");
-        String accessKey = System.getProperty("access.key");
-        if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(accessKey)) {
-            Credential credential = new Credential(userName, accessKey);
-            credential.saveTo(sauceSettings);
+        if (!sauceSettings.exists()) {
+            String userName = System.getProperty("sauce.user");
+            String accessKey = System.getProperty("access.key");
+            if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(accessKey)) {
+                Credential credential = new Credential(userName, accessKey);
+                credential.saveTo(sauceSettings);
+            }
         }
-
     }
 
     protected Server startWebServer() throws Exception {
