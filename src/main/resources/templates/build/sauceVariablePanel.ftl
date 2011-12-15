@@ -11,6 +11,14 @@
 
         </div>
 
+ 		[@ui.bambooSection title='Variables for use with WebDriver']
+        <div class="helpTextArea">
+            <strong>SELENIUM_PLATFORM</strong> - The name of the operating system for the selected browser (eg. VISTA, LINUX)<br/><br/>
+            <strong>SELENIUM_BROWSER</strong> - The name of the selected browser<br/><br/>
+			<strong>SELENIUM_VERSION</strong> - The version number of the selected browser<br/><br/>
+        </div>
+        [/@ui.bambooSection]
+
         [@ui.bambooSection title='Variables for use with DefaultSelenium']
         <div class="helpTextArea">
             <strong>SELENIUM_HOST</strong> - The hostname of the selenium server<br/><br/>
