@@ -44,7 +44,7 @@
     </properties>
     <scm>
         <connection>scm:git:git://github.com/saucelabs/bambo_sauce.git</connection>
-        <developerConnection>>scm:git:git@github.com:saucelabs/bambo_sauce.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:saucelabs/bambo_sauce.git</developerConnection>
         <url>git@github.com:saucelabs/bambo_sauce.git</url>
     </scm>
     <distributionManagement>
