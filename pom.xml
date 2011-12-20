@@ -37,16 +37,22 @@
         </developer>
     </developers>
     <properties>
-        <ci.version>1.6.3</ci.version>
+        <ci.version>1.6.3-SNAPSHOT</ci.version>
         <bamboo.version>3.4</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/saucelabs/bambo_sauce.git</connection>
-        <developerConnection>>scm:git:git://github.com/saucelabs/bambo_sauce.git</developerConnection>
+        <developerConnection>>scm:git:git@github.com:saucelabs/bambo_sauce.git</developerConnection>
         <url>git@github.com:saucelabs/bambo_sauce.git</url>
     </scm>
+    <distributionManagement>
+        <repository>
+            <id>cloudbees-private-release-repository</id>
+            <url>dav:https://repository-saucelabs.forge.cloudbees.com/release</url>
+        </repository>
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>
@@ -105,6 +111,13 @@
                 <version>1.3</version>
             </plugin>
         </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+                <version>1.0-beta-2</version>
+            </extension>
+        </extensions>
     </build>
     <dependencies>
         <!-- Plugin Dependencies-->
@@ -184,6 +197,12 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.saucelabs</groupId>
+            <artifactId>ci-sauce</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>r05</version>
@@ -252,7 +271,7 @@
             <version>2.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
-        
+
 
         <dependency>
             <groupId>org.seleniumhq.webdriver</groupId>
