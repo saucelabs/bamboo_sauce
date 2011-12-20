@@ -43,9 +43,9 @@
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
     <scm>
-        <connection>scm:git:git://github.com/saucelabs/bambo_sauce.git</connection>
-        <developerConnection>scm:git:git@github.com:saucelabs/bambo_sauce.git</developerConnection>
-        <url>git@github.com:saucelabs/bambo_sauce.git</url>
+        <connection>scm:git:git://github.com/saucelabs/bamboo_sauce.git</connection>
+        <developerConnection>scm:git:git@github.com:saucelabs/bamboo_sauce.git</developerConnection>
+        <url>git@github.com:saucelabs/bamboo_sauce.git</url>
     </scm>
     <distributionManagement>
         <repository>
