@@ -92,6 +92,12 @@
         </plugins>
     </build>
     <dependencies>
+		 <dependency>
+	            <groupId>com.saucelabs</groupId>
+	            <artifactId>ci-sauce</artifactId>
+	            <version>1.0</version>
+	            <scope>compile</scope>
+	        </dependency>
         <dependency>
             <groupId>com.atlassian.bamboo</groupId>
             <artifactId>atlassian-bamboo-api</artifactId>
