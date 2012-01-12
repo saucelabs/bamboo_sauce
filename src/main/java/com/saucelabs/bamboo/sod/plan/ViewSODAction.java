@@ -21,10 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Handles invoking the Sauce REST API to find the Sauce Job id that corresponds to the Bamboo build.
@@ -46,7 +43,7 @@ public class ViewSODAction extends ViewBuildResults {
      * Populated by dependency injection.
      */
     private BambooSauceFactory sauceAPIFactory;
-    private static final String HMAC_KEY = "HmacMD5";
+        private static final String HMAC_KEY = "HMACMD5";
     
     private List<JobInformation> jobInformation;
 
@@ -126,12 +123,14 @@ public class ViewSODAction extends ViewBuildResults {
     }
 
     public String calcHMAC(String username, String accessKey, String jobId) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
-        Date now = new Date();
+        Calendar calendar = Calendar.getInstance();
+
         SimpleDateFormat format = new SimpleDateFormat(DATE_FORMAT);
-        String key = username + ":" + accessKey + ":" + format.format(now);
+        format.setTimeZone(TimeZone.getTimeZone("UTC"));
+        String key = username + ":" + accessKey + ":" + format.format(calendar.getTime());
         byte[] keyBytes = key.getBytes();
         SecretKeySpec sks = new SecretKeySpec(keyBytes, HMAC_KEY);
-        Mac mac = Mac.getInstance(HMAC_KEY);
+        Mac mac = Mac.getInstance(sks.getAlgorithm());
         mac.init(sks);
         byte[] hmacBytes = mac.doFinal(jobId.getBytes());
         byte[] hexBytes = new Hex().encode(hmacBytes);
