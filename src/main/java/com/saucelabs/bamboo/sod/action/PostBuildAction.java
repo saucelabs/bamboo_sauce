@@ -15,12 +15,9 @@ import com.saucelabs.rest.Credential;
 import com.saucelabs.rest.JobFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +25,7 @@ import java.util.Map;
  * Invoked after a build has finished to reset the environment variables for the builder back to what they were prior
  * to the invocation of Sauce.  The class will also invoke the Sauce REST API to store the Bamboo build number against
  * the Sauce Job.  This will be performed if the output from the Bamboo Build includes a line beginning with 'SauceOnDemandSessionID'
- * (the selenium-client-factory library will output this line). 
+ * (the selenium-client-factory library will output this line).
  *
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
@@ -36,6 +33,7 @@ import java.util.Map;
 public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomBuildProcessorServer {
 
     private static final Logger logger = Logger.getLogger(PostBuildAction.class);
+    public static final String SAUCE_ON_DEMAND_SESSION_ID = "SauceOnDemandSessionID";
 
     /**
      * Populated via dependency injection.
@@ -71,19 +69,26 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         BuildLogger buildLogger = plan.getBuildLogger();
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         for (LogEntry logEntry : buildLogger.getBuildLog()) {
-            if (logEntry.getLog().startsWith("SauceOnDemandSessionID")) {
+            if (StringUtils.containsIgnoreCase(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID)) {
                 //extract session id
-                String sessionId = StringUtils.substringBetween(logEntry.getLog(),"SauceOnDemandSessionID=", " ");
-                //TODO extract Sauce Job name (included on log line as 'job-name=')?
-                storeSessionId(sessionId);
-                storeBambooBuildNumberInSauce(sessionId);
+                String sessionId = StringUtils.substringBetween(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
+                if (sessionId == null) {
+                    //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
+                    sessionId = StringUtils.substringAfter(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=");
+                }
+                if (sessionId != null) {
+                    //TODO session id still could be null due to invalid case
+                    //TODO extract Sauce Job name (included on log line as 'job-name=')?
+                    storeSessionId(sessionId);
+                    storeBambooBuildNumberInSauce(sessionId);
+                }
             }
         }
     }
 
     /**
      * Stores the Sauce Job Id in the Bamboo build context.
-     * 
+     *
      * @param sessionId the Sauce Job Id
      */
     private void storeSessionId(String sessionId) {
@@ -112,11 +117,11 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             } else if (buildContext.getBuildResult().getBuildState().equals(BuildState.FAILED)) {
                 updates.put("passed", Boolean.FALSE.toString());
             }
-            JobFactory jobFactory = new JobFactory(credential);            
+            JobFactory jobFactory = new JobFactory(credential);
             jobFactory.update(sessionId, updates);
         } catch (IOException e) {
             logger.error("Unable to set build number", e);
-        } 
+        }
     }
 
     private String getBuildNumber() {
@@ -136,7 +141,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     /**
      * Use the parent build context if available, otherwise use the build context.
-     * 
+     *
      * @return
      */
     private BuildContext getBuildContextToUse() {
