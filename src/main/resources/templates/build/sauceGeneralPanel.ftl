@@ -4,13 +4,12 @@
     <div class="sauce_panel_box">
         <div class="helpTextArea">
             <span>
-                <strong>Selenium Version</strong> - Specifies the version of Selenium your tests are using. <br/><br/>
-                <strong>Browser</strong> - Select a browser from our list of supported OS/browser/version combos. <br/><br/>
-                <strong>Max Duration</strong> - As a safety measure to prevent broken tests from running indefinitely, you can limit the duration of tests. (input in seconds)<br/><br/>
-                <strong>Idle Timeout</strong> - As another safety measure to prevent tests from running for a long time after a connection is lost. (input in seconds)<br/><br/>
-                <strong>Starting Browser URL</strong> - The initial URL Selenium should load when running tests<br/><br/>
-            </span>
+                One of the advantages to Sauce Labs' OnDemand setup is that all the code remains on your server, snug and secure behind whatever protection you feel is best.
+
+                To enable access from our cloud to a specific test server on your private network, enable Sauce Connect below.</span>
         </div>
+        [@ww.checkbox label='Enable Sauce Connect' name='custom.sauceondemand.ssh.enabled' toggle='true' description='Invokes Sauce Connect to run Selenium tests within a SSH Tunnel' /]
+
         [@ww.select label='Selenium Version' name='custom.sauceondemand.selenium.version'
                 list="{'1.x', '2.x'}" description='The version of Selenium that will be run'/]
         [@ww.select label="Browser" description="The OS/Browser combination to use for testing" name="custom.sauceondemand.browser" listKey="key" listValue="name" list=browserList /]<br clear="all" />

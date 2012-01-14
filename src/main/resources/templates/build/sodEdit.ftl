@@ -28,15 +28,11 @@ ${webResourceManager.requireResource("com.saucelabs.bamboo.bamboo-sauceondemand-
             <ul>
                 <li>General Settings</li>
                 <li>Video & Profile</li>
-                <li>SSH Tunneling</li>
-                [#-- <li>User Extensions</li> --]
-                <li>Environment Vars</li>
+                <li>Environment Variables</li>
             </ul>
 
             [#include "sauceGeneralPanel.ftl"]
             [#include "sauceVideoPanel.ftl"]
-            [#include "sauceSSHPanel.ftl"]
-            [#-- [#include "sauceExtensionPanel.ftl"] --]
             [#include "sauceVariablePanel.ftl"]
         </div>
 
