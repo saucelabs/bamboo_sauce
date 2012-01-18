@@ -7,15 +7,13 @@ import com.saucelabs.rest.Credential;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
-import org.jaxen.JaxenException;
-import org.jaxen.XPath;
-import org.jaxen.dom4j.Dom4jXPath;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Test;
 import sun.misc.BASE64Encoder;
 
+import javax.xml.xpath.*;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -89,10 +87,13 @@ public class InvokeBuildTest {
     }
 
 
-    private String getValueForNode(Document document, String xpathExpression) throws JaxenException {
+    private String getValueForNode(Document document, String xpathExpression) throws XPathExpressionException {
 
-        XPath xpath = new Dom4jXPath(xpathExpression);
-        return xpath.stringValueOf(document);
+        XPath xpath = XPathFactory.newInstance().newXPath();
+        XPathExpression expression = xpath.compile(xpathExpression);
+                
+
+        return (String) expression.evaluate(document, XPathConstants.STRING);
 
     }
 
