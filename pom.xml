@@ -121,7 +121,7 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
             <version>1.6.1-patch</version>
-            <scope>test</scope>
+            <scope>provided</scope>
         </dependency>
         <!-- Plugin Dependencies-->
         <dependency>
