@@ -117,6 +117,12 @@
         </extensions>
     </build>
     <dependencies>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1-patch</version>
+            <scope>test</scope>
+        </dependency>
         <!-- Plugin Dependencies-->
         <dependency>
             <groupId>com.saucelabs</groupId>
@@ -274,12 +280,7 @@
             <version>0.9.7089</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>dom4j</groupId>
-            <artifactId>dom4j</artifactId>
-            <version>1.6.1-patch</version>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
     <reporting>
         <plugins>
