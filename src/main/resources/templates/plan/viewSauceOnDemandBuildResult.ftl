@@ -5,13 +5,16 @@
     <meta name="tab" content="sauce"/>
 </head>
 <body>
-[#--@cp.resultsSubMenu selectedTab='sauce' /--]
 
-
+<h3>Sauce Results</h3>
 [#if jobInformation?exists ]
+<p span="viewSauceOnDemandBuildResult">
 [#list jobInformation as jobInfo]
-<script type="text/javascript" src="http://saucelabs.com/job-embed/${jobInfo.jobId}.js?auth=${jobInfo.hmac}"></script>
+<iframe src="https://saucelabs.com/job-embed/${jobInfo.jobId}" style="width:1024px; height:420px;">
+    <a href="https://saucelabs.com/job-embed/${jobInfo.jobId}">Your browser does not support iframes. Click here to see the embedded job results.</a>
+</iframe>
 [/#list]
+</p>
 [#else]
 <p>
 Unable to find a Sauce Job result for ${buildKey}.

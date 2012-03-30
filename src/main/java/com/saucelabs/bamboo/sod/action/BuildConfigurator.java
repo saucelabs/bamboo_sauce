@@ -35,7 +35,7 @@ import java.util.Map;
  * @author Ross Rowe
  */
 public class BuildConfigurator extends BaseConfigurableBuildPlugin implements CustomPreBuildAction {
-    
+
     private static final Logger logger = Logger.getLogger(BuildConfigurator.class);
 
     /**
@@ -57,12 +57,12 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * Populated via dependency injection.
      */
     private BambooSauceLibraryManager sauceLibraryManager;
-    
+
     /**
      * Populated via dependency injection.
      */
     private BrowserFactory sauceBrowserFactory;
-    
+
     /**
      * Populated via dependency injection.
      */
@@ -91,10 +91,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
                 checkVersionIsCurrent();
-                startTunnel(config.getTempUsername(), config.getTempApikey());
+                startTunnel(config);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             //catch exceptions so that we don't stop the build from running
             logger.error("Error running Sauce OnDemand BuildConfigurator, attempting to continue", e);
         }
@@ -103,7 +102,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     /**
      * Checks whether the version of the Sauce Connect library is up to date, and if not, adds an error message
-     * to the build log. 
+     * to the build log.
      */
     private void checkVersionIsCurrent() {
         try {
@@ -117,19 +116,17 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             }
         } catch (Exception e) {
             logger.error("Error attempting to check whether sauce connect is up to date, attempting to continue", e);
-        } 
+        }
     }
 
     /**
      * Opens the tunnel and adds the tunnel instance to the sauceTunnelManager map.
      *
-     * @param username
-     * @param apiKey
+     * @param config
      * @throws IOException
      */
-    public void startTunnel(String username, String apiKey) throws IOException {
-        Object tunnel = getSauceTunnelManager().openConnection(username, apiKey);
-        getSauceTunnelManager().addTunnelToMap(buildContext.getPlanKey(), tunnel);
+    public void startTunnel(SODMappedBuildConfiguration config) throws IOException {
+        getSauceTunnelManager().openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, null);
     }
 
 
@@ -225,7 +222,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public void setSauceAPIFactory(BambooSauceFactory sauceAPIFactory) {
         this.sauceAPIFactory = sauceAPIFactory;
     }
-    
+
     public SauceTunnelManager getSauceTunnelManager() {
         if (sauceTunnelManager == null) {
             setSauceTunnelManager(new SauceConnectTwoManager());

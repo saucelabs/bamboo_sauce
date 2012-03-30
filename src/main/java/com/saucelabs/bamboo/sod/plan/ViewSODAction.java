@@ -25,7 +25,7 @@ import java.util.*;
 
 /**
  * Handles invoking the Sauce REST API to find the Sauce Job id that corresponds to the Bamboo build.
- * 
+ *
  * @author Ross Rowe
  */
 public class ViewSODAction extends ViewBuildResults {
@@ -43,16 +43,16 @@ public class ViewSODAction extends ViewBuildResults {
      * Populated by dependency injection.
      */
     private BambooSauceFactory sauceAPIFactory;
-        private static final String HMAC_KEY = "HMACMD5";
-    
+    private static final String HMAC_KEY = "HMACMD5";
+
     private List<JobInformation> jobInformation;
 
     /**
      * Attempts to retrieve the Sauce Session Id from the custom build data (it will be set if the {@link com.saucelabs.bamboo.sod.action.PostBuildAction} class detects if
      * the test output contains a line starting with 'SauceOnDemandSessionID').  If the session id has not been set in the custom build data,
-     * then we attempt to retrieve the job id via the Sauce REST API. 
-     * 
-     * If a job id is found, then it is stored in the <code>jobId</code> instance variable, 
+     * then we attempt to retrieve the job id via the Sauce REST API.
+     * <p/>
+     * If a job id is found, then it is stored in the <code>jobId</code> instance variable,
      * for use by the sodView.ftl template. A HMAC token is also generated, which will be used
      * to authenticate the embedded job result requests.
      *
@@ -81,7 +81,7 @@ public class ViewSODAction extends ViewBuildResults {
         } else {
             processBuildResultsSummary(buildResultsSummary, username, accessKey);
         }
-        
+
         return super.doDefault();
     }
 
@@ -101,6 +101,7 @@ public class ViewSODAction extends ViewBuildResults {
     /**
      * Invokes the Sauce REST API to retrieve the details for the jobs the user has access to.  Iterates over the jobs
      * and attempts to find the job that has a 'build' field matching the build key/number.
+     *
      * @param username
      * @param accessKey
      * @throws Exception

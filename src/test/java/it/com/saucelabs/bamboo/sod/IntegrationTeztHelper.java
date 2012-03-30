@@ -28,6 +28,7 @@ public class IntegrationTeztHelper {
 
     protected WebDriver selenium;
     private SauceTunnelManager sauceTunnelManager;
+    private Credential c;
 
     @Before
     public void setUp() throws Exception {
@@ -40,7 +41,7 @@ public class IntegrationTeztHelper {
                 credential.saveTo(sauceSettings);
             }
         }
-        final Credential c = new Credential();
+        this.c = new Credential();
         Authenticator.setDefault(
                 new Authenticator() {
                     public PasswordAuthentication getPasswordAuthentication() {
@@ -50,8 +51,7 @@ public class IntegrationTeztHelper {
                 }
         );
         sauceTunnelManager = new SauceConnectTwoManager();
-        Process sauceConnect = (Process) sauceTunnelManager.openConnection(c.getUsername(), c.getKey());
-        sauceTunnelManager.addTunnelToMap(DUMMY_PLAN_KEY, sauceConnect);
+        Process sauceConnect = sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), 4445, null, null);
         System.out.println("tunnel established");
         String driver = System.getenv("SELENIUM_DRIVER");
         if (driver == null || driver.equals("")) {
@@ -67,7 +67,7 @@ public class IntegrationTeztHelper {
 
     @After
     public void tearDown() throws Exception {
-        sauceTunnelManager.closeTunnelsForPlan(DUMMY_PLAN_KEY);
+        sauceTunnelManager.closeTunnelsForPlan(c.getUsername(), null);
         selenium.close();
 
     }

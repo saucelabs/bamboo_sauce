@@ -46,7 +46,7 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
             //build context should never be null
             assert buildContext != null;
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-            getSauceTunnelManager().closeTunnelsForPlan(buildContext.getPlanKey());
+            getSauceTunnelManager().closeTunnelsForPlan(config.getTempUsername(), null);
             config.setTempUsername("");
             config.setTempApikey("");
         } catch (Exception e) {

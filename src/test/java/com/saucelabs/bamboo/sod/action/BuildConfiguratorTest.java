@@ -7,7 +7,6 @@ import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
-import com.saucelabs.ci.SauceFactory;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
@@ -36,35 +35,25 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
     private BuildDefinition buildDefinition;
     private SauceTunnel sauceTunnel;
 
+    private final Map<String,Object> tunnelMap = new HashMap<String,Object>();
+
     @Before
     public void setUp() throws Exception {
         this.buildConfigurator = new BuildConfigurator();
         this.tunnelManager = new SauceTunnelManager(){
 
-            private Map<String,Object> tunnelMap = new HashMap<String,Object>();
-
-            public void closeTunnelsForPlan(String planKey) {
-
-            }
-
-            public void addTunnelToMap(String planKey, Object tunnel) {
-                tunnelMap.put(planKey, tunnel);
-            }
-
-            public Object openConnection(String username, String apiKey) throws IOException {
-                return null;
-            }
-
             public Map getTunnelMap() {
                 return tunnelMap;
             }
 
-            public void setPrintStream(PrintStream logger) {
 
+            public void closeTunnelsForPlan(String username, PrintStream printStream) {
+                //To change body of implemented methods use File | Settings | File Templates.
             }
 
-            public void setSauceConnectJar(File sauceConnectJar) {
-
+            public Process openConnection(String username, String apiKey, int port, File sauceConnectJar, PrintStream printStream) throws IOException {
+                tunnelMap.put(username, new Object());
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
         };
         buildConfigurator.setSauceTunnelManager(tunnelManager);
@@ -123,14 +112,17 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         buildDefinition.getCustomConfiguration().put(SODKeys.SSH_ENABLED_KEY, "true");
         buildDefinition.getCustomConfiguration().put(SODKeys.ENABLED_KEY, "true");
         buildConfigurator.call();
-        assertFalse("No sauce tunnels exist", tunnelManager.getTunnelMap().isEmpty());
+        assertFalse("No sauce tunnels exist", getTunnelMap().isEmpty());
     }
 
     @Test
     public void sshDisabled() throws Exception {
         buildDefinition.getCustomConfiguration().put(SODKeys.ENABLED_KEY, "true");
         buildConfigurator.call();
-        assertTrue("Sauce tunnels not empty", tunnelManager.getTunnelMap().isEmpty());
+        assertTrue("Sauce tunnels not empty", getTunnelMap().isEmpty());
     }
 
+    public Map<String, Object> getTunnelMap() {
+        return tunnelMap;
+    }
 }

@@ -111,6 +111,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         config.setTempApikey(sodKey);
         String host = adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY);
         String port = adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY);
+        config.setSshPorts(port);
         String sodDriverURI = getSodDriverUri(sodUsername, sodKey, config);
 
         stringBuilder.append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(host).append('"');
