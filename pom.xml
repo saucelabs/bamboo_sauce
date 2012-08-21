@@ -35,7 +35,7 @@
         </developer>
     </developers>
     <properties>
-        <bamboo.version>4.0</bamboo.version>
+        <bamboo.version>3.4.3</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>

@@ -1,5 +1,0 @@
-<atlassian-user>
-    <repositories>
-        <hibernate name="Hibernate Repository" key="hibernateRepository" description="Hibernate Repository" cache="true"/>
-    </repositories>
-</atlassian-user>
