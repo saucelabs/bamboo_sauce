@@ -28,13 +28,11 @@ import java.util.*;
  *
  * @author Ross Rowe
  */
-public class ViewSODAction extends ViewBuildResults {
+public class ViewSauceJobAction extends ViewBuildResults {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
 
     public static final String JOB_DETAILS_URL = "http://saucelabs.com/rest/v1/%1$s/jobs?full=true";
-
-    public static final String JOB_DETAIL_URL = "http://saucelabs.com/rest/v1/%1$s/jobs/%2$s";
 
     /**
      * Populated by dependency injection.
@@ -47,7 +45,9 @@ public class ViewSODAction extends ViewBuildResults {
     private BambooSauceFactory sauceAPIFactory;
     private static final String HMAC_KEY = "HMACMD5";
 
-    private List<JobInformation> jobInformation;
+    private JobInformation jobInformation;
+
+    private String jobId;
 
     /**
      * Attempts to retrieve the Sauce Session Id from the custom build data (it will be set if the {@link com.saucelabs.bamboo.sod.action.PostBuildAction} class detects if
@@ -88,55 +88,7 @@ public class ViewSODAction extends ViewBuildResults {
     }
 
     private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException, JSONException {
-        String storedJobIds = summary.getCustomBuildData().get(SODKeys.SAUCE_SESSION_ID);
-        jobInformation = new ArrayList<JobInformation>();
-        if (storedJobIds == null) {
-            retrieveJobIdsFromSauce(username, accessKey);
-        } else {
-            String[] jobIds = storedJobIds.split(",");
-            for (String jobId : jobIds) {
-                JSONObject jsonObject = retrieveJobInfoFromSauce(username, accessKey, jobId);
-                JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
-                if (jsonObject.getString("passed").equals("true")) {
-                    information.setStatus("Passed");
-                } else {
-                    information.setStatus("Failed");
-                }
-                jobInformation.add(information);
-            }
-        }
-    }
-
-    /**
-     * Invokes the Sauce REST API to retrieve the details for the jobs the user has access to.  Iterates over the jobs
-     * and attempts to find the job that has a 'build' field matching the build key/number.
-     *
-     * @param username
-     * @param accessKey
-     * @throws Exception
-     */
-    private void retrieveJobIdsFromSauce(String username, String accessKey) throws IOException, JSONException, InvalidKeyException, NoSuchAlgorithmException {
-        //invoke Sauce Rest API to find plan results with those values
-        String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAILS_URL, username), username, accessKey);
-        JSONArray jobResults = new JSONArray(jsonResponse);
-        for (int i = 0; i < jobResults.length(); i++) {
-            //check custom data to find job that was for build
-            JSONObject jobData = jobResults.getJSONObject(i);
-            if (!jobData.isNull("build")) {
-                String buildResultKey = jobData.getString("build");
-                if (buildResultKey.equals(getResultsSummary().getBuildResultKey())) {
-                    String jobId = jobData.getString("id");
-                    jobInformation.add(new JobInformation(jobId, calcHMAC(username, accessKey, jobId)));
-                }
-            }
-        }
-    }
-
-    private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException, JSONException, InvalidKeyException, NoSuchAlgorithmException {
-        //invoke Sauce Rest API to find plan results with those values
-        String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAIL_URL, username, jobId), username, accessKey);
-        return new JSONObject(jsonResponse);
-
+        jobInformation = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
     }
 
     public String calcHMAC(String username, String accessKey, String jobId) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
@@ -162,7 +114,11 @@ public class ViewSODAction extends ViewBuildResults {
         this.administrationConfigurationManager = administrationConfigurationManager;
     }
 
-    public List<JobInformation> getJobInformation() {
+    public JobInformation getJobInformation() {
         return jobInformation;
+    }
+
+    public void setJobId(String jobId) {
+        this.jobId = jobId;
     }
 }

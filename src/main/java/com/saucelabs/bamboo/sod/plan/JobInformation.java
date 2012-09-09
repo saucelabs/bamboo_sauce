@@ -11,6 +11,7 @@ public class JobInformation {
     private String jobId;
     
     private String hmac;
+    private String status;
 
     public JobInformation(String jobId, String hmac) {
         this.jobId = jobId;
@@ -31,5 +32,13 @@ public class JobInformation {
 
     public void setJobId(String jobId) {
         this.jobId = jobId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

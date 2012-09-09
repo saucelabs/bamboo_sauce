@@ -1,4 +1,5 @@
-<atlassian-plugin key="com.saucelabs.bamboo.bamboo-sauceondemand-plugin" name="Bamboo Sauce OnDemand Plugin" plugins-version="2">
+<atlassian-plugin key="com.saucelabs.bamboo.bamboo-sauceondemand-plugin" name="Bamboo Sauce OnDemand Plugin"
+                  plugins-version="2">
     <plugin-info>
         <description>This is the Sauce OnDemand plugin for Bamboo</description>
         <version>${project.version}</version>
@@ -63,21 +64,23 @@
                 <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
             </action>
-            
-            <action name="checkSauceConnectVersion" class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
+
+            <action name="checkSauceConnectVersion"
+                    class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
                     method="default">
                 <result name="success" type="freemarker">/templates/admin/updateSauceConnect.ftl</result>
                 <result name="none" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
             </action>
-            
-            <action name="checkSauceConnectVersionSubmit" class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
+
+            <action name="checkSauceConnectVersionSubmit"
+                    class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
                     method="submit">
                 <result name="input" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
             </action>
-            
+
         </package>
         <package name="sodPlan" extends="buildView">
             <action name="viewSauceOnDemandPlan" class="com.saucelabs.bamboo.sod.plan.ViewSODAction" method="default">
@@ -91,6 +94,11 @@
             <action name="viewSauceOnDemandResult" class="com.saucelabs.bamboo.sod.plan.ViewSODAction" method="default">
                 <result name="input" type="freemarker">/templates/plan/viewSauceOnDemandBuildResult.ftl</result>
                 <result name="success" type="freemarker">/templates/plan/viewSauceOnDemandBuildResult.ftl</result>
+                <result name="error" type="freemarker">/error.ftl</result>
+            </action>
+            <action name="viewSauceJobResult" class="com.saucelabs.bamboo.sod.plan.ViewSauceJobAction" method="default">
+                <result name="input" type="freemarker">/templates/plan/viewSauceJobResult.ftl</result>
+                <result name="success" type="freemarker">/templates/plan/viewSauceJobResult.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
             </action>
 
@@ -120,7 +128,8 @@
         </condition>
     </web-item>
 
-    <component name="sauceTunnelManager" key="sauceTunnelManager" class="com.saucelabs.ci.sauceconnect.SauceConnectTwoManager">
+    <component name="sauceTunnelManager" key="sauceTunnelManager"
+               class="com.saucelabs.ci.sauceconnect.SauceConnectTwoManager">
     </component>
 
     <component name="sauceBrowserFactory" key="sauceBrowserFactory" class="com.saucelabs.ci.BrowserFactory">
@@ -128,9 +137,10 @@
 
     <component name="sauceAPIFactory" key="sauceAPIFactory" class="com.saucelabs.bamboo.sod.util.BambooSauceFactory">
     </component>
-    
-    <component name="sauceLibraryManager" key="sauceLibraryManager" class="com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager">
+
+    <component name="sauceLibraryManager" key="sauceLibraryManager"
+               class="com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager">
     </component>
-    
+
 
 </atlassian-plugin>

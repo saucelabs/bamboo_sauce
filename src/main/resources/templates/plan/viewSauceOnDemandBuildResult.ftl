@@ -9,24 +9,38 @@
 <h3>Sauce Results</h3>
 [#if jobInformation?exists ]
 <p span="viewSauceOnDemandBuildResult">
-[#list jobInformation as jobInfo]
-<iframe src="https://saucelabs.com/job-embed/${jobInfo.jobId}" style="width:1024px; height:420px;">
-    <a href="https://saucelabs.com/job-embed/${jobInfo.jobId}">Your browser does not support iframes. Click here to see the embedded job results.</a>
-</iframe>
-[/#list]
+    The following Sauce OnDemand Jobs were executed as part of this build:
 </p>
+<table>
+    <tr>
+        <th>Job Id</th>
+        <th>Status</th>
+    </tr>
+    [#list jobInformation as jobInfo]
+        <tr>
+            <td>
+                <a href="/build/result/viewSauceJobResult.action?jobId=${jobInfo.jobId}&buildKey=${buildKey}&buildNumber=${buildNumber}">${jobInfo.jobId}</a>
+            </td>
+            <td>
+                ${jobInfo.status}
+            </td>
+        </tr>
+    [/#list]
+</table>
+
 [#else]
 <p>
-Unable to find a Sauce Job result for ${buildKey}.
+    Unable to find a Sauce Job result for ${buildKey}.
 </p>
 
-<p>Please verify that your Sauce tests are applying the value of the SAUCE_BAMBOO_BUILDNUMBER environment variable to the
-selenium context, eg.
+<p>Please verify that your Sauce tests are applying the value of the SAUCE_BAMBOO_BUILDNUMBER environment variable
+    to the
+    selenium context, eg.
 </p>
-<pre>
-String bambooData = System.getenv("SAUCE_BAMBOO_BUILDNUMBER");
-this.selenium.setContext(bambooData);
-</pre>
+    <pre>
+    String bambooData = System.getenv("SAUCE_BAMBOO_BUILDNUMBER");
+    this.selenium.setContext(bambooData);
+    </pre>
 
 [/#if]
 </body>
