@@ -4,10 +4,6 @@ To build the plugin, you will need the <a href="http://confluence.atlassian.com/
 
 The plugin also references the Sauce Connect 2 library, which is hosted in the Sauce Labs Cloudbees Maven repository (https://repository-saucelabs.forge.cloudbees.com/release).  
 
-It can also be built from source and can be obtained from git@github.com:saucelabs/sauce-connect.git.  Once the source has been obtained, it can be built by running 'mvn package' and installed by running:
-
-	mvn install:install-file -DgroupId=com.saucelabs -DartifactId=sauce-connect -Dversion=3.0 -Dpackaging=jar -Dfile=/path/to/sauce-connect.jar
-
 To build (compile,test,jar) the plugin run: 
 
 	atlas-package
