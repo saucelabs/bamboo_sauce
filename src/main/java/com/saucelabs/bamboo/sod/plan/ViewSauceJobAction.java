@@ -7,9 +7,12 @@ import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.resultsummary.BuildResultsSummary;
+
+import com.atlassian.bamboo.resultsummary.ResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import org.apache.commons.codec.binary.Hex;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -120,5 +123,10 @@ public class ViewSauceJobAction extends ViewBuildResults {
 
     public void setJobId(String jobId) {
         this.jobId = jobId;
+    }
+
+    @Override
+    public boolean isRestartable(@NotNull ResultsSummary resultsSummary) {
+        return false;
     }
 }
