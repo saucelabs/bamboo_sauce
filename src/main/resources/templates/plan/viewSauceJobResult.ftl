@@ -8,7 +8,7 @@
 [#if jobInformation?exists ]
 <h3>Sauce Results for ${jobInformation.jobId}</h3>
 
-<script type="text/javascript" src="http://saucelabs.com/job-embed/${jobInformation.jobId}.js?auth=${jobInformation.hmac}"></script>
+<script type="text/javascript" src="https://saucelabs.com/job-embed/${jobInformation.jobId}.js?auth=${jobInformation.hmac}"></script>
 [#else]
 
 <p>

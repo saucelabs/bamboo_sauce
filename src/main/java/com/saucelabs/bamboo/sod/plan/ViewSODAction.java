@@ -10,6 +10,7 @@ import com.atlassian.bamboo.resultsummary.BuildResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,6 +30,8 @@ import java.util.*;
  * @author Ross Rowe
  */
 public class ViewSODAction extends ViewBuildResults {
+
+    private static final Logger logger = Logger.getLogger(ViewSODAction.class);
 
     private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
 
@@ -95,14 +98,19 @@ public class ViewSODAction extends ViewBuildResults {
         } else {
             String[] jobIds = storedJobIds.split(",");
             for (String jobId : jobIds) {
-                JSONObject jsonObject = retrieveJobInfoFromSauce(username, accessKey, jobId);
-                JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
-                if (jsonObject.getString("passed").equals("true")) {
-                    information.setStatus("Passed");
-                } else {
-                    information.setStatus("Failed");
+                try {
+                    JSONObject jsonObject = retrieveJobInfoFromSauce(username, accessKey, jobId);
+                    JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
+                    if (jsonObject.getString("passed").equals("true")) {
+                        information.setStatus("Passed");
+                    } else {
+                        information.setStatus("Failed");
+                    }
+                    jobInformation.add(information);
+                } catch (Exception e) {
+                    //log and attempt to continue
+                    logger.error("Error retrieving results from Sauce OnDemand", e);
                 }
-                jobInformation.add(information);
             }
         }
     }

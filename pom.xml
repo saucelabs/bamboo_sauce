@@ -35,7 +35,7 @@
         </developer>
     </developers>
     <properties>
-        <bamboo.version>3.4.3</bamboo.version>
+        <bamboo.version>4.2.1</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
@@ -132,20 +132,20 @@
         <dependency>
             <groupId>de.schlichtherle.truezip</groupId>
             <artifactId>truezip-file</artifactId>
-            <version>7.4</version>
-            <scope>provided</scope>
+            <version>7.4.3</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>de.schlichtherle.truezip</groupId>
             <artifactId>truezip-driver-file</artifactId>
-            <version>7.4</version>
-            <scope>provided</scope>
+            <version>7.4.3</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>de.schlichtherle.truezip</groupId>
             <artifactId>truezip-driver-zip</artifactId>
-            <version>7.4</version>
-            <scope>provided</scope>
+            <version>7.4.3</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Sauce Connect 2 -->
         <dependency>
