@@ -73,8 +73,7 @@
                             com.atlassian.bamboo;version="0.0",
                             com.atlassian.plugin;version="2.7.3",
                             javax.crypto.spec;version="0.0",
-                            javax.crypto;version="0.0",
-                            de.schlichtherle.truezip.*;version="0.0"
+                            javax.crypto;version="0.0"
                         </Import-Package>
                     </instructions>
                 </configuration>
@@ -129,24 +128,25 @@
             <version>1.5</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-file</artifactId>
-            <version>7.4.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-driver-file</artifactId>
-            <version>7.4.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>de.schlichtherle.truezip</groupId>
-            <artifactId>truezip-driver-zip</artifactId>
-            <version>7.4.3</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--Disabled TrueZip functionality due to compatability issues with running Bamboo under JDK6-->
+        <!--<dependency>-->
+            <!--<groupId>de.schlichtherle.truezip</groupId>-->
+            <!--<artifactId>truezip-file</artifactId>-->
+            <!--<version>7.4.3</version>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>de.schlichtherle.truezip</groupId>-->
+            <!--<artifactId>truezip-driver-file</artifactId>-->
+            <!--<version>7.4.3</version>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>de.schlichtherle.truezip</groupId>-->
+            <!--<artifactId>truezip-driver-zip</artifactId>-->
+            <!--<version>7.4.3</version>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
         <!-- Sauce Connect 2 -->
         <dependency>
             <groupId>com.saucelabs</groupId>

@@ -3,7 +3,7 @@ package com.saucelabs.bamboo.sod.util;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.plugin.PluginAccessor;
 import com.saucelabs.ci.SauceLibraryManager;
-import de.schlichtherle.truezip.file.TFile;
+//import de.schlichtherle.truezip.file.TFile;
 import org.json.JSONException;
 
 import java.io.File;
@@ -25,7 +25,7 @@ import java.net.URISyntaxException;
  *
  * @author Ross Rowe
  */
-public class BambooSauceLibraryManager extends SauceLibraryManager {
+public class BambooSauceLibraryManager {//extends SauceLibraryManager {
 
     /**
      * Populated via dependency injection.
@@ -38,22 +38,23 @@ public class BambooSauceLibraryManager extends SauceLibraryManager {
      * Populated by dependency injection.
      */
     private BambooSauceFactory sauceAPIFactory;
-    
+
     private static final String PLUGIN_KEY = "com.saucelabs.bamboo.bamboo-sauceondemand-plugin";
 
 
-    @Override
+    //@Override
     public boolean checkForLaterVersion() throws IOException, JSONException, URISyntaxException {
-        //retrieve contents of version url and parse as JSON
-        getSauceAPIFactory().setupProxy(administrationConfigurationManager);
-        return super.checkForLaterVersion();
+        return false;
+//        //retrieve contents of version url and parse as JSON
+//        getSauceAPIFactory().setupProxy(administrationConfigurationManager);
+//        return super.checkForLaterVersion();
     }
 
-    @Override
+    //@Override
     public void triggerReload() throws JSONException, IOException, URISyntaxException {
-        //retrieve contents of version url and parse as JSON
-        getSauceAPIFactory().setupProxy(administrationConfigurationManager);
-        super.triggerReload();
+//        //retrieve contents of version url and parse as JSON
+//        getSauceAPIFactory().setupProxy(administrationConfigurationManager);
+//        super.triggerReload();
     }
 
     public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {
@@ -92,27 +93,27 @@ public class BambooSauceLibraryManager extends SauceLibraryManager {
      * @throws java.io.IOException        thrown if an error occurs during the Jar file modification
      * @throws java.net.URISyntaxException thrown if an error occurs retrieving the URL for the Bamboo plugin Jar file
      */
-    public void updatePluginJar(File newJarFile) throws IOException, URISyntaxException {
-        File runningJarFile = new File
-                (BambooSauceLibraryManager.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        addFileToJar(runningJarFile, new TFile(newJarFile));
-        Object plugin = pluginAccessor.getPlugin(PLUGIN_KEY);
-        Class pluginClass = pluginAccessor.getPlugin(PLUGIN_KEY).getClass();
-        try {
-            //have to use reflection here as the plugin API classes aren't available to the plugin
-            Method getPluginArtifactMethod = pluginClass.getDeclaredMethod("getPluginArtifact");
-            Object pluginArtifact = getPluginArtifactMethod.invoke(plugin);
-            Class pluginArtifactClass = pluginArtifact.getClass();
-            Method toFileMethod = pluginArtifactClass.getDeclaredMethod("toFile");
-            File originalJarFile = (File) toFileMethod.invoke(pluginArtifact);
-            addFileToJar(originalJarFile, new TFile(newJarFile));
-        } catch (NoSuchMethodException e) {
-            throw new IOException("Unexpected error invoking plugin logic", e);
-        } catch (InvocationTargetException e) {
-            throw new IOException("Unexpected error invoking plugin logic", e);
-        } catch (IllegalAccessException e) {
-            throw new IOException("Unexpected error invoking plugin logic", e);
-        }
-    }
+//    public void updatePluginJar(File newJarFile) throws IOException, URISyntaxException {
+//        File runningJarFile = new File
+//                (BambooSauceLibraryManager.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+//        addFileToJar(runningJarFile, new TFile(newJarFile));
+//        Object plugin = pluginAccessor.getPlugin(PLUGIN_KEY);
+//        Class pluginClass = pluginAccessor.getPlugin(PLUGIN_KEY).getClass();
+//        try {
+//            //have to use reflection here as the plugin API classes aren't available to the plugin
+//            Method getPluginArtifactMethod = pluginClass.getDeclaredMethod("getPluginArtifact");
+//            Object pluginArtifact = getPluginArtifactMethod.invoke(plugin);
+//            Class pluginArtifactClass = pluginArtifact.getClass();
+//            Method toFileMethod = pluginArtifactClass.getDeclaredMethod("toFile");
+//            File originalJarFile = (File) toFileMethod.invoke(pluginArtifact);
+//            addFileToJar(originalJarFile, new TFile(newJarFile));
+//        } catch (NoSuchMethodException e) {
+//            throw new IOException("Unexpected error invoking plugin logic", e);
+//        } catch (InvocationTargetException e) {
+//            throw new IOException("Unexpected error invoking plugin logic", e);
+//        } catch (IllegalAccessException e) {
+//            throw new IOException("Unexpected error invoking plugin logic", e);
+//        }
+//    }
 
 }
