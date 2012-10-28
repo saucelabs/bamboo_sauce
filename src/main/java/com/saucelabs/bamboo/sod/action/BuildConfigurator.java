@@ -140,7 +140,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         populateCommonContext(context);
         try {
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
-            context.put("browserList", getSauceBrowserFactory().values());
+            context.put("browserList", getSauceBrowserFactory().getWebDriverBrowsers());
         } catch (IOException e) {
             //TODO are there a set of default browsers that we can use?
             //TODO detect a proxy exception as opposed to all exceptions?

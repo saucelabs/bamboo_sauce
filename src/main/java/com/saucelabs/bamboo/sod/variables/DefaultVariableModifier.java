@@ -64,7 +64,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         StringBuilder stringBuilder = new StringBuilder();
         createCommonEnvironmentVariables(prefix, stringBuilder, adminConfig);
-        Browser browser = sauceBrowserFactory.forKey(config.getBrowserKey());
+        Browser browser = sauceBrowserFactory.webDriverBrowserForKey(config.getBrowserKey());
         //DefaultCapabilities information
         if (browser != null) {
             stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append(EQUALS).append(browser.getPlatform().toString()).append('"');
@@ -134,7 +134,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      */
     protected String getSodJson(String username, String apiKey, SODMappedBuildConfiguration config) throws JSONException {
 
-        SODSeleniumConfiguration sodConfig = new SODSeleniumConfiguration(username, apiKey, sauceBrowserFactory.forKey(config.getBrowserKey()));
+        SODSeleniumConfiguration sodConfig = new SODSeleniumConfiguration(username, apiKey, sauceBrowserFactory.webDriverBrowserForKey(config.getBrowserKey()));
         sodConfig.setJobName(buildContext.getPlanName() + "-" + Integer.toString(buildContext.getBuildNumber()));
         sodConfig.setFirefoxProfileUrl(StringUtils.defaultString(config.getFirefoxProfileUrl()));
         sodConfig.setIdleTimeout(config.getIdleTimeout());
@@ -160,7 +160,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         sb.append("&access-key=").append(apiKey);
         sb.append("&job-name=").append(StringUtils.trim(buildContext.getPlanName())).append('-').append(Integer.toString(buildContext.getBuildNumber()));
 
-        Browser browser = sauceBrowserFactory.forKey(config.getBrowserKey());
+        Browser browser = sauceBrowserFactory.webDriverBrowserForKey(config.getBrowserKey());
         if (browser != null) {
             sb.append("&os=").append(browser.getOs());
             sb.append("&browser=").append(browser.getBrowserName());

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
@@ -130,22 +131,22 @@
         </dependency>
         <!--Disabled TrueZip functionality due to compatability issues with running Bamboo under JDK6-->
         <!--<dependency>-->
-            <!--<groupId>de.schlichtherle.truezip</groupId>-->
-            <!--<artifactId>truezip-file</artifactId>-->
-            <!--<version>7.4.3</version>-->
-            <!--<scope>compile</scope>-->
+        <!--<groupId>de.schlichtherle.truezip</groupId>-->
+        <!--<artifactId>truezip-file</artifactId>-->
+        <!--<version>7.4.3</version>-->
+        <!--<scope>compile</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>de.schlichtherle.truezip</groupId>-->
-            <!--<artifactId>truezip-driver-file</artifactId>-->
-            <!--<version>7.4.3</version>-->
-            <!--<scope>compile</scope>-->
+        <!--<groupId>de.schlichtherle.truezip</groupId>-->
+        <!--<artifactId>truezip-driver-file</artifactId>-->
+        <!--<version>7.4.3</version>-->
+        <!--<scope>compile</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
-            <!--<groupId>de.schlichtherle.truezip</groupId>-->
-            <!--<artifactId>truezip-driver-zip</artifactId>-->
-            <!--<version>7.4.3</version>-->
-            <!--<scope>compile</scope>-->
+        <!--<groupId>de.schlichtherle.truezip</groupId>-->
+        <!--<artifactId>truezip-driver-zip</artifactId>-->
+        <!--<version>7.4.3</version>-->
+        <!--<scope>compile</scope>-->
         <!--</dependency>-->
         <!-- Sauce Connect 2 -->
         <dependency>
@@ -169,8 +170,9 @@
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>ci-sauce</artifactId>
-            <version>1.12</version>
+            <version>1.19_bamboo_patch</version>
             <scope>compile</scope>
+
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
@@ -191,21 +193,21 @@
             <artifactId>atlassian-bamboo-api</artifactId>
             <version>${bamboo.version}</version>
             <scope>provided</scope>
-            
+
         </dependency>
         <dependency>
             <groupId>com.atlassian.bamboo</groupId>
             <artifactId>atlassian-bamboo-core</artifactId>
             <version>${bamboo.version}</version>
             <scope>provided</scope>
-            
+
         </dependency>
         <dependency>
             <groupId>com.atlassian.bamboo</groupId>
             <artifactId>atlassian-bamboo-web</artifactId>
             <version>${bamboo.version}</version>
             <scope>provided</scope>
-           
+
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
