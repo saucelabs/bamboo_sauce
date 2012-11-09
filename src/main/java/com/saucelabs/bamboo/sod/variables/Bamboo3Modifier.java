@@ -28,11 +28,9 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
         try {
             Class taskDefinitionClass = TaskDefinition.class;
             if (taskDefinitionClass != null) {
-                Method taskDefinitionsMethod = BuildDefinition.class.getMethod("getTaskDefinitions", null);
-                List/*<TaskDefinition>*/ taskDefinitions = (List/*<TaskDefinition>*/) taskDefinitionsMethod.invoke(definition, null);
-                for (Object taskDefinition : taskDefinitions) {
-                    Method method = taskDefinitionClass.getMethod("getConfiguration");
-                    Map<String, String> configuration = (Map<String, String>) method.invoke(taskDefinition);
+                List<TaskDefinition> taskDefinitions = definition.getTaskDefinitions();
+                for (TaskDefinition taskDefinition : taskDefinitions) {
+                    Map<String, String> configuration = taskDefinition.getConfiguration();
                     String originalEnv = configuration.get("environmentVariables");
                     if (StringUtils.isNotBlank(originalEnv)) {
                         envBuffer = originalEnv + " " + envBuffer;
@@ -40,25 +38,6 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
 
                     config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
                     configuration.put("environmentVariables", envBuffer);
-                }
-            }
-        } catch (Exception e) {
-            //ignore and attempt to continue
-        }
-    }
-
-    //@Override
-    public void restoreVariables() {
-        try {
-            Class taskDefinitionClass = Class.forName("com.atlassian.bamboo.task.TaskDefinition");
-            if (taskDefinitionClass != null) {
-                Method taskDefinitionsMethod = BuildDefinition.class.getMethod("getTaskDefinitions", null);
-                List/*<TaskDefinition>*/ taskDefinitions = (List/*<TaskDefinition>*/) taskDefinitionsMethod.invoke(definition, null);
-                for (Object taskDefinition : taskDefinitions) {
-                    Method method = taskDefinitionClass.getMethod("getConfiguration");
-                    Map<String, String> configuration = (Map<String, String>) method.invoke(taskDefinition);
-                    configuration.put("environmentVariables", config.getMap().get(SODKeys.TEMP_ENV_VARS));
-                    config.getMap().put(SODKeys.TEMP_ENV_VARS, "");
                 }
             }
         } catch (Exception e) {

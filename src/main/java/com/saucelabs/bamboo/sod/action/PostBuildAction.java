@@ -1,5 +1,7 @@
 package com.saucelabs.bamboo.sod.action;
 
+import com.atlassian.bamboo.build.BuildDefinition;
+import com.atlassian.bamboo.build.BuildDefinitionManager;
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
 import com.atlassian.bamboo.build.LogEntry;
 import com.atlassian.bamboo.build.logger.BuildLogger;
@@ -44,7 +46,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     public BuildContext call() {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {
-            resetEnvironmentVariables(config);
             recordSauceJobResult();
         }
         return buildContext;
@@ -126,17 +127,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     private String getBuildNumber() {
         return getBuildContextToUse().getBuildResultKey();
-    }
-
-    private void resetEnvironmentVariables(final SODMappedBuildConfiguration config) {
-        Plan plan = planManager.getPlanByKey(buildContext.getPlanKey());
-        if (plan != null) {
-            VariableModifier variableModifier = getVariableModifier(config, plan);
-            if (variableModifier != null) {
-                variableModifier.restoreVariables();
-                planManager.savePlan(plan);
-            }
-        }
     }
 
     /**

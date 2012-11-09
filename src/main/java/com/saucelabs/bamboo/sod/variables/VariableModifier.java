@@ -14,8 +14,6 @@ public interface VariableModifier {
     
     void storeVariables() throws JSONException;
 
-    void restoreVariables();
-
     void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager);
 
     void setSauceBrowserFactory(BrowserFactory sauceBrowserFactory);
