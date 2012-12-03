@@ -1,21 +1,13 @@
 package com.saucelabs.bamboo.sod.action;
 
-import com.atlassian.bamboo.build.BuildDefinition;
-import com.atlassian.bamboo.build.BuildDefinitionManager;
 import com.atlassian.bamboo.buildqueue.manager.CustomPreBuildQueuedAction;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.atlassian.bamboo.plan.Plan;
-import com.atlassian.bamboo.plan.PlanManager;
-import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.variables.VariableModifier;
 import com.saucelabs.ci.BrowserFactory;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-
-import java.util.List;
 
 /**
  * Pre Build Action which generates and adds the Selenium environment variables that apply to the build
@@ -40,11 +32,10 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
      * Entry point into build action.
      *
      * @return
-     * @throws JSONException if an error occurs generating the Selenium environment variables
      */
     @NotNull
     //@Override
-    public BuildContext call() throws JSONException {
+    public BuildContext call() {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {
             setSeleniumEnvironmentVars(config);
@@ -54,9 +45,8 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
 
     /**
      * @param config
-     * @throws JSONException if an error occurs generating the Selenium environment variables
      */
-    private void setSeleniumEnvironmentVars(SODMappedBuildConfiguration config) throws JSONException {
+    private void setSeleniumEnvironmentVars(SODMappedBuildConfiguration config){
         VariableModifier variableModifier = getVariableModifier(config, buildContext.getBuildDefinition());
         variableModifier.setAdministrationConfigurationManager(administrationConfigurationManager);
         variableModifier.setSauceBrowserFactory(getSauceBrowserFactory());

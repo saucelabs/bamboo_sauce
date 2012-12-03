@@ -6,9 +6,7 @@ import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +21,7 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
         super(config, definition, buildContext);
     }
 
-    public void storeVariables() throws JSONException {
+    public void storeVariables() {
         String envBuffer = createSeleniumEnvironmentVariables();
         try {
             Class taskDefinitionClass = TaskDefinition.class;

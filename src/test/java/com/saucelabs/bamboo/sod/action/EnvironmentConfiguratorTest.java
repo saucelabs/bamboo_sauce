@@ -73,7 +73,6 @@ public class EnvironmentConfiguratorTest {
 
         when(buildDefinition.getCustomConfiguration()).thenReturn(customConfiguration);
         environmentConfigurator.init(buildContext);
-        environmentConfigurator.setPlanManager(planManager);
     }
 
     @Test

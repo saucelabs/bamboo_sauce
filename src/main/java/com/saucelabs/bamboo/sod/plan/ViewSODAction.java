@@ -13,9 +13,9 @@ import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -92,7 +92,7 @@ public class ViewSODAction extends ViewBuildResults {
         return super.doDefault();
     }
 
-    private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException, JSONException {
+    private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         String storedJobIds = summary.getCustomBuildData().get(SODKeys.SAUCE_SESSION_ID);
         jobInformation = new ArrayList<JobInformation>();
         if (storedJobIds == null) {
@@ -103,7 +103,7 @@ public class ViewSODAction extends ViewBuildResults {
                 try {
                     JSONObject jsonObject = retrieveJobInfoFromSauce(username, accessKey, jobId);
                     JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
-                    if (jsonObject.getString("passed").equals("true")) {
+                    if (jsonObject.get("passed").equals("true")) {
                         information.setStatus("Passed");
                     } else {
                         information.setStatus("Failed");
@@ -125,27 +125,27 @@ public class ViewSODAction extends ViewBuildResults {
      * @param accessKey
      * @throws Exception
      */
-    private void retrieveJobIdsFromSauce(String username, String accessKey) throws IOException, JSONException, InvalidKeyException, NoSuchAlgorithmException {
+    private void retrieveJobIdsFromSauce(String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         //invoke Sauce Rest API to find plan results with those values
         String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAILS_URL, username), username, accessKey);
-        JSONArray jobResults = new JSONArray(jsonResponse);
-        for (int i = 0; i < jobResults.length(); i++) {
+        JSONArray jobResults = (JSONArray) JSONValue.parse(jsonResponse);
+        for (int i = 0; i < jobResults.size(); i++) {
             //check custom data to find job that was for build
-            JSONObject jobData = jobResults.getJSONObject(i);
-            if (!jobData.isNull("build")) {
-                String buildResultKey = jobData.getString("build");
+            JSONObject jobData = (JSONObject) jobResults.get(i);
+            if (jobData.containsKey("build")) {
+                String buildResultKey = (String) jobData.get("build");
                 if (buildResultKey.equals(getResultsSummary().getBuildResultKey())) {
-                    String jobId = jobData.getString("id");
+                    String jobId = (String) jobData.get("id");
                     jobInformation.add(new JobInformation(jobId, calcHMAC(username, accessKey, jobId)));
                 }
             }
         }
     }
 
-    private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException, JSONException, InvalidKeyException, NoSuchAlgorithmException {
+    private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         //invoke Sauce Rest API to find plan results with those values
         String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAIL_URL, username, jobId), username, accessKey);
-        return new JSONObject(jsonResponse);
+        return (JSONObject) JSONValue.parse(jsonResponse);
 
     }
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
@@ -46,7 +47,7 @@
     </scm>
     <distributionManagement>
         <repository>
-            <id>cloudbees-private-release-repository</id>
+            <id>cloudbees.private.release.repository</id>
             <url>dav:https://repository-saucelabs.forge.cloudbees.com/release</url>
         </repository>
     </distributionManagement>
@@ -63,11 +64,10 @@
                     <instructions>
                         <Export-Package>org.codehaus.jackson*</Export-Package>
                         <Import-Package>
-                            org.json;version="0.0",
-                            org.apache.log4j;version="1.2.15",
-                            org.apache.commons.codec.binary;version="1.3",
-                            org.apache.commons.lang*;version="2.5",
-                            org.apache.commons.io*;version="1.4",
+                            org.apache.log4j;version="0.0",
+                            org.apache.commons.logging;version="0.0",
+                            org.apache.commons.lang*;version="0.0",
+                            org.apache.commons.io*;version="0.0",
                             com.atlassian.bamboo.*;version="0.0",
                             com.atlassian.core.util;version="4.5.3",
                             com.atlassian.bamboo;version="0.0",
@@ -122,12 +122,12 @@
             <scope>provided</scope>
         </dependency>
         <!-- Plugin Dependencies-->
-        <dependency>
-            <groupId>com.saucelabs</groupId>
-            <artifactId>sauce-rest-api</artifactId>
-            <version>1.5</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>com.saucelabs</groupId>-->
+        <!--<artifactId>sauce-rest-api</artifactId>-->
+        <!--<version>1.5</version>-->
+        <!--<scope>compile</scope>-->
+        <!--</dependency>-->
         <!--Disabled TrueZip functionality due to compatability issues with running Bamboo under JDK6-->
         <!--<dependency>-->
         <!--<groupId>de.schlichtherle.truezip</groupId>-->
@@ -154,22 +154,22 @@
             <version>3.0.18</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20080701</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.5.0</version>
-            <scope>compile</scope>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.json</groupId>-->
+        <!--<artifactId>json</artifactId>-->
+        <!--<version>20080701</version>-->
+        <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.codehaus.jackson</groupId>-->
+        <!--<artifactId>jackson-mapper-asl</artifactId>-->
+        <!--<version>1.5.0</version>-->
+        <!--<scope>compile</scope>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>ci-sauce</artifactId>
-            <version>1.19_bamboo_patch</version>
+            <version>1.20_bamboo_patch</version>
             <scope>compile</scope>
 
         </dependency>
@@ -212,6 +212,12 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>1.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+            <version>2.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -2,15 +2,11 @@ package com.saucelabs.bamboo.sod.util;
 
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.plugin.PluginAccessor;
-import com.saucelabs.ci.SauceLibraryManager;
-//import de.schlichtherle.truezip.file.TFile;
-import org.json.JSONException;
 
-import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URISyntaxException;
+
+//import de.schlichtherle.truezip.file.TFile;
 
 /**
  * Handles checking for and installing updates to the SauceConnect library.  Updates are checked by
@@ -43,7 +39,7 @@ public class BambooSauceLibraryManager {//extends SauceLibraryManager {
 
 
     //@Override
-    public boolean checkForLaterVersion() throws IOException, JSONException, URISyntaxException {
+    public boolean checkForLaterVersion() throws IOException, URISyntaxException {
         return false;
 //        //retrieve contents of version url and parse as JSON
 //        getSauceAPIFactory().setupProxy(administrationConfigurationManager);
@@ -51,7 +47,7 @@ public class BambooSauceLibraryManager {//extends SauceLibraryManager {
     }
 
     //@Override
-    public void triggerReload() throws JSONException, IOException, URISyntaxException {
+    public void triggerReload() throws IOException, URISyntaxException {
 //        //retrieve contents of version url and parse as JSON
 //        getSauceAPIFactory().setupProxy(administrationConfigurationManager);
 //        super.triggerReload();

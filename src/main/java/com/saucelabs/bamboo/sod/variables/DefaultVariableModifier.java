@@ -4,14 +4,10 @@ import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.saucelabs.bamboo.sod.SODSeleniumConfiguration;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
-import com.saucelabs.ci.Browser;
-import com.saucelabs.ci.BrowserFactory;
-import com.saucelabs.ci.SeleniumVersion;
+import com.saucelabs.ci.*;
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONException;
 
 /**
  * Handles writing and restoring the Sauce OnDemand environment variables to the Builder instance (for pre-Bamboo 3 instances).
@@ -40,18 +36,16 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
     /**
      * @return
-     * @throws JSONException
      */
-    protected String createSeleniumEnvironmentVariables() throws JSONException {
+    protected String createSeleniumEnvironmentVariables() {
         return createSeleniumEnvironmentVariables("");
     }
 
     /**
      * @param prefix Prefix for each environment variable (eg '-D'), can be null
      * @return String representing the set of environment variables to apply
-     * @throws JSONException if an error occurs generating the Selenium environment variables
      */
-    protected String createSeleniumEnvironmentVariables(String prefix) throws JSONException {
+    protected String createSeleniumEnvironmentVariables(String prefix){
         if (config.getSeleniumVersion().equals(SeleniumVersion.ONE)) {
             return createSelenium1EnvironmentVariables(prefix);
         } else {
@@ -75,7 +69,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         return stringBuilder.toString();
     }
 
-    private String createSelenium1EnvironmentVariables(String prefix) throws JSONException {
+    private String createSelenium1EnvironmentVariables(String prefix) {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
@@ -130,9 +124,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      * @param apiKey
      * @param config
      * @return
-     * @throws JSONException if an error occurs converting the config to JSON
      */
-    protected String getSodJson(String username, String apiKey, SODMappedBuildConfiguration config) throws JSONException {
+    protected String getSodJson(String username, String apiKey, SODMappedBuildConfiguration config) {
 
         SODSeleniumConfiguration sodConfig = new SODSeleniumConfiguration(username, apiKey, sauceBrowserFactory.webDriverBrowserForKey(config.getBrowserKey()));
         sodConfig.setJobName(buildContext.getPlanName() + "-" + Integer.toString(buildContext.getBuildNumber()));
@@ -140,7 +133,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         sodConfig.setIdleTimeout(config.getIdleTimeout());
         sodConfig.setMaxDuration(config.getMaxDuration());
         sodConfig.setRecordVideo(config.recordVideo());
-        sodConfig.setUserExtensions(StringUtils.defaultString(config.getUserExtensionsJson()));
+        sodConfig.setUserExtensions(config.getUserExtensionsJson());
         return sodConfig.toJson();
     }
 
@@ -158,7 +151,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         StringBuilder sb = new StringBuilder("sauce-ondemand:?username=");
         sb.append(username);
         sb.append("&access-key=").append(apiKey);
-        sb.append("&job-name=").append(StringUtils.trim(buildContext.getPlanName())).append('-').append(Integer.toString(buildContext.getBuildNumber()));
+        sb.append("&job-name=").append(buildContext.getPlanName().trim()).append('-').append(Integer.toString(buildContext.getBuildNumber()));
 
         Browser browser = sauceBrowserFactory.webDriverBrowserForKey(config.getBrowserKey());
         if (browser != null) {

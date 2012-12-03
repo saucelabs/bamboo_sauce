@@ -43,8 +43,8 @@ public class ConfigureSODAction extends ConfigurationAction
         final AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         setUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         setAccessKey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
-        setSeleniumHost(StringUtils.defaultString(adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY),DEFAULT_SELENIUM_HOST));
-        setSeleniumPort(StringUtils.defaultString(adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY),DEFAULT_SELENIUM_PORT));
+        setSeleniumHost(StringUtils.defaultString(adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY), DEFAULT_SELENIUM_HOST));
+        setSeleniumPort(StringUtils.defaultString(adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY), DEFAULT_SELENIUM_PORT));
         return INPUT;
     }
 

@@ -2,7 +2,6 @@ package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.saucelabs.ci.BrowserFactory;
-import org.json.JSONException;
 
 /**
  * Interface that defines the behaviour for classes that control the generation and restoration of
@@ -12,7 +11,7 @@ import org.json.JSONException;
  */
 public interface VariableModifier {
     
-    void storeVariables() throws JSONException;
+    void storeVariables();
 
     void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager);
 

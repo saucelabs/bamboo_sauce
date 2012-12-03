@@ -21,7 +21,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -88,9 +87,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
-            checkVersionIsCurrent();
+            //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
-                checkVersionIsCurrent();
+                //checkVersionIsCurrent();
                 startTunnel(config);
             }
         } catch (Exception e) {
@@ -144,8 +143,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         } catch (IOException e) {
             //TODO are there a set of default browsers that we can use?
             //TODO detect a proxy exception as opposed to all exceptions?
-            populateDefaultBrowserList(context);
-        } catch (JSONException e) {
             populateDefaultBrowserList(context);
         }
     }
