@@ -47,8 +47,7 @@ public class SSHTunnelCloser extends BaseConfigurablePlugin implements CustomBui
             assert buildContext != null;
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             getSauceTunnelManager().closeTunnelsForPlan(config.getTempUsername(), null);
-            config.setTempUsername("");
-            config.setTempApikey("");
+
         } catch (Exception e) {
             //catch exceptions so that we don't stop the build from running
             logger.error("Error running Sauce OnDemand SSHTunnelCloser, attempting to continue", e);
