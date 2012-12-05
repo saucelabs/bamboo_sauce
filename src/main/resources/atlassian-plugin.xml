@@ -128,19 +128,19 @@
         </condition>
     </web-item>
 
-    <component name="sauceTunnelManager" key="sauceTunnelManager"
-               class="com.saucelabs.ci.sauceconnect.SauceConnectTwoManager">
-    </component>
+    <!--<component name="sauceTunnelManager" key="sauceTunnelManager"-->
+               <!--class="com.saucelabs.ci.sauceconnect.SauceConnectTwoManager">-->
+    <!--</component>-->
 
-    <component name="sauceBrowserFactory" key="sauceBrowserFactory" class="com.saucelabs.ci.BrowserFactory">
-    </component>
+    <!--<component name="sauceBrowserFactory" key="sauceBrowserFactory" class="com.saucelabs.ci.BrowserFactory">-->
+    <!--</component>-->
 
-    <component name="sauceAPIFactory" key="sauceAPIFactory" class="com.saucelabs.bamboo.sod.util.BambooSauceFactory">
-    </component>
+    <!--<component name="sauceAPIFactory" key="sauceAPIFactory" class="com.saucelabs.bamboo.sod.util.BambooSauceFactory">-->
+    <!--</component>-->
 
-    <component name="sauceLibraryManager" key="sauceLibraryManager"
-               class="com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager">
-    </component>
+    <!--<component name="sauceLibraryManager" key="sauceLibraryManager"-->
+               <!--class="com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager">-->
+    <!--</component>-->
 
 
 </atlassian-plugin>

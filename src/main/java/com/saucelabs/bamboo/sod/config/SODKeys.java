@@ -8,6 +8,9 @@ package com.saucelabs.bamboo.sod.config;
  */
 public final class SODKeys
 {
+    public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
+    public static final String SAUCE_API_KEY = "SAUCE_API_KEY";
+
     /** Disallow instantiation of class.*/
     private SODKeys() {}
     public static final String CUSTOM_PREFIX = "custom.sauceondemand.";

@@ -13,7 +13,6 @@ import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -37,7 +36,7 @@ public class ViewSODAction extends ViewBuildResults {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
 
-    public static final String JOB_DETAILS_URL = "http://saucelabs.com/rest/v1/%1$s/jobs?full=true";
+    public static final String JOB_DETAILS_URL = "http://saucelabs.com/rest/v1/%1$s/build/%2$s/jobs?full=true";
 
     public static final String JOB_DETAIL_URL = "http://saucelabs.com/rest/v1/%1$s/jobs/%2$s";
 
@@ -127,19 +126,13 @@ public class ViewSODAction extends ViewBuildResults {
      */
     private void retrieveJobIdsFromSauce(String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         //invoke Sauce Rest API to find plan results with those values
-        String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAILS_URL, username), username, accessKey);
-        JSONArray jobResults = (JSONArray) JSONValue.parse(jsonResponse);
-        for (int i = 0; i < jobResults.size(); i++) {
-            //check custom data to find job that was for build
-            JSONObject jobData = (JSONObject) jobResults.get(i);
-            if (jobData.containsKey("build")) {
-                String buildResultKey = (String) jobData.get("build");
-                if (buildResultKey.equals(getResultsSummary().getBuildResultKey())) {
-                    String jobId = (String) jobData.get("id");
-                    jobInformation.add(new JobInformation(jobId, calcHMAC(username, accessKey, jobId)));
-                }
-            }
+        String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAILS_URL, username, getResultsSummary().getBuildResultKey()), username, accessKey);
+        JSONObject jobData = (JSONObject) JSONValue.parse(jsonResponse);
+        String jobId = (String) jobData.get("id");
+        if (jobId != null) {
+            jobInformation.add(new JobInformation(jobId, calcHMAC(username, accessKey, jobId)));
         }
+
     }
 
     private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
