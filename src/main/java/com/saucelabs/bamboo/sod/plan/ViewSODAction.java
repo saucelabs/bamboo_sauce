@@ -13,6 +13,7 @@ import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -67,7 +68,7 @@ public class ViewSODAction extends ViewBuildResults {
      */
     @Override
     public String doDefault() throws Exception {
-
+        logger.info("Processing ViewSODAction");
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
@@ -92,9 +93,11 @@ public class ViewSODAction extends ViewBuildResults {
     }
 
     private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+        logger.info("Processing build summary");
         String storedJobIds = summary.getCustomBuildData().get(SODKeys.SAUCE_SESSION_ID);
         jobInformation = new ArrayList<JobInformation>();
         if (storedJobIds == null) {
+            logger.info("No stored job ids");
             retrieveJobIdsFromSauce(username, accessKey);
         } else {
             String[] jobIds = storedJobIds.split(",");
@@ -126,18 +129,40 @@ public class ViewSODAction extends ViewBuildResults {
      */
     private void retrieveJobIdsFromSauce(String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         //invoke Sauce Rest API to find plan results with those values
-        String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAILS_URL, username, getResultsSummary().getBuildResultKey()), username, accessKey);
-        JSONObject jobData = (JSONObject) JSONValue.parse(jsonResponse);
-        String jobId = (String) jobData.get("id");
-        if (jobId != null) {
-            jobInformation.add(new JobInformation(jobId, calcHMAC(username, accessKey, jobId)));
+        String url = String.format(JOB_DETAILS_URL, username, getResultsSummary().getBuildResultKey());
+        logger.info("Invoking REST API for " + url);
+        String jsonResponse = sauceAPIFactory.doREST(url, username, accessKey);
+        logger.info("REST response " + jsonResponse);
+        JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonResponse);
+        JSONArray jobs = (JSONArray) jsonObject.get("jobs");
+        for (Object object : jobs) {
+            JSONObject jobObject = (JSONObject) object;
+            String jobId = (String) jobObject.get("id");
+            if (jobId != null) {
+                logger.info("Adding jobInformation for " + jobId);
+                JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
+                Object passed = jobObject.get("passed");
+                if (passed != null) {
+                    if (passed.equals("true")) {
+                        information.setStatus("Passed");
+                    } else {
+                        information.setStatus("Failed");
+                    }
+                }
+                jobInformation.add(information);
+            } else {
+                logger.warn("Unable to find jobId in jsonData");
+            }
         }
 
     }
 
     private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
         //invoke Sauce Rest API to find plan results with those values
-        String jsonResponse = sauceAPIFactory.doREST(String.format(JOB_DETAIL_URL, username, jobId), username, accessKey);
+        String url = String.format(JOB_DETAIL_URL, username, jobId);
+        logger.info("Invoking REST API for " + url);
+        String jsonResponse = sauceAPIFactory.doREST(url, username, accessKey);
+        logger.info("REST response " + jsonResponse);
         return (JSONObject) JSONValue.parse(jsonResponse);
 
     }
