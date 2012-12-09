@@ -48,6 +48,7 @@ public class EnvironmentConfiguratorTest {
 
         when(buildContext.getBuildResult()).thenReturn(buildResult);
         when(buildContext.getBuildDefinition()).thenReturn(buildDefinition);
+        when(buildContext.getPlanName()).thenReturn("PLAN");
         when(buildContext.getPlanKey()).thenReturn("PLAN");
         when(planManager.getPlanByKey(eq("PLAN"))).thenReturn(plan);
         when(plan.getBuildDefinition()).thenReturn(buildDefinition);

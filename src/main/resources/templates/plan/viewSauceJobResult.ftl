@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Sauce OnDemand Job Result</title>
+    <title>Sauce Job Result</title>
     <meta name="decorator" content="result">
     <meta name="tab" content="sauce"/>
 </head>

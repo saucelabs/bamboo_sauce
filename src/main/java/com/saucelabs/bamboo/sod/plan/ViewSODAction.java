@@ -105,7 +105,7 @@ public class ViewSODAction extends ViewBuildResults {
                 try {
                     JSONObject jsonObject = retrieveJobInfoFromSauce(username, accessKey, jobId);
                     JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
-                    if (jsonObject.get("passed").equals("true")) {
+                    if (jsonObject.get("passed").equals(Boolean.TRUE)) {
                         information.setStatus("Passed");
                     } else {
                         information.setStatus("Failed");
@@ -143,7 +143,7 @@ public class ViewSODAction extends ViewBuildResults {
                 JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
                 Object passed = jobObject.get("passed");
                 if (passed != null) {
-                    if (passed.equals("true")) {
+                    if (passed.equals(Boolean.TRUE)) {
                         information.setStatus("Passed");
                     } else {
                         information.setStatus("Failed");

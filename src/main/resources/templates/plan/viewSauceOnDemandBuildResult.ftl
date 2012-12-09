@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Sauce OnDemand Results</title>
+    <title>Sauce Results</title>
     <meta name="decorator" content="result">
     <meta name="tab" content="sauce"/>
 </head>
@@ -9,7 +9,7 @@
 <h3>Sauce Results</h3>
 [#if jobInformation?exists ]
 <p span="viewSauceOnDemandBuildResult">
-    The following Sauce OnDemand Jobs were executed as part of this build:
+    The following Sauce Jobs were executed as part of this build:
 </p>
 <table>
     <tr>
@@ -19,7 +19,7 @@
     [#list jobInformation as jobInfo]
         <tr>
             <td>
-                <a href="/build/result/viewSauceJobResult.action?jobId=${jobInfo.jobId}&buildKey=${buildKey}&buildNumber=${buildNumber}">${jobInfo.jobId}</a>
+                <a href="build/result/viewSauceJobResult.action?jobId=${jobInfo.jobId}&buildKey=${buildKey}&buildNumber=${buildNumber}">${jobInfo.jobId}</a>
             </td>
             <td>
                 ${jobInfo.status}

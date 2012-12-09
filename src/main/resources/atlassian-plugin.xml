@@ -112,7 +112,7 @@
 
     <web-item key="sodPlanDetails" name="sauce" section="chainResults.subMenu/chainResults" weight="50">
         <description key="sodPlanDetails.desc">Provides details of the Sauce OnDemand results</description>
-        <label key="Sauce OnDemand Results"/>
+        <label key="Sauce Jobs"/>
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>
         <condition class="com.saucelabs.bamboo.sod.plan.ViewSODCondition">
 
@@ -121,26 +121,12 @@
 
     <web-item key="sodResultsDetails" name="sauce" section="results.subMenu/results" weight="50">
         <description key="sodPlanDetails.desc">Provides details of the Sauce OnDemand results</description>
-        <label key="Sauce OnDemand Results"/>
+        <label key="Sauce Jobs"/>
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>
         <condition class="com.saucelabs.bamboo.sod.plan.ViewSODCondition">
 
         </condition>
     </web-item>
-
-    <!--<component name="sauceTunnelManager" key="sauceTunnelManager"-->
-               <!--class="com.saucelabs.ci.sauceconnect.SauceConnectTwoManager">-->
-    <!--</component>-->
-
-    <!--<component name="sauceBrowserFactory" key="sauceBrowserFactory" class="com.saucelabs.ci.BrowserFactory">-->
-    <!--</component>-->
-
-    <!--<component name="sauceAPIFactory" key="sauceAPIFactory" class="com.saucelabs.bamboo.sod.util.BambooSauceFactory">-->
-    <!--</component>-->
-
-    <!--<component name="sauceLibraryManager" key="sauceLibraryManager"-->
-               <!--class="com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager">-->
-    <!--</component>-->
 
 
 </atlassian-plugin>

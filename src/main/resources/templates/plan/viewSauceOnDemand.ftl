@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Sauce OnDemand Results</title>
+    <title>Sauce Results</title>
     <meta name="decorator" content="plan">
 </head>
 <body>
@@ -15,10 +15,10 @@
     [#list jobInformation as jobInfo]
         <tr>
             <td>
-                <a href="${req.contextPath}//build/result/viewSauceJobResult.action?job=${jobInfo.jobId}">${jobInfo.jobId}</a>
+                <a href="build/result/viewSauceJobResult.action?job=${jobInfo.jobId}">${jobInfo.jobId}</a>
             </td>
             <td>
-
+                ${jobInfo.status}
             </td>
         </tr>
     [/#list]
