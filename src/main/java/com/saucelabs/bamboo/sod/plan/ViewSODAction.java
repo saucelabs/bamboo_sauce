@@ -64,7 +64,7 @@ public class ViewSODAction extends ViewBuildResults {
      * to authenticate the embedded job result requests.
      *
      * @return 'default'
-     * @throws Exception thrown if an error occurs during the invocation of the Sauce REST API
+     * @throws Exception thrown if an error occurs generating the key
      */
     @Override
     public String doDefault() throws Exception {
@@ -92,7 +92,16 @@ public class ViewSODAction extends ViewBuildResults {
         return super.doDefault();
     }
 
-    private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+    /**
+     *
+     * @param summary
+     * @param username
+     * @param accessKey
+     * @throws InvalidKeyException thrown if an error occurs generating the key
+     * @throws NoSuchAlgorithmException thrown if an error occurs generating the key
+     * @throws UnsupportedEncodingException thrown if an error occurs generating the key
+     */
+    private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         logger.info("Processing build summary");
         String storedJobIds = summary.getCustomBuildData().get(SODKeys.SAUCE_SESSION_ID);
         jobInformation = new ArrayList<JobInformation>();
@@ -111,7 +120,7 @@ public class ViewSODAction extends ViewBuildResults {
                         information.setStatus("Failed");
                     }
                     jobInformation.add(information);
-                } catch (Exception e) {
+                } catch (IOException e) {
                     //log and attempt to continue
                     logger.error("Error retrieving results from Sauce OnDemand", e);
                 }
@@ -127,11 +136,18 @@ public class ViewSODAction extends ViewBuildResults {
      * @param accessKey
      * @throws Exception
      */
-    private void retrieveJobIdsFromSauce(String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+    private void retrieveJobIdsFromSauce(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         //invoke Sauce Rest API to find plan results with those values
         String url = String.format(JOB_DETAILS_URL, username, getResultsSummary().getBuildResultKey());
         logger.info("Invoking REST API for " + url);
-        String jsonResponse = sauceAPIFactory.doREST(url, username, accessKey);
+        String jsonResponse = null;
+        try {
+            jsonResponse = sauceAPIFactory.doREST(url, username, accessKey);
+        } catch (IOException e) {
+            //error occurred performing REST call.  Log the error and return out
+            logger.error("Error occurred invoking Sauce REST API", e);
+            return;
+        }
         logger.info("REST response " + jsonResponse);
         JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonResponse);
         JSONArray jobs = (JSONArray) jsonObject.get("jobs");
@@ -157,7 +173,15 @@ public class ViewSODAction extends ViewBuildResults {
 
     }
 
-    private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
+    /**
+     *
+     * @param username
+     * @param accessKey
+     * @param jobId
+     * @return
+     * @throws IOException thrown if an error occurs invoking Sauce REST API
+     */
+    private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException {
         //invoke Sauce Rest API to find plan results with those values
         String url = String.format(JOB_DETAIL_URL, username, jobId);
         logger.info("Invoking REST API for " + url);
@@ -167,6 +191,16 @@ public class ViewSODAction extends ViewBuildResults {
 
     }
 
+    /**
+     *
+     * @param username
+     * @param accessKey
+     * @param jobId
+     * @return
+     * @throws NoSuchAlgorithmException thrown if an error occurs generating the key
+     * @throws InvalidKeyException thrown if an error occurs generating the key
+     * @throws UnsupportedEncodingException thrown if an error occurs generating the key
+     */
     public String calcHMAC(String username, String accessKey, String jobId) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         Calendar calendar = Calendar.getInstance();
 
