@@ -10,6 +10,7 @@ public final class SODKeys
 {
     public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
     public static final String SAUCE_API_KEY = "SAUCE_API_KEY";
+    public static final String SAUCE_BROWSERS = "SAUCE_ONDEMAND_BROWSERS";
 
     /** Disallow instantiation of class.*/
     private SODKeys() {}
@@ -21,6 +22,8 @@ public final class SODKeys
     public static final String BROWSER_KEY = CUSTOM_PREFIX + "browser";
     public static final String SELENIUM_URL_KEY = CUSTOM_PREFIX + "selenium.url";
     public static final String SELENIUM_VERSION_KEY = CUSTOM_PREFIX + "selenium.version";
+    public static final String SAUCE_USER_KEY = CUSTOM_PREFIX + "user_name";
+    public static final String SAUCE_ACCESS_KEY = CUSTOM_PREFIX + "access_key";
 
     /* ADVANCED OPTIONS */
     public static final String RECORD_VIDEO_KEY = CUSTOM_PREFIX + "record-video";

@@ -2,12 +2,11 @@ package it.com.saucelabs.bamboo.sod;
 
 
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
+import com.saucelabs.rest.Credential;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import com.saucelabs.rest.Credential;
-
-import static org.junit.Assert.assertEquals;
 
 
 public class AdministrationTest extends IntegrationTeztHelper {
@@ -31,7 +30,8 @@ public class AdministrationTest extends IntegrationTeztHelper {
 
     }
 
-    @Test 
+    @Test
+    @Ignore("Updating of Sauce Connect jar file is currently disabled")
     public void updateSauceConnect() throws Exception {
 		Credential credential = new Credential();
         selenium.get("http://localhost:" + AbstractTestHelper.PORT + "/bamboo/admin/sauceondemand/configureSauceOnDemand.action?os_username=admin&os_password=admin");

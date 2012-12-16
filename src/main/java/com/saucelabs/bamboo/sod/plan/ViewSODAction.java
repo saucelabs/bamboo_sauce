@@ -1,16 +1,20 @@
 package com.saucelabs.bamboo.sod.plan;
 
+import com.atlassian.bamboo.build.Job;
 import com.atlassian.bamboo.build.ViewBuildResults;
 import com.atlassian.bamboo.chains.ChainResultsSummary;
 import com.atlassian.bamboo.chains.ChainStageResult;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
+import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.resultsummary.BuildResultsSummary;
 import com.atlassian.bamboo.resultsummary.ResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.json.simple.JSONArray;
@@ -70,8 +74,22 @@ public class ViewSODAction extends ViewBuildResults {
     public String doDefault() throws Exception {
         logger.info("Processing ViewSODAction");
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+
         String username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         String accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
+        Plan plan = planManager.getPlanByKey(PlanKeys.getPlanKey(getBuildKey()));
+        List<Job> jobs;
+        if (plan != null) {
+            jobs = planManager.getPlansByProject(plan.getProject(), Job.class);
+            for (Job job : jobs) {
+                final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
+                if (StringUtils.isNotEmpty(config.getUsername())) {
+                    username = config.getUsername();
+                    accessKey = config.getAccessKey();
+                }
+            }
+        }
+
         setResultsSummary(resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(getBuildKey(), getBuildNumber())));
         if (buildResultsSummary == null) {
             //we are on the Plan results pages, so drill down to the chain results to find the custom data
@@ -93,17 +111,17 @@ public class ViewSODAction extends ViewBuildResults {
     }
 
     /**
-     *
      * @param summary
      * @param username
      * @param accessKey
-     * @throws InvalidKeyException thrown if an error occurs generating the key
-     * @throws NoSuchAlgorithmException thrown if an error occurs generating the key
+     * @throws InvalidKeyException          thrown if an error occurs generating the key
+     * @throws NoSuchAlgorithmException     thrown if an error occurs generating the key
      * @throws UnsupportedEncodingException thrown if an error occurs generating the key
      */
     private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         logger.info("Processing build summary");
         String storedJobIds = summary.getCustomBuildData().get(SODKeys.SAUCE_SESSION_ID);
+
         jobInformation = new ArrayList<JobInformation>();
         if (storedJobIds == null) {
             logger.info("No stored job ids");
@@ -174,7 +192,6 @@ public class ViewSODAction extends ViewBuildResults {
     }
 
     /**
-     *
      * @param username
      * @param accessKey
      * @param jobId
@@ -192,13 +209,12 @@ public class ViewSODAction extends ViewBuildResults {
     }
 
     /**
-     *
      * @param username
      * @param accessKey
      * @param jobId
      * @return
-     * @throws NoSuchAlgorithmException thrown if an error occurs generating the key
-     * @throws InvalidKeyException thrown if an error occurs generating the key
+     * @throws NoSuchAlgorithmException     thrown if an error occurs generating the key
+     * @throws InvalidKeyException          thrown if an error occurs generating the key
      * @throws UnsupportedEncodingException thrown if an error occurs generating the key
      */
     public String calcHMAC(String username, String accessKey, String jobId) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {

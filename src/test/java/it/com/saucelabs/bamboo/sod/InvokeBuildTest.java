@@ -91,8 +91,6 @@ public class InvokeBuildTest {
 
         XPath xpath = XPathFactory.newInstance().newXPath();
         XPathExpression expression = xpath.compile(xpathExpression);
-                
-
         return (String) expression.evaluate(document, XPathConstants.STRING);
 
     }
