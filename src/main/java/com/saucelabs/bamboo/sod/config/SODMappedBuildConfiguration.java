@@ -27,7 +27,16 @@ public class SODMappedBuildConfiguration {
     }
 
     public String[] getSelectedBrowsers() {
-        return map.get(BROWSER_KEY).split(",");
+        return fromString(map.get(BROWSER_KEY));
+    }
+
+    public static String[] fromString(String string) {
+    	String[] strings = string.replace("[", "").replace("]", "").split(", ");
+    	String result[] = new String[strings.length];
+    	for (int i = 0; i < result.length; i++) {
+    		result[i] = strings[i];
+    	}
+    	return result;
     }
 
     public void setBrowserKey(String browser) {
@@ -86,16 +95,8 @@ public class SODMappedBuildConfiguration {
         return Boolean.parseBoolean(map.get(SSH_USE_DEFAULTS_KEY));
     }
 
-    public void setUseSshDefaults(boolean defaults) {
-        map.put(SSH_USE_DEFAULTS_KEY, Boolean.toString(defaults));
-    }
-
     public String getSshHost() {
         return map.get(SSH_LOCAL_HOST_KEY);
-    }
-
-    public void setSshHost(String host) {
-        map.put(SSH_LOCAL_HOST_KEY, host);
     }
 
     public String getSshPorts() {
@@ -127,14 +128,10 @@ public class SODMappedBuildConfiguration {
     }
 
     public SeleniumVersion getSeleniumVersion() {
-        String versionNumber = map.get(SELENIUM_VERSION_KEY);
-        SeleniumVersion version = null;
-        for (SeleniumVersion storedVersion : SeleniumVersion.values()) {
-            if (storedVersion.getVersionNumber().equals(versionNumber)) {
-                version = storedVersion;
-                break;
-            }
-        }
-        return version;
+        Boolean useSeleniumRc = Boolean.parseBoolean(map.get(SELENIUMRC_KEY));
+        if (useSeleniumRc)
+            return SeleniumVersion.ONE;
+        else
+            return SeleniumVersion.TWO;
     }
 }

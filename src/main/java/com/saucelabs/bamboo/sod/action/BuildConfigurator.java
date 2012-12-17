@@ -8,6 +8,8 @@ import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
+import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork.util.OgnlValueStack;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
@@ -17,14 +19,20 @@ import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
 import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+
+import static com.saucelabs.bamboo.sod.config.SODKeys.BROWSER_KEY;
+import static com.saucelabs.bamboo.sod.config.SODKeys.SELENIUMRC_KEY;
 
 /**
  * Pre-Build Action which will start a SSH Tunnel via the Sauce REST API if the build is configured to run
@@ -139,6 +147,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         populateCommonContext(context);
         try {
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
+            String[] selectedBrowsers = getSelectedBrowsers(buildConfiguration);
+            OgnlValueStack stack = ActionContext.getContext().getValueStack();
+            stack.getContext().put("selectedBrowsers", selectedBrowsers);
             context.put("webDriverBrowserList", getSauceBrowserFactory().getWebDriverBrowsers());
             context.put("seleniumRCBrowserList", getSauceBrowserFactory().getSeleniumBrowsers());
         } catch (IOException e) {
@@ -146,6 +157,23 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             //TODO detect a proxy exception as opposed to all exceptions?
             populateDefaultBrowserList(context);
         }
+    }
+
+    private String[] getSelectedBrowsers(BuildConfiguration buildConfiguration) throws IOException {
+        List<Browser> browsers;
+        List<String> selectedBrowsers = new ArrayList<String>();
+        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(BROWSER_KEY));
+        if (Boolean.parseBoolean(buildConfiguration.getString(SELENIUMRC_KEY))) {
+           browsers = getSauceBrowserFactory().getSeleniumBrowsers();
+        } else {
+            browsers = getSauceBrowserFactory().getWebDriverBrowsers();
+        }
+        for (Browser browser : browsers) {
+            if (ArrayUtils.contains(selectedKeys, browser.getKey())) {
+                selectedBrowsers.add(browser.getKey());
+            }
+        }
+        return selectedBrowsers.toArray(new String[selectedBrowsers.size()]);
     }
 
     private void populateDefaultBrowserList(Map<String, Object> context) {
@@ -249,4 +277,5 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public void setPlanManager(PlanManager planManager) {
         this.planManager = planManager;
     }
+
 }

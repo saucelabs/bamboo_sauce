@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
@@ -36,10 +37,9 @@
         </developer>
     </developers>
     <properties>
-        <bamboo.version>4.3</bamboo.version>
-        <bamboo.data.version>3.2.2</bamboo.data.version>
-        <atlassian.plugins.version>4.0</atlassian.plugins.version>
-        <amps.version>4.1.1</amps.version>
+        <bamboo.version>4.2.1</bamboo.version>
+        <bamboo.data.version>2.6.1</bamboo.data.version>
+        <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/saucelabs/bamboo_sauce.git</connection>
@@ -57,14 +57,20 @@
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-bamboo-plugin</artifactId>
-                <version>${amps.version}</version>
+                <version>${atlassian.plugins.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
                     <instructions>
                         <Export-Package>org.codehaus.jackson*</Export-Package>
-                        <Import-Package>org.apache.log4j;version="0.0", org.apache.commons.logging;version="0.0", org.apache.commons.lang*;version="0.0", org.apache.commons.io*;version="0.0", org.apache.commons.codec*;version="0.0", com.atlassian.bamboo.*;version="0.0", com.atlassian.core.util;version="4.5.3", com.atlassian.bamboo;version="0.0", com.atlassian.plugin;version="2.7.3", javax.crypto.spec;version="0.0", javax.crypto;version="0.0"</Import-Package>
+                        <Import-Package>org.apache.log4j;version="0.0", org.apache.commons.logging;version="0.0",
+                            org.apache.commons.lang*;version="0.0", org.apache.commons.io*;version="0.0",
+                            org.apache.commons.codec*;version="0.0", com.atlassian.bamboo.*;version="0.0",
+                            com.atlassian.core.util;version="4.5.3", com.atlassian.bamboo;version="0.0",
+                            com.atlassian.plugin;version="2.7.3", javax.crypto.spec;version="0.0",
+                            javax.crypto;version="0.0"
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>

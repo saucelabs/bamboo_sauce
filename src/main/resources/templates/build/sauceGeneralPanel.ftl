@@ -19,25 +19,18 @@
             clear="all"/>
     [/@ui.bambooSection]
 
-    [@ww.select label='Selenium Version' name='custom.sauceondemand.selenium.version'
-    list="{'1.x', '2.x'}" description='The version of Selenium that will be run'/]
+    [@ww.checkbox label='Selenium RC Support?' name='custom.sauceondemand.seleniumrc' toggle='true' description='' /]
 
-    [@ui.bambooSection dependsOn='custom.sauceondemand.selenium.version' showOn='1.x']
-        [@ww.select
-            label="Selenium RC Browser(s)" description="The OS/Browser combination to use for testing with Selenium RC"
-            name="custom.sauceondemand.browser"
-            listKey="key" listValue="name"
-            list=seleniumRCBrowserList
-            multiple="true"
-            size="5"/]
-    [/@ui.bambooSection]
-    [@ui.bambooSection dependsOn='custom.sauceondemand.selenium.version' showOn='2.x']
+
+    [@ui.bambooSection dependsOn='custom.sauceondemand.seleniumrc' showOn='false']
         [@ww.select
             label="WebDriver Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
             name="custom.sauceondemand.browser"
-            listKey="key" listValue="name"
+            listKey="key"
+            listValue="name"
             list=webDriverBrowserList
             multiple="true"
+            value="selectedBrowsers"
             size="5"/]
     [/@ui.bambooSection]
 
