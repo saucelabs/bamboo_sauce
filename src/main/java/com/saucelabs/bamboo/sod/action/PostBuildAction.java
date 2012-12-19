@@ -1,10 +1,11 @@
 package com.saucelabs.bamboo.sod.action;
 
+import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
 import com.atlassian.bamboo.build.LogEntry;
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.builder.BuildState;
-import com.atlassian.bamboo.plan.Plan;
+import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
@@ -38,6 +39,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private PlanManager planManager;
 
+    private BuildLoggerManager buildLoggerManager;
+
     @NotNull
     public BuildContext call() {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
@@ -62,9 +65,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      * @param config
      */
     private void recordSauceJobResult(SODMappedBuildConfiguration config) {
-        Plan plan = planManager.getPlanByKey(buildContext.getPlanKey());
-        assert plan != null;
-        BuildLogger buildLogger = plan.getBuildLogger();
+        BuildLogger buildLogger = buildLoggerManager.getBuildLogger(PlanKeys.getPlanResultKey(buildContext.getBuildResultKey()));
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         for (LogEntry logEntry : buildLogger.getBuildLog()) {
             if (StringUtils.containsIgnoreCase(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID)) {
@@ -134,5 +135,9 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private BuildContext getBuildContextToUse() {
         return buildContext.getParentBuildContext() == null ? buildContext : buildContext.getParentBuildContext();
+    }
+
+    public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
+        this.buildLoggerManager = buildLoggerManager;
     }
 }
