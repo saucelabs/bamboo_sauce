@@ -31,6 +31,8 @@ public class SODMappedBuildConfiguration {
     }
 
     public static String[] fromString(String string) {
+        if (string == null)
+            return new String[]{};
     	String[] strings = string.replace("[", "").replace("]", "").split(", ");
     	String result[] = new String[strings.length];
     	for (int i = 0; i < result.length; i++) {
