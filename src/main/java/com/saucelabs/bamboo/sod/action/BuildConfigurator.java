@@ -224,9 +224,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public boolean hasValidSauceConfig() {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         return (StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY))
-                && StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY))
-                && StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY))
-                && StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY)));
+                && StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY)));
     }
 
     public AdministrationConfigurationManager getAdministrationConfigurationManager() {

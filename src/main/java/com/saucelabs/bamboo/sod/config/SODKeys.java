@@ -32,6 +32,8 @@ public final class SODKeys
     public static final String FIREFOX_PROFILE_KEY = CUSTOM_PREFIX + "firefox-profile";
     public static final String MAX_DURATION_KEY = CUSTOM_PREFIX + "max-duration";
     public static final String IDLE_TIMEOUT_KEY = CUSTOM_PREFIX + "idle-timeout";
+    public static final String SELENIUM_HOST_KEY = CUSTOM_PREFIX + "selenium.host";
+    public static final String SELENIUM_PORT_KEY = CUSTOM_PREFIX + "selenium.port";
 
     /* SSH BASIC TUNNEL OPTIONS */
     public static final String SSH_ENABLED_KEY = SSH_PREFIX + "enabled";
@@ -43,9 +45,7 @@ public final class SODKeys
     /* ADMIN CONFIG KEYS */
     public static final String SOD_USERNAME_KEY = "sauceondemand.username";
     public static final String SOD_ACCESSKEY_KEY = "sauceondemand.accesskey";
-    public static final String SELENIUM_HOST_KEY = "selenium.host";
-    public static final String SELENIUM_PORT_KEY = "selenium.port";
-    public static final String SELENIUM_BROWSER_KEY = "selenium.browser";
+
     public static final String PROXY_HOST_KEY = "sauceondemand.proxyHost";
     public static final String PROXY_PASSWORD_KEY = "sauceondemand.proxyPassword";
     public static final String PROXY_USERNAME_KEY = "sauceondemand.proxyUsername";

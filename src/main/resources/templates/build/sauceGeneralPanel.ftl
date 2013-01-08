@@ -10,6 +10,7 @@
                     href="http://saucelabs.com/docs/sauce-connect">Sauce Connect</a> below.</span>
         </div>
     [@ww.checkbox label='Enable Sauce Connect' name='custom.sauceondemand.ssh.enabled' toggle='true' description='Invokes Sauce Connect to run Selenium tests within a SSH Tunnel' /]
+
     [@ww.checkbox label='Override Default Authentication' name='custom.sauceondemand.auth.enabled' toggle='true' description='Specify a different username/access key for this build' /]
 
     [@ui.bambooSection dependsOn='custom.sauceondemand.auth.enabled' showOn='true']
@@ -41,5 +42,13 @@
         <br clear="all"/>
     [@ww.textfield name='custom.sauceondemand.selenium.url' label='Starting Browser URL' description='The initial url the browser should load'/]
         <div class="clearer"></div>
+
+
+    [@ww.textfield name='custom.sauceondemand.selenium.host' label='Selenium Host' description="The name of the Selenium host to be used.  For tests run using Sauce Connect, this should be localhost.
+        ondemand.saucelabs.com can also be used to connect directly to Sauce."/]
+    <br clear="all"/>
+    [@ww.textfield name='custom.sauceondemand.selenium.port' label='Selenium Port' description="The name of the Selenium Port to be used.  For tests run using Sauce Connect, this should be 4445.  If using ondemand.saucelabs.com for the Selenium Host, then use 4444." /]<br
+        clear="all"/>
+
     </div>
 </div>

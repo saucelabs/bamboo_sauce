@@ -33,12 +33,12 @@ public class SODMappedBuildConfiguration {
     public static String[] fromString(String string) {
         if (string == null)
             return new String[]{};
-    	String[] strings = string.replace("[", "").replace("]", "").split(", ");
-    	String result[] = new String[strings.length];
-    	for (int i = 0; i < result.length; i++) {
-    		result[i] = strings[i];
-    	}
-    	return result;
+        String[] strings = string.replace("[", "").replace("]", "").split(", ");
+        String result[] = new String[strings.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = strings[i];
+        }
+        return result;
     }
 
     public void setBrowserKey(String browser) {
@@ -89,24 +89,30 @@ public class SODMappedBuildConfiguration {
         return Boolean.parseBoolean(map.get(SSH_ENABLED_KEY));
     }
 
-    public void setSshEnabled(boolean enabled) {
-        map.put(SSH_ENABLED_KEY, Boolean.toString(enabled));
-    }
+    public String getSshPorts() {
 
-    public boolean useSshDefaults() {
-        return Boolean.parseBoolean(map.get(SSH_USE_DEFAULTS_KEY));
+        String port = map.get(SELENIUM_PORT_KEY);
+        if (port == null || port.equals("")) {
+            if (isSshEnabled()) {
+                port = "4445";
+            } else {
+                port = "4444";
+            }
+        }
+        return port;
     }
 
     public String getSshHost() {
-        return map.get(SSH_LOCAL_HOST_KEY);
-    }
 
-    public String getSshPorts() {
-        return map.get(SSH_LOCAL_PORTS_KEY);
-    }
-
-    public void setSshPorts(String ports) {
-        map.put(SSH_LOCAL_PORTS_KEY, ports);
+        String host = map.get(SELENIUM_HOST_KEY);
+        if (host == null || host.equals("")) {
+            if (isSshEnabled()) {
+                host = "localhost";
+            } else {
+                host = "ondemand.saucelabs.com";
+            }
+        }
+        return host;
     }
 
     public String getTempApikey() {
