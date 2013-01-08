@@ -67,6 +67,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     private void recordSauceJobResult(SODMappedBuildConfiguration config) {
         BuildLogger buildLogger = buildLoggerManager.getBuildLogger(PlanKeys.getPlanResultKey(buildContext.getBuildResultKey()));
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
+        boolean foundLogEntry = false;
         for (LogEntry logEntry : buildLogger.getBuildLog()) {
             if (StringUtils.containsIgnoreCase(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID)) {
                 //extract session id
@@ -75,13 +76,17 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                     //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
                     sessionId = StringUtils.substringAfter(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=");
                 }
-                if (sessionId != null) {
+                if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
                     //TODO session id still could be null due to invalid case
                     //TODO extract Sauce Job name (included on log line as 'job-name=')?
+                    foundLogEntry = true;
                     storeSessionId(sessionId);
                     storeBambooBuildNumberInSauce(config, sessionId);
                 }
             }
+        }
+        if (!foundLogEntry) {
+            logger.warn("No Sauce Session ids found in log output");
         }
     }
 
@@ -118,6 +123,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             }
 
             SauceREST sauceREST = new SauceREST(config.getTempUsername(), config.getTempApikey());
+            logger.debug("About to update job " + sessionId + " with build number " + getBuildNumber());
             sauceREST.updateJobInfo(sessionId, updates);
         } catch (IOException e) {
             logger.error("Unable to set build number", e);
