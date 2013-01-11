@@ -10,12 +10,16 @@
 <table>
     <tr>
         <th>Job Id</th>
+        <th>Name</th>
         <th>Status</th>
     </tr>
     [#list jobInformation as jobInfo]
         <tr>
             <td>
                 <a href="build/result/viewSauceJobResult.action?job=${jobInfo.jobId}">${jobInfo.jobId}</a>
+            </td>
+            <td>
+                ${jobInfo.name}
             </td>
             <td>
                 ${jobInfo.status}

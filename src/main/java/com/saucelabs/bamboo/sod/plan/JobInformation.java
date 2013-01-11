@@ -12,6 +12,7 @@ public class JobInformation {
     
     private String hmac;
     private String status;
+    private String name;
 
     public JobInformation(String jobId, String hmac) {
         this.jobId = jobId;
@@ -40,5 +41,13 @@ public class JobInformation {
 
     public String getStatus() {
         return status;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

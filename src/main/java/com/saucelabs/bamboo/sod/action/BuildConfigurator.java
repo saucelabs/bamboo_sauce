@@ -1,9 +1,12 @@
 package com.saucelabs.bamboo.sod.action;
 
+import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomPreBuildAction;
+import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.Plan;
+import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
@@ -14,6 +17,7 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
+import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
@@ -75,6 +79,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      */
     private PlanManager planManager;
 
+    private BuildLoggerManager buildLoggerManager;
+
     private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
     private static final String DEFAULT_IDLE_TIMEOUT = "90";
@@ -82,6 +88,10 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private static final String DEFAULT_SSH_LOCAL_HOST = "localhost";
     private static final String DEFAULT_SSH_LOCAL_PORT = "8080";
     private static final String DEFAULT_SELENIUM_VERSION = SeleniumVersion.TWO.getVersionNumber();
+    /**
+     *
+     */
+    private SauceLogInterceptor sauceLogInterceptor;
 
     /**
      * Entry point into build action.
@@ -95,6 +105,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
+            BuildLogger buildLogger = buildLoggerManager.getBuildLogger(PlanKeys.getPlanResultKey(buildContext.getBuildResultKey()));
+            buildLogger.getInterceptorStack().add(sauceLogInterceptor);
+
             //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
                 //checkVersionIsCurrent();
@@ -276,4 +289,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.planManager = planManager;
     }
 
+    public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
+        this.buildLoggerManager = buildLoggerManager;
+    }
+
+    public void setSauceLogInterceptor(SauceLogInterceptor sauceLogInterceptor) {
+        this.sauceLogInterceptor = sauceLogInterceptor;
+    }
 }

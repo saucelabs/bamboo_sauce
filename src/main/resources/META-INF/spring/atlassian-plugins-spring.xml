@@ -17,4 +17,8 @@
     <beans:bean id="sauceLibraryManager"
                 class="com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager">
     </beans:bean>
+
+    <beans:bean id="sauceLogInterceptor"
+                class="com.saucelabs.bamboo.sod.util.SauceLogInterceptor">
+    </beans:bean>
 </beans:beans>

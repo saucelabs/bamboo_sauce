@@ -99,51 +99,30 @@ public class ViewSODAction extends ViewBuildResults {
                 for (ChainStageResult chainStageResult : chainStageResults) {
                     Set<BuildResultsSummary> buildResultSummaries = chainStageResult.getBuildResults();
                     for (BuildResultsSummary summary : buildResultSummaries) {
-                        processBuildResultsSummary(summary, username, accessKey);
+                        processBuildResultsSummary(username, accessKey);
                     }
                 }
             }
         } else {
-            processBuildResultsSummary(buildResultsSummary, username, accessKey);
+            processBuildResultsSummary(username, accessKey);
         }
 
         return super.doDefault();
     }
 
     /**
-     * @param summary
+     *
      * @param username
      * @param accessKey
      * @throws InvalidKeyException          thrown if an error occurs generating the key
      * @throws NoSuchAlgorithmException     thrown if an error occurs generating the key
      * @throws UnsupportedEncodingException thrown if an error occurs generating the key
      */
-    private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    private void processBuildResultsSummary(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         logger.info("Processing build summary");
-        String storedJobIds = summary.getCustomBuildData().get(SODKeys.SAUCE_SESSION_ID);
-
         jobInformation = new ArrayList<JobInformation>();
-        if (storedJobIds == null) {
-            logger.info("No stored job ids");
-            retrieveJobIdsFromSauce(username, accessKey);
-        } else {
-            String[] jobIds = storedJobIds.split(",");
-            for (String jobId : jobIds) {
-                try {
-                    JSONObject jsonObject = retrieveJobInfoFromSauce(username, accessKey, jobId);
-                    JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
-                    if (jsonObject.get("passed").equals(Boolean.TRUE)) {
-                        information.setStatus("Passed");
-                    } else {
-                        information.setStatus("Failed");
-                    }
-                    jobInformation.add(information);
-                } catch (IOException e) {
-                    //log and attempt to continue
-                    logger.error("Error retrieving results from Sauce OnDemand", e);
-                }
-            }
-        }
+        retrieveJobIdsFromSauce(username, accessKey);
+
     }
 
     /**
@@ -183,28 +162,12 @@ public class ViewSODAction extends ViewBuildResults {
                         information.setStatus("Failed");
                     }
                 }
+                information.setName((String) jobObject.get("name"));
                 jobInformation.add(information);
             } else {
                 logger.warn("Unable to find jobId in jsonData");
             }
         }
-
-    }
-
-    /**
-     * @param username
-     * @param accessKey
-     * @param jobId
-     * @return
-     * @throws IOException thrown if an error occurs invoking Sauce REST API
-     */
-    private JSONObject retrieveJobInfoFromSauce(String username, String accessKey, String jobId) throws IOException {
-        //invoke Sauce Rest API to find plan results with those values
-        String url = String.format(JOB_DETAIL_URL, username, jobId);
-        logger.info("Invoking REST API for " + url);
-        String jsonResponse = sauceAPIFactory.doREST(url, username, accessKey);
-        logger.info("REST response " + jsonResponse);
-        return (JSONObject) JSONValue.parse(jsonResponse);
 
     }
 
