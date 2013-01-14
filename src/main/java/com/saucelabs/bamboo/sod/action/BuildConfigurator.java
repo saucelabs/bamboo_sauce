@@ -106,6 +106,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
             BuildLogger buildLogger = buildLoggerManager.getBuildLogger(PlanKeys.getPlanResultKey(buildContext.getBuildResultKey()));
+            logger.debug("Adding Sauce Log Interceptor");
             buildLogger.getInterceptorStack().add(sauceLogInterceptor);
 
             //checkVersionIsCurrent();

@@ -74,6 +74,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     private void recordSauceJobResult(SODMappedBuildConfiguration config) {
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         boolean foundLogEntry = false;
+        logger.debug("Checking log interceptor entries");
         for (LogEntry logEntry : sauceLogInterceptor.getLogEntries()) {
             if (StringUtils.containsIgnoreCase(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID)) {
                 //extract session id
@@ -89,10 +90,11 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 }
             }
         }
-        sauceLogInterceptor.clearLogEntries();
+
         if (!foundLogEntry) {
             logger.warn("No Sauce Session ids found in log output");
         }
+        sauceLogInterceptor.clearLogEntries();
     }
 
     /**
