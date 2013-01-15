@@ -17,7 +17,7 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
-import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
+import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
@@ -81,6 +81,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     private BuildLoggerManager buildLoggerManager;
 
+    private SauceLogInterceptorManager sauceLogInterceptorManager;
+
     private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
     private static final String DEFAULT_IDLE_TIMEOUT = "90";
@@ -88,10 +90,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private static final String DEFAULT_SSH_LOCAL_HOST = "localhost";
     private static final String DEFAULT_SSH_LOCAL_PORT = "8080";
     private static final String DEFAULT_SELENIUM_VERSION = SeleniumVersion.TWO.getVersionNumber();
-    /**
-     *
-     */
-    private SauceLogInterceptor sauceLogInterceptor;
 
     /**
      * Entry point into build action.
@@ -107,7 +105,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
             BuildLogger buildLogger = buildLoggerManager.getBuildLogger(PlanKeys.getPlanResultKey(buildContext.getBuildResultKey()));
             logger.debug("Adding Sauce Log Interceptor");
-            buildLogger.getInterceptorStack().add(sauceLogInterceptor);
+            buildLogger.getInterceptorStack().add(sauceLogInterceptorManager.createLogInterceptor(buildContext.getBuildResultKey()));
 
             //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
@@ -178,7 +176,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         List<String> selectedBrowsers = new ArrayList<String>();
         String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(BROWSER_KEY));
         if (Boolean.parseBoolean(buildConfiguration.getString(SELENIUMRC_KEY))) {
-           browsers = getSauceBrowserFactory().getSeleniumBrowsers();
+            browsers = getSauceBrowserFactory().getSeleniumBrowsers();
         } else {
             browsers = getSauceBrowserFactory().getWebDriverBrowsers();
         }
@@ -294,7 +292,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.buildLoggerManager = buildLoggerManager;
     }
 
-    public void setSauceLogInterceptor(SauceLogInterceptor sauceLogInterceptor) {
-        this.sauceLogInterceptor = sauceLogInterceptor;
+    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
+        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
     }
+
+
 }

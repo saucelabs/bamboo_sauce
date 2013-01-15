@@ -9,6 +9,7 @@ import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
+import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -42,10 +43,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private BuildLoggerManager buildLoggerManager;
 
-    /**
-     * Populated via dependency injection.
-     */
-    private SauceLogInterceptor sauceLogInterceptor;
+    private SauceLogInterceptorManager sauceLogInterceptorManager;
 
     @NotNull
     public BuildContext call() {
@@ -75,26 +73,32 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         boolean foundLogEntry = false;
         logger.debug("Checking log interceptor entries");
-        for (LogEntry logEntry : sauceLogInterceptor.getLogEntries()) {
-            if (StringUtils.containsIgnoreCase(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID)) {
-                //extract session id
-                String sessionId = StringUtils.substringBetween(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
-                if (sessionId == null) {
-                    //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
-                    sessionId = StringUtils.substringAfter(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=");
-                }
-                if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
-                    //TODO extract Sauce Job name (included on log line as 'job-name=')?
-                    foundLogEntry = true;
-                    storeBambooBuildNumberInSauce(config, sessionId);
+
+        SauceLogInterceptor sauceLogInterceptor = sauceLogInterceptorManager.getLogInterceptor(buildContext.getBuildResultKey());
+        if (sauceLogInterceptor != null) {
+            for (LogEntry logEntry : sauceLogInterceptor.getLogEntries()) {
+                if (StringUtils.containsIgnoreCase(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID)) {
+                    //extract session id
+                    String sessionId = StringUtils.substringBetween(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
+                    if (sessionId == null) {
+                        //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
+                        sessionId = StringUtils.substringAfter(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=");
+                    }
+                    if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
+                        //TODO extract Sauce Job name (included on log line as 'job-name=')?
+                        foundLogEntry = true;
+                        storeBambooBuildNumberInSauce(config, sessionId);
+                    }
                 }
             }
+        } else {
+            logger.warn("Unable to find Sauce Log Interceptor");
         }
 
         if (!foundLogEntry) {
             logger.warn("No Sauce Session ids found in log output");
         }
-        sauceLogInterceptor.clearLogEntries();
+        sauceLogInterceptorManager.removeInterceptor(buildContext.getBuildResultKey());
     }
 
     /**
@@ -138,7 +142,9 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         this.buildLoggerManager = buildLoggerManager;
     }
 
-    public void setSauceLogInterceptor(SauceLogInterceptor sauceLogInterceptor) {
-        this.sauceLogInterceptor = sauceLogInterceptor;
+    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
+        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
     }
+
+
 }
