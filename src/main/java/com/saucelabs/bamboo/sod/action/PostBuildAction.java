@@ -2,21 +2,22 @@ package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
-import com.atlassian.bamboo.build.LogEntry;
+import com.atlassian.bamboo.build.logger.BuildLogUtils;
 import com.atlassian.bamboo.builder.BuildState;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
-import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
-import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
 import com.saucelabs.saucerest.SauceREST;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,13 +44,15 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private BuildLoggerManager buildLoggerManager;
 
-    private SauceLogInterceptorManager sauceLogInterceptorManager;
-
     @NotNull
     public BuildContext call() {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {
-            recordSauceJobResult(config);
+            try {
+                recordSauceJobResult(config);
+            } catch (IOException e) {
+                logger.error(e);
+            }
         }
         return buildContext;
     }
@@ -69,36 +72,37 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      *
      * @param config
      */
-    private void recordSauceJobResult(SODMappedBuildConfiguration config) {
+    private void recordSauceJobResult(SODMappedBuildConfiguration config) throws IOException {
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         boolean foundLogEntry = false;
         logger.debug("Checking log interceptor entries");
+        File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
+        String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanKey(), buildContext.getBuildNumber());
 
-        SauceLogInterceptor sauceLogInterceptor = sauceLogInterceptorManager.getLogInterceptor(buildContext.getBuildResultKey());
-        if (sauceLogInterceptor != null) {
-            for (LogEntry logEntry : sauceLogInterceptor.getLogEntries()) {
-                if (StringUtils.containsIgnoreCase(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID)) {
-                    //extract session id
-                    String sessionId = StringUtils.substringBetween(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
-                    if (sessionId == null) {
-                        //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
-                        sessionId = StringUtils.substringAfter(logEntry.getLog(), SAUCE_ON_DEMAND_SESSION_ID + "=");
-                    }
-                    if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
-                        //TODO extract Sauce Job name (included on log line as 'job-name=')?
-                        foundLogEntry = true;
-                        storeBambooBuildNumberInSauce(config, sessionId);
-                    }
+        List lines = FileUtils.readLines(new File(logDirectory, logFileName));
+
+        for (Object object : lines) {
+            String line = (String) object;
+            if (StringUtils.containsIgnoreCase(line, SAUCE_ON_DEMAND_SESSION_ID)) {
+                //extract session id
+                String sessionId = StringUtils.substringBetween(line, SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
+                if (sessionId == null) {
+                    //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
+                    sessionId = StringUtils.substringAfter(line, SAUCE_ON_DEMAND_SESSION_ID + "=");
+                }
+                if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
+                    //TODO extract Sauce Job name (included on log line as 'job-name=')?
+                    foundLogEntry = true;
+                    storeBambooBuildNumberInSauce(config, sessionId);
                 }
             }
-        } else {
-            logger.warn("Unable to find Sauce Log Interceptor");
         }
+
 
         if (!foundLogEntry) {
             logger.warn("No Sauce Session ids found in log output");
         }
-        sauceLogInterceptorManager.removeInterceptor(buildContext.getBuildResultKey());
+
     }
 
     /**
@@ -141,10 +145,5 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
         this.buildLoggerManager = buildLoggerManager;
     }
-
-    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
-        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
-    }
-
 
 }

@@ -162,7 +162,7 @@ public class ViewSODAction extends ViewBuildResults {
                         information.setStatus("Failed");
                     }
                 }
-                information.setName((String) jobObject.get("name"));
+                information.setJobName(StringUtils.defaultString((String) jobObject.get("name")));
                 jobInformation.add(information);
             } else {
                 logger.warn("Unable to find jobId in jsonData");

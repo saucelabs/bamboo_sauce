@@ -12,7 +12,7 @@ public class JobInformation {
     
     private String hmac;
     private String status;
-    private String name;
+    private String jobName;
 
     public JobInformation(String jobId, String hmac) {
         this.jobId = jobId;
@@ -43,11 +43,11 @@ public class JobInformation {
         return status;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getJobName() {
+        return jobName;
     }
 
-    public String getName() {
-        return name;
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
     }
 }

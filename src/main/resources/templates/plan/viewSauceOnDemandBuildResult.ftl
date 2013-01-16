@@ -23,7 +23,7 @@
                 <a href="build/result/viewSauceJobResult.action?jobId=${jobInfo.jobId}&buildKey=${buildKey}&buildNumber=${buildNumber}">${jobInfo.jobId}</a>
             </td>
             <td>
-                ${jobInfo.name}
+                ${jobInfo.jobName}
             </td>
             <td>
                 ${jobInfo.status}

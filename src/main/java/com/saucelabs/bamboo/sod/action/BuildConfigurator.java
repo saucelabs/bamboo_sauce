@@ -17,7 +17,6 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
-import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
@@ -81,8 +80,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     private BuildLoggerManager buildLoggerManager;
 
-    private SauceLogInterceptorManager sauceLogInterceptorManager;
-
     private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
     private static final String DEFAULT_IDLE_TIMEOUT = "90";
@@ -104,8 +101,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
             BuildLogger buildLogger = buildLoggerManager.getBuildLogger(PlanKeys.getPlanResultKey(buildContext.getBuildResultKey()));
-            logger.debug("Adding Sauce Log Interceptor");
-            buildLogger.getInterceptorStack().add(sauceLogInterceptorManager.createLogInterceptor(buildContext.getBuildResultKey()));
 
             //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
@@ -291,10 +286,5 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
         this.buildLoggerManager = buildLoggerManager;
     }
-
-    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
-        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
-    }
-
 
 }
