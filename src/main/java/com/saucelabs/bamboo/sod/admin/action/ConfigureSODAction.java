@@ -91,16 +91,6 @@ public class ConfigureSODAction extends ConfigurationAction
             addFieldError("accessKey", "Access Key is required.");
         }
 
-        if (StringUtils.isBlank(seleniumHost))
-        {
-            addFieldError("seleniumHost", "Host is required.");
-        }
-
-        if (StringUtils.isBlank(seleniumPort))
-        {
-            addFieldError("seleniumPort", "Port is required.");
-        }
-
     }
 
     public AdministrationConfigurationManager getAdministrationConfigurationManager()
