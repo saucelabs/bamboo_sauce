@@ -11,21 +11,15 @@ import org.apache.commons.lang.StringUtils;
  * Handles the validation and storage of the Sauce administration variables.
  * 
  * The values entered here apply to all projects in the Bamboo environment.
- * 
- * TODO do we need to support multiple languages?
- * TODO do we need to support multiple Sauce configurations in a Bamboo environment?
+ *
  * 
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */
 public class ConfigureSODAction extends ConfigurationAction
 {
-    public static final String DEFAULT_SELENIUM_HOST = "localhost";
-    public static final String DEFAULT_SELENIUM_PORT = "4445";
     private String username;
     private String accessKey;
-    private String seleniumHost;
-    private String seleniumPort;
 
     /**
      * Populated via dependency injection.
@@ -43,8 +37,6 @@ public class ConfigureSODAction extends ConfigurationAction
         final AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         setUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         setAccessKey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
-        setSeleniumHost(StringUtils.defaultString(adminConfig.getSystemProperty(SODKeys.SELENIUM_HOST_KEY), DEFAULT_SELENIUM_HOST));
-        setSeleniumPort(StringUtils.defaultString(adminConfig.getSystemProperty(SODKeys.SELENIUM_PORT_KEY), DEFAULT_SELENIUM_PORT));
         return INPUT;
     }
 
@@ -59,8 +51,6 @@ public class ConfigureSODAction extends ConfigurationAction
         final AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         adminConfig.setSystemProperty(SODKeys.SOD_USERNAME_KEY, getUsername());
         adminConfig.setSystemProperty(SODKeys.SOD_ACCESSKEY_KEY, getAccessKey());
-        adminConfig.setSystemProperty(SODKeys.SELENIUM_HOST_KEY, getSeleniumHost());
-        adminConfig.setSystemProperty(SODKeys.SELENIUM_PORT_KEY, getSeleniumPort());
         administrationConfigurationManager.saveAdministrationConfiguration(adminConfig);
         //this is a bit of a hack to support unit testing
         //getBamboo() won't be null at runtime, but we can't mock the method
@@ -111,26 +101,6 @@ public class ConfigureSODAction extends ConfigurationAction
     public void setAccessKey(String accesskey)
     {
         this.accessKey = accesskey;
-    }
-
-    public String getSeleniumHost()
-    {
-        return seleniumHost;
-    }
-
-    public void setSeleniumHost(String seleniumHost)
-    {
-        this.seleniumHost = seleniumHost;
-    }
-
-    public String getSeleniumPort()
-    {
-        return seleniumPort;
-    }
-
-    public void setSeleniumPort(String seleniumPort)
-    {
-        this.seleniumPort = seleniumPort;
     }
 
     public String getUsername()

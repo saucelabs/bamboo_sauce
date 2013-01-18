@@ -35,8 +35,6 @@ public class ConfigureSODActionTest extends AbstractTestHelper {
         assertEquals("Result not INPUT", result, "input");
         assertEquals(configureSODAction.getUsername(), "defaultUser");
         assertEquals(configureSODAction.getAccessKey(), "defaultAccessKey");
-        assertEquals(configureSODAction.getSeleniumHost(), "localhost");
-        assertEquals(configureSODAction.getSeleniumPort(), "4445");
     }
     
     @Test
