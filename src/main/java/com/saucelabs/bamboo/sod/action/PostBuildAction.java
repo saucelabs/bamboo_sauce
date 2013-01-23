@@ -13,6 +13,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -112,20 +115,27 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      * @param sessionId the Sauce Job Id
      */
     private void storeBambooBuildNumberInSauce(SODMappedBuildConfiguration config, String sessionId) {
+        SauceREST sauceREST = new SauceREST(config.getTempUsername(), config.getTempApikey());
+
         Map<String, Object> updates = new HashMap<String, Object>();
         try {
+            String json = sauceREST.getJobInfo(sessionId);
+            JSONObject jsonObject = (JSONObject) new JSONParser().parse(json);
             updates.put("build", getBuildNumber());
-            if (buildContext.getBuildResult().getBuildState().equals(BuildState.SUCCESS)) {
-                updates.put("passed", Boolean.TRUE.toString());
-            } else if (buildContext.getBuildResult().getBuildState().equals(BuildState.FAILED)) {
-                updates.put("passed", Boolean.FALSE.toString());
+            if (jsonObject.get("passed") == null || jsonObject.get("passed").equals("")) {
+                if (buildContext.getBuildResult().getBuildState().equals(BuildState.SUCCESS)) {
+                    updates.put("passed", Boolean.TRUE.toString());
+                } else if (buildContext.getBuildResult().getBuildState().equals(BuildState.FAILED)) {
+                    updates.put("passed", Boolean.FALSE.toString());
+                }
             }
 
-            SauceREST sauceREST = new SauceREST(config.getTempUsername(), config.getTempApikey());
             logger.debug("About to update job " + sessionId + " with build number " + getBuildNumber());
             sauceREST.updateJobInfo(sessionId, updates);
         } catch (IOException e) {
             logger.error("Unable to set build number", e);
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 
