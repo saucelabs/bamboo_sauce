@@ -132,10 +132,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
             logger.debug("About to update job " + sessionId + " with build number " + getBuildNumber());
             sauceREST.updateJobInfo(sessionId, updates);
-        } catch (IOException e) {
+        }  catch (ParseException e) {
             logger.error("Unable to set build number", e);
-        } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
     }
 

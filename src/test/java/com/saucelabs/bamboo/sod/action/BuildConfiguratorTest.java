@@ -7,6 +7,8 @@ import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
+import com.saucelabs.ci.Browser;
+import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
@@ -125,4 +127,11 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
     public Map<String, Object> getTunnelMap() {
         return tunnelMap;
     }
+
+    @Test
+   	public void browserFromSaucelabs() throws Exception {
+           BrowserFactory factory = new BrowserFactory();
+           List<Browser> browsers = factory.getWebDriverBrowsers();
+           assertFalse("browsers is empty", browsers.isEmpty());
+   	}
 }

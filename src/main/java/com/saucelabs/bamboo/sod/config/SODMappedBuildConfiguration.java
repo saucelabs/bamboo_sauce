@@ -19,7 +19,7 @@ public class SODMappedBuildConfiguration {
     }
 
     public String getUsername() {
-        return map.get(SAUCE_USER_NAME);
+        return map.get(SAUCE_USER_KEY);
     }
 
     public String getAccessKey() {
