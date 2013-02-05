@@ -1,0 +1,2362 @@
+[
+
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.6.24.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.6.24.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "7.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "7.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "9.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "9.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "10.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "10.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safari",
+        "long_version": "5.1.5.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Google Chrome",
+        "api_name": "googlechrome",
+        "long_version": "21.0.1180.75.",
+        "preferred_version": "",
+        "automation_backend": "selenium",
+        "os": "Mac 10.6",
+        "short_version": ""
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iehta",
+        "long_version": "9.0.8112.16421.",
+        "preferred_version": "9",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexplore",
+        "long_version": "9.0.8112.16421.",
+        "preferred_version": "9",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexploreproxy",
+        "long_version": "9.0.8112.16421.",
+        "preferred_version": "9",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iehta",
+        "long_version": "6.0.3790.3959.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexplore",
+        "long_version": "6.0.3790.3959.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexploreproxy",
+        "long_version": "6.0.3790.3959.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safari",
+        "long_version": "3.2.2.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safariproxy",
+        "long_version": "3.2.2.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iehta",
+        "long_version": "8.0.7601.17514.",
+        "preferred_version": "9",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexplore",
+        "long_version": "8.0.7601.17514.",
+        "preferred_version": "9",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexploreproxy",
+        "long_version": "8.0.7601.17514.",
+        "preferred_version": "9",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "9.64.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "10.63.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "11.64.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "12.12.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iehta",
+        "long_version": "8.0.6001.18702.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexplore",
+        "long_version": "8.0.6001.18702.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexploreproxy",
+        "long_version": "8.0.6001.18702.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "19.0b2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "19.0b2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "20.0a2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "20"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "20.0a2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "20"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safariproxy",
+        "long_version": "5.1.7.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Google Chrome",
+        "api_name": "googlechrome",
+        "long_version": "24.0.1312.56.",
+        "preferred_version": "",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": ""
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "9.64.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "10.63.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "11.64.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "12.12.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "19.0b2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "19.0b2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "20.0a2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "20"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "20.0a2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "20"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safariproxy",
+        "long_version": "5.1.7.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Google Chrome",
+        "api_name": "googlechrome",
+        "long_version": "24.0.1312.52.",
+        "preferred_version": "",
+        "automation_backend": "selenium",
+        "os": "Windows 2008",
+        "short_version": ""
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "9.64.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "10.63.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "2.0.0.20.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "2"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.0.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.0"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.5.19.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "7.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "10.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "19.0b2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "19.0b2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "20.0a2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "20"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "20.0a2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Windows 2012",
+        "short_version": "20"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iehta",
+        "long_version": "7.0.5730.13.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexplore",
+        "long_version": "7.0.5730.13.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Internet Explorer",
+        "api_name": "iexploreproxy",
+        "long_version": "7.0.5730.13.",
+        "preferred_version": "8",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safari",
+        "long_version": "4.0.5.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safariproxy",
+        "long_version": "4.0.5.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Windows 2003",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Safari",
+        "api_name": "safari",
+        "long_version": "6.0.1.",
+        "preferred_version": "5",
+        "automation_backend": "selenium",
+        "os": "Mac 10.8",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Google Chrome",
+        "api_name": "googlechrome",
+        "long_version": "22.0.1229.79.",
+        "preferred_version": "",
+        "automation_backend": "selenium",
+        "os": "Mac 10.8",
+        "short_version": ""
+    },
+    {
+        "long_name": "Opera",
+        "api_name": "opera",
+        "long_version": "12.12.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "3.6.28.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "3.6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "4.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "4"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "5.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "5"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "6.0.2.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "6"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "7.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "7.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "7.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "7"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "8.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "8"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "9.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "9"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "10.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "10.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "10.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "10"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefoxproxy",
+        "long_version": "11.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "11"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "12.0.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "12"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "13.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "13"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "14.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "14"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "15.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "15"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "16.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "16"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "17.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "17"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "18.0.1.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "18"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "firefox",
+        "long_version": "19.0b3.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Firefox",
+        "api_name": "chrome",
+        "long_version": "19.0b3.",
+        "preferred_version": "11",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": "19"
+    },
+    {
+        "long_name": "Google Chrome",
+        "api_name": "googlechrome",
+        "long_version": "24.0.1312.56.",
+        "preferred_version": "",
+        "automation_backend": "selenium",
+        "os": "Linux",
+        "short_version": ""
+    }
+
+]
