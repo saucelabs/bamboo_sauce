@@ -11,6 +11,8 @@ public final class SODKeys
     public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
     public static final String SAUCE_API_KEY = "SAUCE_API_KEY";
     public static final String SAUCE_BROWSERS = "SAUCE_ONDEMAND_BROWSERS";
+    public static final String SELENIUM_MAX_DURATION_ENV = "SELENIUM_MAX_DURATION";
+    public static final String SELENIUM_IDLE_TIMEOUT_ENV = "SELENIUM_IDLE_TIMEOUT";
 
     /** Disallow instantiation of class.*/
     private SODKeys() {}

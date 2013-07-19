@@ -144,6 +144,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(config.getSshHost()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append(EQUALS).append(config.getSshPorts()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(config.getSeleniumStartingUrl()).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_MAX_DURATION_ENV).append(EQUALS).append(config.getMaxDuration()).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_IDLE_TIMEOUT_ENV).append(EQUALS).append(config.getIdleTimeout()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_USER_NAME).append(EQUALS).append(config.getTempUsername()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_API_KEY).append(EQUALS).append(config.getTempApikey()).append('"');
         if (buildContext.getParentBuildContext() == null) {
