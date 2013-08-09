@@ -14,6 +14,8 @@ import org.apache.commons.lang.StringUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.net.URLEncoder;
+
 /**
  * Handles writing and restoring the Sauce OnDemand environment variables to the Builder instance (for pre-Bamboo 3 instances).
  * The variables are saved to the plan's configuration by the {@link com.saucelabs.bamboo.sod.action.EnvironmentConfigurator} class,
@@ -86,11 +88,12 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
     private void browserAsJSON(JSONArray browsersJSON, Browser browserInstance) {
         JSONObject config = new JSONObject();
-        config.put("os", browserInstance.getOs());
+        //ensure that spaces in the OS are encoded
+        config.put("os", URLEncoder.encode(browserInstance.getOs()));
         config.put("platform", browserInstance.getPlatform().toString());
         config.put("browser", browserInstance.getBrowserName());
         config.put("browser-version", browserInstance.getVersion());
-        config.put("url", browserInstance.getUri());
+        config.put("url", URLEncoder.encode(browserInstance.getUri()));
 
         browsersJSON.add(config);
     }
