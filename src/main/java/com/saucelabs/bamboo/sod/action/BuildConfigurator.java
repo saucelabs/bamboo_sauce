@@ -2,11 +2,9 @@ package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomPreBuildAction;
-import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.Plan;
-import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
@@ -17,6 +15,7 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
+import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
@@ -78,6 +77,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      */
     private PlanManager planManager;
 
+    private SauceLogInterceptorManager sauceLogInterceptorManager;
+
     private BuildLoggerManager buildLoggerManager;
 
     private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
@@ -100,8 +101,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
-            BuildLogger buildLogger = buildLoggerManager.getBuildLogger(PlanKeys.getPlanResultKey(buildContext.getBuildResultKey()));
-
             //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
                 //checkVersionIsCurrent();
@@ -287,4 +286,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.buildLoggerManager = buildLoggerManager;
     }
 
+    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
+        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
+    }
 }

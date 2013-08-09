@@ -2,14 +2,15 @@ package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
-import com.atlassian.bamboo.build.logger.BuildLogUtils;
+import com.atlassian.bamboo.build.LogEntry;
+import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.builder.BuildState;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
 import com.saucelabs.saucerest.SauceREST;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +18,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -46,6 +45,9 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      * Populated via dependency injection.
      */
     private BuildLoggerManager buildLoggerManager;
+
+
+    private SauceLogInterceptorManager sauceLogInterceptorManager;
 
     @NotNull
     public BuildContext call() {
@@ -79,13 +81,11 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         boolean foundLogEntry = false;
         logger.debug("Checking log interceptor entries");
-        File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
-        String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanKey(), buildContext.getBuildNumber());
 
-        List lines = FileUtils.readLines(new File(logDirectory, logFileName));
+        BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
 
-        for (Object object : lines) {
-            String line = (String) object;
+        for (LogEntry object : buildLogger.getBuildLog()) {
+            String line = object.getLog();
             if (StringUtils.containsIgnoreCase(line, SAUCE_ON_DEMAND_SESSION_ID)) {
                 //extract session id
                 String sessionId = StringUtils.substringBetween(line, SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
@@ -154,4 +154,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         this.buildLoggerManager = buildLoggerManager;
     }
 
+    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
+        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
+    }
 }
