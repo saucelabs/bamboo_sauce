@@ -15,7 +15,7 @@
         <div class="helpTextArea">
             <strong>SELENIUM_HOST</strong> - The hostname of the selenium server<br/><br/>
             <strong>SELENIUM_PORT</strong> - The port of the selenium server<br/><br/>
-            <strong>SAUCE_ONDEMAND_BROWSERS</strong> - Represents the selected browsers in JSON format<br/><br/>
+            <strong>bamboo_SAUCE_ONDEMAND_BROWSERS</strong> - Represents the selected browsers in JSON format<br/><br/>
             <strong>SELENIUM_PLATFORM</strong> - The name of the operating system for the selected browser (eg. VISTA,
             LINUX)<br/><br/>
             <strong>SELENIUM_BROWSER</strong> - The name of the selected browser<br/><br/>

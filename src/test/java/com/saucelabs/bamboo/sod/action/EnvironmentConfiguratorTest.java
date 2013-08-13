@@ -63,7 +63,7 @@ public class EnvironmentConfiguratorTest {
         customConfiguration.put(SODKeys.TEMP_USERNAME, "tempUser");
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
         customConfiguration.put(SODKeys.ENABLED_KEY, "true");
-        customConfiguration.put(SODKeys.BROWSER_KEY, "Windows 2008firefox7");
+        customConfiguration.put(SODKeys.BROWSER_KEY, "[Windows 2008firefox7, Windows 2008firefox7]" );
 
         this.taskDefinitions = new ArrayList<TaskDefinition>();
         taskDefinitions.add(definition);

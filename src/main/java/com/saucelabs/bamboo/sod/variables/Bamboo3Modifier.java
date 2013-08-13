@@ -3,6 +3,7 @@ package com.saucelabs.bamboo.sod.variables;
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
+import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import org.apache.commons.lang.StringUtils;
@@ -21,26 +22,34 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
         super(config, definition, buildContext);
     }
 
-    public void storeVariables() {
-        String envBuffer = createSeleniumEnvironmentVariables();
-        try {
-            Class taskDefinitionClass = TaskDefinition.class;
-            if (taskDefinitionClass != null) {
-                List<TaskDefinition> taskDefinitions = definition.getTaskDefinitions();
-                for (TaskDefinition taskDefinition : taskDefinitions) {
-                    Map<String, String> configuration = taskDefinition.getConfiguration();
-                    String originalEnv = configuration.get("environmentVariables");
-                    if (StringUtils.isNotBlank(originalEnv)) {
-                        envBuffer = originalEnv + " " + envBuffer;
-                    }
-
-                    config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
-                    configuration.put("environmentVariables", envBuffer);
-                }
-            }
-        } catch (Exception e) {
-            //ignore and attempt to continue
-        }
+    public Map<String,VariableDefinitionContext> getVariables() {
+        return createSeleniumVariableContext();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void storeVariables() {
+            String envBuffer = createSeleniumEnvironmentVariables();
+            try {
+                Class taskDefinitionClass = TaskDefinition.class;
+                if (taskDefinitionClass != null) {
+                    List<TaskDefinition> taskDefinitions = definition.getTaskDefinitions();
+                    for (TaskDefinition taskDefinition : taskDefinitions) {
+                        Map<String, String> configuration = taskDefinition.getConfiguration();
+                        String originalEnv = configuration.get("environmentVariables");
+                        if (StringUtils.isNotBlank(originalEnv)) {
+                            envBuffer = originalEnv + " " + envBuffer;
+                        }
+
+                        config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
+                        configuration.put("environmentVariables", envBuffer);
+                    }
+                }
+            } catch (Exception e) {
+                //ignore and attempt to continue
+            }
+        }
+
 
 }
