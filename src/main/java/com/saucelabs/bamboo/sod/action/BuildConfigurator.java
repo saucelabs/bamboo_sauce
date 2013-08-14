@@ -100,7 +100,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public BuildContext call() throws IOException {
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-            getSauceAPIFactory().setupProxy(administrationConfigurationManager);
+            BambooSauceFactory factory = getSauceAPIFactory();
+            if (factory != null) {
+                //should never be null, but NPEs were being thrown for users when using remote agents
+                factory.setupProxy(administrationConfigurationManager);
+            }
             //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
                 //checkVersionIsCurrent();
@@ -159,7 +163,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             context.put("webDriverBrowserList", getSauceBrowserFactory().getWebDriverBrowsers());
             context.put("seleniumRCBrowserList", getSauceBrowserFactory().getSeleniumBrowsers());
         } catch (IOException e) {
-            //TODO are there a set of default browsers that we can use?
             //TODO detect a proxy exception as opposed to all exceptions?
             populateDefaultBrowserList(context);
         }
