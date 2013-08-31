@@ -9,8 +9,8 @@ import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
-import com.opensymphony.xwork.ActionContext;
-import com.opensymphony.xwork.util.OgnlValueStack;
+import com.opensymphony.xwork2.ActionContext;
+import com.opensymphony.xwork2.util.ValueStack;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
@@ -158,8 +158,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         try {
             getSauceAPIFactory().setupProxy(administrationConfigurationManager);
             String[] selectedBrowsers = getSelectedBrowsers(buildConfiguration);
-            OgnlValueStack stack = ActionContext.getContext().getValueStack();
+            ValueStack stack = ActionContext.getContext().getValueStack();
             stack.getContext().put("selectedBrowsers", selectedBrowsers);
+            context.put("selectedBrowsers", selectedBrowsers);
             context.put("webDriverBrowserList", getSauceBrowserFactory().getWebDriverBrowsers());
             context.put("seleniumRCBrowserList", getSauceBrowserFactory().getSeleniumBrowsers());
         } catch (IOException e) {
