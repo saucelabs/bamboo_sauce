@@ -2,14 +2,12 @@ package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
-import com.atlassian.bamboo.build.LogEntry;
-import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.builder.BuildState;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
+import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
-import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -46,9 +44,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private BuildLoggerManager buildLoggerManager;
 
-
-    private SauceLogInterceptorManager sauceLogInterceptorManager;
-
     @NotNull
     public BuildContext call() {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
@@ -82,11 +77,11 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         boolean foundLogEntry = false;
         logger.debug("Checking log interceptor entries");
 
-        BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
+        CurrentBuildResult buildResult = buildContext.getBuildResult();
+        for (Map.Entry<String, String> entry : buildResult.getCustomBuildData().entrySet()) {
 
-        for (LogEntry object : buildLogger.getBuildLog()) {
-            String line = object.getLog();
-            if (StringUtils.containsIgnoreCase(line, SAUCE_ON_DEMAND_SESSION_ID)) {
+            if (entry.getKey().contains("SAUCE_JOB_ID")) {
+                String line = entry.getValue();
                 //extract session id
                 String sessionId = StringUtils.substringBetween(line, SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
                 if (sessionId == null) {
@@ -132,7 +127,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
             logger.debug("About to update job " + sessionId + " with build number " + getBuildNumber());
             sauceREST.updateJobInfo(sessionId, updates);
-        }  catch (ParseException e) {
+        } catch (ParseException e) {
             logger.error("Unable to set build number", e);
         }
     }
@@ -154,7 +149,4 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         this.buildLoggerManager = buildLoggerManager;
     }
 
-    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
-        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
-    }
 }

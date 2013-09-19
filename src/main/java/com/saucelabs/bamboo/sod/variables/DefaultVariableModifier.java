@@ -92,10 +92,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      * <ul>
      * <li></li>
      * </ul>
-     *
-     * @param prefix
-     * @param stringBuilder
-     * @param adminConfig
+
      */
     private void createCommonEnvironmentVariables(Map<String, VariableDefinitionContext> variables, AdministrationConfiguration adminConfig) {
 
