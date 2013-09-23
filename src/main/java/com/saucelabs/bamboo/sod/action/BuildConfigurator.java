@@ -2,6 +2,7 @@ package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomPreBuildAction;
+import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.Plan;
@@ -9,13 +10,14 @@ import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
+import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork.ActionContext;
 import com.opensymphony.xwork.util.OgnlValueStack;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
-import com.saucelabs.bamboo.sod.util.SauceLogInterceptorManager;
+import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
@@ -77,10 +79,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      */
     private PlanManager planManager;
 
-    private SauceLogInterceptorManager sauceLogInterceptorManager;
-
-    private BuildLoggerManager buildLoggerManager;
-
     private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
     private static final String DEFAULT_IDLE_TIMEOUT = "90";
@@ -105,6 +103,10 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
                 //should never be null, but NPEs were being thrown for users when using remote agents
                 factory.setupProxy(administrationConfigurationManager);
             }
+            BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
+            BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
+            SauceLogInterceptor logInterceptor = new SauceLogInterceptor(buildContext);
+            buildLogger.getInterceptorStack().add(logInterceptor);
             //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
                 //checkVersionIsCurrent();
@@ -285,11 +287,4 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.planManager = planManager;
     }
 
-    public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
-        this.buildLoggerManager = buildLoggerManager;
-    }
-
-    public void setSauceLogInterceptorManager(SauceLogInterceptorManager sauceLogInterceptorManager) {
-        this.sauceLogInterceptorManager = sauceLogInterceptorManager;
-    }
 }

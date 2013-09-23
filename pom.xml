@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
-    <version>1.6.34</version>
+    <version>1.6.34c</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
     <packaging>atlassian-plugin</packaging>
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
@@ -65,7 +65,7 @@
                         <Export-Package>org.codehaus.jackson*</Export-Package>
                         <Import-Package>org.apache.log4j;version="0.0", org.apache.commons.logging;version="0.0",
                             org.apache.commons.lang*;version="0.0", org.apache.commons.io*;version="0.0",
-                            org.apache.commons.codec*;version="0.0", com.atlassian.bamboo.*;version="0.0",
+                            org.apache.commons.codec*;version="0.0", com.atlassian.bamboo.*;version="0.0", com.atlassian.spring.*;version="0.0",
                             com.atlassian.core.util;version="4.5.3", com.atlassian.bamboo;version="0.0",
                             com.atlassian.plugin;version="2.7.3", javax.crypto.spec;version="0.0",
                             javax.crypto;version="0.0"
