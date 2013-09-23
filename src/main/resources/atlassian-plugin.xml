@@ -128,5 +128,7 @@
         </condition>
     </web-item>
 
+    <component-import key="buildLoggerManager" interface="com.atlassian.bamboo.build.BuildLoggerManager"/>
+
 
 </atlassian-plugin>
