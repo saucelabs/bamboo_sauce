@@ -2,6 +2,9 @@ package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessorServer;
+import com.atlassian.bamboo.build.LogEntry;
+import com.atlassian.bamboo.build.logger.BuildLogUtils;
+import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.builder.BuildState;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
@@ -9,6 +12,7 @@ import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.saucerest.SauceREST;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -16,8 +20,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,6 +49,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      * Populated via dependency injection.
      */
     private BuildLoggerManager buildLoggerManager;
+
 
     @NotNull
     public BuildContext call() {
@@ -79,28 +86,52 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
         CurrentBuildResult buildResult = buildContext.getBuildResult();
         for (Map.Entry<String, String> entry : buildResult.getCustomBuildData().entrySet()) {
-
             if (entry.getKey().contains("SAUCE_JOB_ID")) {
-                String line = entry.getValue();
-                //extract session id
-                String sessionId = StringUtils.substringBetween(line, SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
-                if (sessionId == null) {
-                    //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
-                    sessionId = StringUtils.substringAfter(line, SAUCE_ON_DEMAND_SESSION_ID + "=");
-                }
-                if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
-                    //TODO extract Sauce Job name (included on log line as 'job-name=')?
-                    foundLogEntry = true;
-                    storeBambooBuildNumberInSauce(config, sessionId);
-                }
+                foundLogEntry = foundLogEntry || processLine(config, foundLogEntry, entry.getValue());
             }
         }
 
-
         if (!foundLogEntry) {
-            logger.warn("No Sauce Session ids found in log output");
+            logger.warn("No Sauce Session ids found in build context, reading from log file");
+            //try read from the log file directly
+            File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
+            String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanKey(), buildContext.getBuildNumber());
+            List lines = FileUtils.readLines(new File(logDirectory, logFileName));
+            for (Object object : lines) {
+                foundLogEntry = foundLogEntry || processLine(config, foundLogEntry, (String) object);
+
+            }
         }
 
+        //if we still don't have anything, try the build logger output.  This will only have the last 100 lines.
+        if (!foundLogEntry) {
+            logger.warn("No Sauce Session ids found in log file, reading from build logger output");
+            BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
+            for (LogEntry logEntry : buildLogger.getBuildLog()) {
+                foundLogEntry = foundLogEntry || processLine(config, foundLogEntry, logEntry.getLog());
+
+            }
+        }
+
+        if (!foundLogEntry) {
+            logger.warn("No Sauce Session ids found in build output");
+        }
+
+    }
+
+    private boolean processLine(SODMappedBuildConfiguration config, boolean foundLogEntry, String line) {
+        //extract session id
+        String sessionId = StringUtils.substringBetween(line, SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
+        if (sessionId == null) {
+            //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
+            sessionId = StringUtils.substringAfter(line, SAUCE_ON_DEMAND_SESSION_ID + "=");
+        }
+        if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
+            //TODO extract Sauce Job name (included on log line as 'job-name=')?
+            foundLogEntry = true;
+            storeBambooBuildNumberInSauce(config, sessionId);
+        }
+        return foundLogEntry;
     }
 
     /**

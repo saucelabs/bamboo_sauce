@@ -130,5 +130,9 @@
 
     <component-import key="buildLoggerManager" interface="com.atlassian.bamboo.build.BuildLoggerManager"/>
 
+    <bambooEventListener key="buildHungNotificationListener" name="Build Notification Listener"
+                         class="com.saucelabs.bamboo.sod.listener.SauceBuildListener">
+        <description>Listens for if a build has hung.</description>
+    </bambooEventListener>
 
 </atlassian-plugin>
