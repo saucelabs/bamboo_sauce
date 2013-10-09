@@ -73,95 +73,114 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     /**
-     * Iterates over the output lines from the build.  For each line that begins with 'SauceOnDemandSessionID',
-     * store the session id from the line in the custom build data of the build, and invoke the Sauce REST API
-     * to store the Bamboo build number
-     *
-     * @param config
-     */
-    private void recordSauceJobResult(SODMappedBuildConfiguration config) throws IOException {
-        //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
-        boolean foundLogEntry = false;
-        logger.debug("Checking log interceptor entries");
+         * Iterates over the output lines from the build.  For each line that begins with 'SauceOnDemandSessionID',
+         * store the session id from the line in the custom build data of the build, and invoke the Sauce REST API
+         * to store the Bamboo build number
+         *
+         * @param config
+         */
+        private void recordSauceJobResult(SODMappedBuildConfiguration config) throws IOException {
+            //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
+            boolean foundLogEntry = false;
+            logger.debug("Checking log interceptor entries");
 
-        CurrentBuildResult buildResult = buildContext.getBuildResult();
-        for (Map.Entry<String, String> entry : buildResult.getCustomBuildData().entrySet()) {
-            if (entry.getKey().contains("SAUCE_JOB_ID")) {
-                foundLogEntry = foundLogEntry || processLine(config, foundLogEntry, entry.getValue());
-            }
-        }
-
-        if (!foundLogEntry) {
-            logger.warn("No Sauce Session ids found in build context, reading from log file");
-            //try read from the log file directly
-            File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
-            String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanKey(), buildContext.getBuildNumber());
-            List lines = FileUtils.readLines(new File(logDirectory, logFileName));
-            for (Object object : lines) {
-                foundLogEntry = foundLogEntry || processLine(config, foundLogEntry, (String) object);
-
-            }
-        }
-
-        //if we still don't have anything, try the build logger output.  This will only have the last 100 lines.
-        if (!foundLogEntry) {
-            logger.warn("No Sauce Session ids found in log file, reading from build logger output");
-            BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
-            for (LogEntry logEntry : buildLogger.getBuildLog()) {
-                foundLogEntry = foundLogEntry || processLine(config, foundLogEntry, logEntry.getLog());
-
-            }
-        }
-
-        if (!foundLogEntry) {
-            logger.warn("No Sauce Session ids found in build output");
-        }
-
-    }
-
-    private boolean processLine(SODMappedBuildConfiguration config, boolean foundLogEntry, String line) {
-        //extract session id
-        String sessionId = StringUtils.substringBetween(line, SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
-        if (sessionId == null) {
-            //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
-            sessionId = StringUtils.substringAfter(line, SAUCE_ON_DEMAND_SESSION_ID + "=");
-        }
-        if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
-            //TODO extract Sauce Job name (included on log line as 'job-name=')?
-            foundLogEntry = true;
-            storeBambooBuildNumberInSauce(config, sessionId);
-        }
-        return foundLogEntry;
-    }
-
-    /**
-     * Invokes the Sauce REST API to store the build number and pass/fail status against the Sauce Job.
-     *
-     * @param config
-     * @param sessionId the Sauce Job Id
-     */
-    private void storeBambooBuildNumberInSauce(SODMappedBuildConfiguration config, String sessionId) {
-        SauceREST sauceREST = new SauceREST(config.getTempUsername(), config.getTempApikey());
-
-        Map<String, Object> updates = new HashMap<String, Object>();
-        try {
-            String json = sauceREST.getJobInfo(sessionId);
-            JSONObject jsonObject = (JSONObject) new JSONParser().parse(json);
-            updates.put("build", getBuildNumber());
-            if (jsonObject.get("passed") == null || jsonObject.get("passed").equals("")) {
-                if (buildContext.getBuildResult().getBuildState().equals(BuildState.SUCCESS)) {
-                    updates.put("passed", Boolean.TRUE.toString());
-                } else if (buildContext.getBuildResult().getBuildState().equals(BuildState.FAILED)) {
-                    updates.put("passed", Boolean.FALSE.toString());
+            CurrentBuildResult buildResult = buildContext.getBuildResult();
+            for (Map.Entry<String, String> entry : buildResult.getCustomBuildData().entrySet()) {
+                if (entry.getKey().contains("SAUCE_JOB_ID")) {
+                    if (processLine(config, entry.getValue())) {
+                        foundLogEntry = true;
+                    };
                 }
             }
 
-            logger.debug("About to update job " + sessionId + " with build number " + getBuildNumber());
-            sauceREST.updateJobInfo(sessionId, updates);
-        } catch (ParseException e) {
-            logger.error("Unable to set build number", e);
+            if (!foundLogEntry) {
+                logger.warn("No Sauce Session ids found in build context, reading from log file");
+                //try read from the log file directly
+                File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
+                String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanKey(), buildContext.getBuildNumber());
+                List lines = FileUtils.readLines(new File(logDirectory, logFileName));
+                for (Object object : lines) {
+                    String line = (String) object;
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("Processing line: " + line);
+                    }
+                    if (processLine(config, line)) {
+                       foundLogEntry = true;
+                    }
+                }
+            }
+
+            //if we still don't have anything, try the build logger output.  This will only have the last 100 lines.
+            if (!foundLogEntry) {
+                logger.warn("No Sauce Session ids found in log file, reading from build logger output");
+                BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
+                for (LogEntry logEntry : buildLogger.getBuildLog()) {
+                    if (processLine(config, logEntry.getLog())) {
+                        foundLogEntry = true;
+                    }
+
+                }
+            }
+
+            if (!foundLogEntry) {
+                logger.warn("No Sauce Session ids found in build output");
+            }
+
         }
-    }
+
+        private boolean processLine(SODMappedBuildConfiguration config, String line) {
+            //extract session id
+            String sessionId = StringUtils.substringBetween(line, SAUCE_ON_DEMAND_SESSION_ID + "=", " ");
+            if (sessionId == null) {
+                //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
+                sessionId = StringUtils.substringAfter(line, SAUCE_ON_DEMAND_SESSION_ID + "=");
+            }
+            if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
+                if (sessionId.trim().equals("")) {
+                    logger.error("Session id for line" + line + " was blank");
+                    return false;
+                } else {
+                    //TODO extract Sauce Job name (included on log line as 'job-name=')?
+                    storeBambooBuildNumberInSauce(config, sessionId);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /**
+         * Invokes the Sauce REST API to store the build number and pass/fail status against the Sauce Job.
+         *
+         * @param config
+         * @param sessionId the Sauce Job Id
+         */
+        private void storeBambooBuildNumberInSauce(SODMappedBuildConfiguration config, String sessionId) {
+            SauceREST sauceREST = new SauceREST(config.getTempUsername(), config.getTempApikey());
+
+            Map<String, Object> updates = new HashMap<String, Object>();
+            try {
+                logger.debug("Invoking Sauce REST API for " + sessionId);
+                String json = sauceREST.getJobInfo(sessionId);
+                logger.debug("Results: " + json);
+                JSONObject jsonObject = (JSONObject) new JSONParser().parse(json);
+                updates.put("build", getBuildNumber());
+                if (jsonObject.get("passed") == null || jsonObject.get("passed").equals("")) {
+                    if (buildContext.getBuildResult().getBuildState().equals(BuildState.SUCCESS)) {
+                        updates.put("passed", Boolean.TRUE.toString());
+                    } else if (buildContext.getBuildResult().getBuildState().equals(BuildState.FAILED)) {
+                        updates.put("passed", Boolean.FALSE.toString());
+                    }
+                }
+
+                logger.debug("About to update job " + sessionId + " with build number " + getBuildNumber());
+                sauceREST.updateJobInfo(sessionId, updates);
+            } catch (ParseException e) {
+                logger.error("Unable to set build number for " + sessionId, e);
+            } catch (Exception e) {
+                logger.error("Unexpected error processing " + sessionId , e);
+            }
+
+        }
 
     private String getBuildNumber() {
         return getBuildContextToUse().getBuildResultKey();
