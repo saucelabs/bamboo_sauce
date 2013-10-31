@@ -3,7 +3,7 @@ package com.saucelabs.bamboo.sod.admin.action;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.configuration.ConfigurationAction;
-import com.opensymphony.xwork.ActionContext;
+import com.opensymphony.xwork2.ActionContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import org.apache.commons.lang.StringUtils;
 
