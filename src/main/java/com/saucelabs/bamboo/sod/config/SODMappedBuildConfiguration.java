@@ -142,4 +142,13 @@ public class SODMappedBuildConfiguration {
         else
             return SeleniumVersion.TWO;
     }
+
+    public String getHttpsProtocol() {
+        return map.get(HTTPS_PROTOCOL);
+    }
+
+    public String getSauceConnectOptions() {
+        return map.get(SAUCE_CONNECT_OPTIONS);
+    }
+
 }

@@ -145,7 +145,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * @throws IOException
      */
     public void startTunnel(SODMappedBuildConfiguration config) throws IOException {
-        getSauceTunnelManager().openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, null);
+        getSauceTunnelManager().openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, config.getSauceConnectOptions(), config.getHttpsProtocol(), null);
     }
 
 

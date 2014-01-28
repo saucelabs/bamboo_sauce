@@ -50,5 +50,11 @@
     [@ww.textfield name='custom.sauceondemand.selenium.port' label='Selenium Port' description="The name of the Selenium Port to be used.  For tests run using Sauce Connect, this should be 4445.  If using ondemand.saucelabs.com for the Selenium Host, then use 4444." /]<br
         clear="all"/>
 
+    <br clear="all"/>
+        [@ww.textfield name='custom.sauceondemand.sauceConnectOptions' label='Sauce Connect Options' description='Additional command line options for Sauce Connect' /]
+        <br clear="all"/>
+        [@ww.textfield name='custom.sauceondemand.httpsProtocol' label='HTTPS Protocol' description='Used to override the https protocol settings' /]
+
+
     </div>
 </div>

@@ -71,14 +71,16 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     }
 
     private void browserAsJSON(JSONArray browsersJSON, Browser browserInstance) {
-        JSONObject config = new JSONObject();
-        config.put("os", browserInstance.getOs());
-        config.put("platform", browserInstance.getPlatform().toString());
-        config.put("browser", browserInstance.getBrowserName());
-        config.put("browser-version", browserInstance.getVersion());
-        config.put("url", browserInstance.getUri());
+        if (browserInstance != null) {
+            JSONObject config = new JSONObject();
+            config.put("os", browserInstance.getOs());
+            config.put("platform", browserInstance.getPlatform().toString());
+            config.put("browser", browserInstance.getBrowserName());
+            config.put("browser-version", browserInstance.getVersion());
+            config.put("url", browserInstance.getUri());
 
-        browsersJSON.add(config);
+            browsersJSON.add(config);
+        }
     }
 
 

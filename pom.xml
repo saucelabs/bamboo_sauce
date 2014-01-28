@@ -163,7 +163,7 @@
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>ci-sauce</artifactId>
-            <version>1.25_bamboo_patch</version>
+            <version>1.26_bamboo_patch</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
