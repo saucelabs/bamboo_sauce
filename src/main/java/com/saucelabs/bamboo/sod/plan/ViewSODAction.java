@@ -82,10 +82,12 @@ public class ViewSODAction extends ViewBuildResults {
         if (plan != null) {
             jobs = planManager.getPlansByProject(plan.getProject(), Job.class);
             for (Job job : jobs) {
-                final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
-                if (StringUtils.isNotEmpty(config.getUsername())) {
-                    username = config.getUsername();
-                    accessKey = config.getAccessKey();
+                if (job.getKey().startsWith(getBuildKey())) {
+                    final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
+                    if (StringUtils.isNotEmpty(config.getUsername())) {
+                        username = config.getUsername();
+                        accessKey = config.getAccessKey();
+                    }
                 }
             }
         }
@@ -111,7 +113,6 @@ public class ViewSODAction extends ViewBuildResults {
     }
 
     /**
-     *
      * @param username
      * @param accessKey
      * @throws InvalidKeyException          thrown if an error occurs generating the key
