@@ -1,7 +1,7 @@
 package com.saucelabs.bamboo.sod.action;
 
 import com.atlassian.bamboo.build.BuildLoggerManager;
-import com.atlassian.bamboo.build.CustomBuildProcessorServer;
+import com.atlassian.bamboo.build.CustomBuildProcessor;
 import com.atlassian.bamboo.build.LogEntry;
 import com.atlassian.bamboo.build.logger.BuildLogUtils;
 import com.atlassian.bamboo.build.logger.BuildLogger;
@@ -13,6 +13,8 @@ import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
+import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
@@ -41,7 +43,7 @@ import java.util.regex.Pattern;
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */
-public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomBuildProcessorServer {
+public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomBuildProcessor {
 
     private static final Logger logger = Logger.getLogger(PostBuildAction.class);
     public static final String SAUCE_ON_DEMAND_SESSION_ID = "SauceOnDemandSessionID";
@@ -59,12 +61,19 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private BuildLoggerManager buildLoggerManager;
 
+
+    /**
+     * Populated via dependency injection.
+     */
+    private SauceTunnelManager sauceTunnelManager;
+
     @NotNull
     public BuildContext call() {
 
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {
             try {
+                getSauceTunnelManager().closeTunnelsForPlan(config.getTempUsername(), null);
                 recordSauceJobResult(config);
             } catch (IOException e) {
                 logger.error(e);
@@ -79,6 +88,18 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     public void setPlanManager(PlanManager planManager) {
         this.planManager = planManager;
+    }
+
+    public void setSauceTunnelManager(SauceTunnelManager sauceTunnelManager) {
+        this.sauceTunnelManager = sauceTunnelManager;
+    }
+
+    public SauceTunnelManager getSauceTunnelManager() {
+        if (sauceTunnelManager == null) {
+            //this will occur when a remote agent runs, as it doesn't have Spring components available
+            setSauceTunnelManager(new SauceConnectTwoManager());
+        }
+        return sauceTunnelManager;
     }
 
     /**

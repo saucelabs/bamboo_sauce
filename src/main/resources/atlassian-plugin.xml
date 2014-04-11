@@ -38,15 +38,10 @@
                           class="com.saucelabs.bamboo.sod.action.EnvironmentConfigurator">
     </preBuildQueuedAction>
 
-    <buildProcessor key="sodTunnelCloser" name="Sauce OnDemand Tunnel Closer"
-                    class="com.saucelabs.bamboo.sod.action.SSHTunnelCloser">
-        <skipIfFailed>false</skipIfFailed>
-    </buildProcessor>
-
-    <buildProcessorServer key="sodPostRunner" name="Sauce OnDemand Post Runner"
+    <buildProcessor key="sodPostRunner" name="Sauce OnDemand Post Runner"
                           class="com.saucelabs.bamboo.sod.action.PostBuildAction">
         <skipIfFailed>false</skipIfFailed>
-    </buildProcessorServer>
+    </buildProcessor>
 
 
     <xwork key="sodActions" name="Sauce OnDemand Actions">
