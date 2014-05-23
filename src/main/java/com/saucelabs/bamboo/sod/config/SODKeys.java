@@ -71,6 +71,7 @@ public final class SODKeys
 
     public static final String HTTPS_PROTOCOL = CUSTOM_PREFIX + "httpsProtocol";
     public static final String SAUCE_CONNECT_OPTIONS = CUSTOM_PREFIX + "sauceConnectOptions";
-    
+    public static final String SAUCE_CONNECT_V3 = CUSTOM_PREFIX + "sauceConnect3";
+
     public static final String SAUCE_SESSION_ID = "sauceondemand.sessionId";
 }

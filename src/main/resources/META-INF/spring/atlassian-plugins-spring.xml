@@ -8,6 +8,10 @@
                 class="com.saucelabs.ci.sauceconnect.SauceConnectTwoManager">
     </beans:bean>
 
+    <beans:bean id="sauceConnectFourTunnelManager"
+                   class="com.saucelabs.ci.sauceconnect.SauceConnectFourManager">
+       </beans:bean>
+
     <beans:bean id="sauceBrowserFactory" class="com.saucelabs.ci.BrowserFactory">
     </beans:bean>
 

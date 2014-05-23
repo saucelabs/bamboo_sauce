@@ -36,7 +36,7 @@
         </developer>
     </developers>
     <properties>
-        <bamboo.version>5.1.0</bamboo.version>
+        <bamboo.version>5.5.1</bamboo.version>
         <bamboo.data.version>2.6.1</bamboo.data.version>
         <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
     </properties>
@@ -111,11 +111,7 @@
         </extensions>
     </build>
     <dependencies>
-        <dependency>
-            <groupId>com.saucelabs</groupId>
-            <artifactId>saucerest</artifactId>
-            <version>1.0.10</version>
-        </dependency>
+
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
@@ -163,14 +159,7 @@
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>ci-sauce</artifactId>
-            <version>1.26_bamboo_patch</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.saucelabs</groupId>
-                    <artifactId>saucerest</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>1.64</version>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>

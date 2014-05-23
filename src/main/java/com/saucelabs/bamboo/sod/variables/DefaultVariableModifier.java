@@ -14,6 +14,8 @@ import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SODSeleniumConfiguration;
 import com.saucelabs.ci.SeleniumVersion;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -28,6 +30,8 @@ import java.util.Map;
  * @author Ross Rowe
  */
 public abstract class DefaultVariableModifier implements VariableModifier {
+
+    private static final Logger logger = Logger.getLogger(DefaultVariableModifier.class);
 
     protected static final String EQUALS = "=\"";
 
@@ -147,10 +151,13 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             sodConfig.setMaxDuration(config.getMaxDuration());
             sodConfig.setRecordVideo(config.recordVideo());
             sodConfig.setUserExtensions(config.getUserExtensionsJson());
-            return sodConfig.toJson();
-        } else {
-            return "";
+            try {
+                return sodConfig.toJson();
+            } catch (JSONException e) {
+                logger.error("Error converting object to JSON", e);
+            }
         }
+        return "";
     }
 
     /**

@@ -21,6 +21,7 @@ import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
+import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import org.apache.commons.lang.ArrayUtils;
@@ -52,7 +53,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     /**
      * Populated via dependency injection.
      */
-    private SauceTunnelManager sauceTunnelManager;
+    private SauceConnectTwoManager sauceTunnelManager;
+
+    private SauceConnectFourManager sauceConnectFourTunnelManager;
 
     /**
      * Populated by dependency injection.
@@ -145,7 +148,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * @throws IOException
      */
     public void startTunnel(SODMappedBuildConfiguration config) throws IOException {
-        getSauceTunnelManager().openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, config.getSauceConnectOptions(), config.getHttpsProtocol(), null);
+        SauceTunnelManager sauceTunnelManager = config.isSauceConnect3() ? getSauceTunnelManager() : getSauceConnectFourTunnelManager();
+        sauceTunnelManager.openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, config.getSauceConnectOptions(), config.getHttpsProtocol(), null);
     }
 
 
@@ -165,13 +169,13 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             context.put("selectedBrowsers", selectedBrowsers);
             context.put("webDriverBrowserList", getSauceBrowserFactory().getWebDriverBrowsers());
             context.put("seleniumRCBrowserList", getSauceBrowserFactory().getSeleniumBrowsers());
-        } catch (IOException e) {
+        } catch (Exception e) {
             //TODO detect a proxy exception as opposed to all exceptions?
             populateDefaultBrowserList(context);
         }
     }
 
-    private String[] getSelectedBrowsers(BuildConfiguration buildConfiguration) throws IOException {
+    private String[] getSelectedBrowsers(BuildConfiguration buildConfiguration) throws Exception {
         List<Browser> browsers;
         List<String> selectedBrowsers = new ArrayList<String>();
         String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(BROWSER_KEY));
@@ -247,7 +251,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.administrationConfigurationManager = administrationConfigurationManager;
     }
 
-    public void setSauceTunnelManager(SauceTunnelManager sauceTunnelManager) {
+    public void setSauceTunnelManager(SauceConnectTwoManager sauceTunnelManager) {
         this.sauceTunnelManager = sauceTunnelManager;
     }
 
@@ -259,11 +263,18 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.sauceAPIFactory = sauceAPIFactory;
     }
 
-    public SauceTunnelManager getSauceTunnelManager() {
+    public SauceConnectTwoManager getSauceTunnelManager() {
         if (sauceTunnelManager == null) {
             setSauceTunnelManager(new SauceConnectTwoManager());
         }
         return sauceTunnelManager;
+    }
+
+    public SauceConnectFourManager getSauceConnectFourTunnelManager() {
+        if (sauceConnectFourTunnelManager == null) {
+            setSauceConnectFourTunnelManager(new SauceConnectFourManager());
+        }
+        return sauceConnectFourTunnelManager;
     }
 
     public BambooSauceFactory getSauceAPIFactory() {
@@ -288,4 +299,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.planManager = planManager;
     }
 
+    public void setSauceConnectFourTunnelManager(SauceConnectFourManager sauceConnectFourTunnelManager) {
+        this.sauceConnectFourTunnelManager = sauceConnectFourTunnelManager;
+    }
 }

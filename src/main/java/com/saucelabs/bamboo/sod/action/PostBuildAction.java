@@ -13,6 +13,7 @@ import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.saucerest.SauceREST;
@@ -65,7 +66,9 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     /**
      * Populated via dependency injection.
      */
-    private SauceTunnelManager sauceTunnelManager;
+    private SauceConnectTwoManager sauceTunnelManager;
+
+    private SauceConnectFourManager sauceConnectFourTunnelManager;
 
     @NotNull
     public BuildContext call() {
@@ -73,7 +76,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {
             try {
-                getSauceTunnelManager().closeTunnelsForPlan(config.getTempUsername(), null);
+                SauceTunnelManager sauceTunnelManager = config.isSauceConnect3() ? getSauceTunnelManager() : getSauceConnectFourTunnelManager();
+                sauceTunnelManager.closeTunnelsForPlan(config.getTempUsername(), config.getSauceConnectOptions(), null);
                 recordSauceJobResult(config);
             } catch (IOException e) {
                 logger.error(e);
@@ -90,11 +94,11 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         this.planManager = planManager;
     }
 
-    public void setSauceTunnelManager(SauceTunnelManager sauceTunnelManager) {
+    public void setSauceTunnelManager(SauceConnectTwoManager sauceTunnelManager) {
         this.sauceTunnelManager = sauceTunnelManager;
     }
 
-    public SauceTunnelManager getSauceTunnelManager() {
+    public SauceConnectTwoManager getSauceTunnelManager() {
         if (sauceTunnelManager == null) {
             //this will occur when a remote agent runs, as it doesn't have Spring components available
             setSauceTunnelManager(new SauceConnectTwoManager());
@@ -281,6 +285,17 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
         this.buildLoggerManager = buildLoggerManager;
+    }
+
+    public SauceConnectFourManager getSauceConnectFourTunnelManager() {
+        if (sauceConnectFourTunnelManager == null) {
+            setSauceConnectFourTunnelManager(new SauceConnectFourManager());
+        }
+        return sauceConnectFourTunnelManager;
+    }
+
+    public void setSauceConnectFourTunnelManager(SauceConnectFourManager sauceConnectFourTunnelManager) {
+        this.sauceConnectFourTunnelManager = sauceConnectFourTunnelManager;
     }
 
 }
