@@ -116,46 +116,41 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     private void recordSauceJobResult(SODMappedBuildConfiguration config) throws IOException {
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         boolean foundLogEntry = false;
-        logger.debug("Checking log interceptor entries");
-
+        logger.info("Checking log interceptor entries");
         CurrentBuildResult buildResult = buildContext.getBuildResult();
         for (Map.Entry<String, String> entry : buildResult.getCustomBuildData().entrySet()) {
             if (entry.getKey().contains("SAUCE_JOB_ID")) {
                 if (processLine(config, entry.getValue())) {
                     foundLogEntry = true;
                 }
-                ;
-            }
-        }
-
-        if (!foundLogEntry) {
-            logger.warn("No Sauce Session ids found in build context, reading from log file");
-            //try read from the log file directly
-            File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
-            String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanKey(), buildContext.getBuildNumber());
-            List lines = FileUtils.readLines(new File(logDirectory, logFileName));
-            for (Object object : lines) {
-                String line = (String) object;
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Processing line: " + line);
-                }
-                if (processLine(config, line)) {
-                    foundLogEntry = true;
-                }
-            }
-        }
-
-        //if we still don't have anything, try the build logger output.  This will only have the last 100 lines.
-        if (!foundLogEntry) {
-            logger.warn("No Sauce Session ids found in log file, reading from build logger output");
-            BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
-            for (LogEntry logEntry : buildLogger.getBuildLog()) {
-                if (processLine(config, logEntry.getLog())) {
-                    foundLogEntry = true;
-                }
 
             }
         }
+
+        logger.info("Reading from log file");
+        //try read from the log file directly
+        File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
+        String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanResultKey());
+        List lines = FileUtils.readLines(new File(logDirectory, logFileName));
+        for (Object object : lines) {
+            String line = (String) object;
+            if (logger.isDebugEnabled()) {
+                logger.debug("Processing line: " + line);
+            }
+            if (processLine(config, line)) {
+                foundLogEntry = true;
+            }
+        }
+
+
+        logger.info("Reading from build logger output");
+        BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
+        for (LogEntry logEntry : buildLogger.getBuildLog()) {
+            if (processLine(config, logEntry.getLog())) {
+                foundLogEntry = true;
+            }
+        }
+
 
         if (!foundLogEntry) {
             logger.warn("No Sauce Session ids found in build output");

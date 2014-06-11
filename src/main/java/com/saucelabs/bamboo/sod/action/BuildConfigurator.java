@@ -4,7 +4,7 @@ import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomPreBuildAction;
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
-import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
+import com.atlassian.bamboo.configuration.AdministrationConfigurationAccessor;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
@@ -65,7 +65,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     /**
      * Populated via dependency injection.
      */
-    private AdministrationConfigurationManager administrationConfigurationManager;
+    private AdministrationConfigurationAccessor administrationConfigurationAccessor;
 
     /**
      * Populated via dependency injection.
@@ -104,10 +104,10 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             BambooSauceFactory factory = getSauceAPIFactory();
             if (factory != null) {
                 //should never be null, but NPEs were being thrown for users when using remote agents
-                factory.setupProxy(administrationConfigurationManager);
+                factory.setupProxy(administrationConfigurationAccessor);
             }
             BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
-            BuildLogger buildLogger = buildLoggerManager.getBuildLogger(buildContext.getBuildResultKey());
+            BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
             SauceLogInterceptor logInterceptor = new SauceLogInterceptor(buildContext);
             buildLogger.getInterceptorStack().add(logInterceptor);
             //checkVersionIsCurrent();
@@ -162,7 +162,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
         try {
-            getSauceAPIFactory().setupProxy(administrationConfigurationManager);
+            getSauceAPIFactory().setupProxy(administrationConfigurationAccessor);
             String[] selectedBrowsers = getSelectedBrowsers(buildConfiguration);
             ValueStack stack = ActionContext.getContext().getValueStack();
             stack.getContext().put("selectedBrowsers", selectedBrowsers);
@@ -238,17 +238,17 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * @return boolean indicating whether the Sauce configuration specified in the administration interface
      */
     public boolean hasValidSauceConfig() {
-        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+        AdministrationConfiguration adminConfig = administrationConfigurationAccessor.getAdministrationConfiguration();
         return (StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY))
                 && StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY)));
     }
 
-    public AdministrationConfigurationManager getAdministrationConfigurationManager() {
-        return administrationConfigurationManager;
+    public AdministrationConfigurationAccessor getAdministrationConfigurationAccessor() {
+        return administrationConfigurationAccessor;
     }
 
-    public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {
-        this.administrationConfigurationManager = administrationConfigurationManager;
+    public void setAdministrationConfigurationAccessor(AdministrationConfigurationAccessor administrationConfigurationAccessor) {
+        this.administrationConfigurationAccessor = administrationConfigurationAccessor;
     }
 
     public void setSauceTunnelManager(SauceConnectTwoManager sauceTunnelManager) {

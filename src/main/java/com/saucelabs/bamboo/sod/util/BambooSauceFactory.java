@@ -1,7 +1,7 @@
 package com.saucelabs.bamboo.sod.util;
 
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
-import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
+import com.atlassian.bamboo.configuration.AdministrationConfigurationAccessor;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.ci.SauceFactory;
 import org.apache.commons.lang.StringUtils;
@@ -16,7 +16,7 @@ import java.net.PasswordAuthentication;
  */
 public class BambooSauceFactory extends SauceFactory {
 
-    public void setupProxy(AdministrationConfigurationManager administrationConfigurationManager) {
+    public void setupProxy(AdministrationConfigurationAccessor administrationConfigurationManager) {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String proxyHost = adminConfig.getSystemProperty(SODKeys.PROXY_HOST_KEY);
         String proxyPort = adminConfig.getSystemProperty(SODKeys.PROXY_PORT_KEY);
