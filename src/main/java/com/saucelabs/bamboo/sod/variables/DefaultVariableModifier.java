@@ -289,13 +289,13 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      */
     private void createCommonEnvironmentVariables(String prefix, StringBuilder stringBuilder, AdministrationConfiguration adminConfig) {
 
-        if (StringUtils.isNotEmpty(config.getUsername())) {
+        if (config.shouldOverrideAuthentication() && StringUtils.isNotEmpty(config.getUsername())) {
             config.setTempUsername(config.getUsername());
         } else {
             config.setTempUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         }
 
-        if (StringUtils.isNotEmpty(config.getAccessKey())) {
+        if (config.shouldOverrideAuthentication() && StringUtils.isNotEmpty(config.getAccessKey())) {
             config.setTempApikey(config.getAccessKey());
         } else {
             config.setTempApikey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));

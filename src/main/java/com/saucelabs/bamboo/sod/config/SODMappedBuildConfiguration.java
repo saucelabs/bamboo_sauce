@@ -18,6 +18,10 @@ public class SODMappedBuildConfiguration {
         this.map = map;
     }
 
+    public boolean shouldOverrideAuthentication() {
+        return map.get(OVERRIDE_AUTHENTICATION_KEY) != null &&map.get(OVERRIDE_AUTHENTICATION_KEY).equals("true");
+    }
+
     public String getUsername() {
         return map.get(SAUCE_USER_KEY);
     }

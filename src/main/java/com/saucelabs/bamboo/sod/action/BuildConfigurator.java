@@ -169,6 +169,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             context.put("selectedBrowsers", selectedBrowsers);
             context.put("webDriverBrowserList", getSauceBrowserFactory().getWebDriverBrowsers());
             context.put("seleniumRCBrowserList", getSauceBrowserFactory().getSeleniumBrowsers());
+            context.put("appiumBrowserList", getSauceBrowserFactory().getAppiumBrowsers());
         } catch (Exception e) {
             //TODO detect a proxy exception as opposed to all exceptions?
             populateDefaultBrowserList(context);

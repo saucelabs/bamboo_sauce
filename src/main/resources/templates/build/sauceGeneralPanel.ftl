@@ -22,7 +22,6 @@
 
     [@ww.checkbox label='Selenium RC Support?' name='custom.sauceondemand.seleniumrc' toggle='true' description='' /]
 
-
     [@ui.bambooSection dependsOn='custom.sauceondemand.seleniumrc' showOn='false']
         [@ww.select
             label="WebDriver Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
@@ -32,8 +31,37 @@
             list=webDriverBrowserList
             multiple="true"
             value="selectedBrowsers"
-            size="5"/]
+            size="10"
+            cssStyle="height: 160px; width: 600px;"/]
     [/@ui.bambooSection]
+
+    [@ui.bambooSection dependsOn='custom.sauceondemand.seleniumrc' showOn='true']
+            [@ww.select
+                label="Selenium RC Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
+                name="custom.sauceondemand.browser"
+                listKey="key"
+                listValue="name"
+                list=seleniumRCBrowserList
+                multiple="true"
+                value="selectedBrowsers"
+                size="10"
+                cssStyle="height: 160px; width: 600px;"/]
+        [/@ui.bambooSection]
+
+    [#--[@ww.checkbox label='Appium Support?' name='custom.sauceondemand.appium' toggle='true' description='' /]--]
+
+    [#--[@ui.bambooSection dependsOn='custom.sauceondemand.appium' showOn='true']--]
+            [#--[@ww.select--]
+                [#--label="Appium Browser(s)" description="The OS/Browser combination to use for testing with Appium"--]
+                [#--name="custom.sauceondemand.browser"--]
+                [#--listKey="key"--]
+                [#--listValue="name"--]
+                [#--list=appiumBrowserList--]
+                [#--multiple="true"--]
+                [#--value="selectedBrowsers"--]
+                [#--size="10"--]
+                [#--cssStyle="height: 160px; width: 600px;"/]--]
+        [#--[/@ui.bambooSection]--]
 
         <br clear="all"/>
     [@ww.textfield name='custom.sauceondemand.max-duration' label='Max Duration' description='The maximum time (in seconds) allotted to run tests' /]
