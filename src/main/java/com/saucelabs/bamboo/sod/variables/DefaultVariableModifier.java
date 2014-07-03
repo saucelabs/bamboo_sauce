@@ -61,15 +61,14 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         Map<String, VariableDefinitionContext> variables = new HashMap<String, VariableDefinitionContext>();
 
         String[] selectedBrowsers = config.getSelectedBrowsers();
-        if (selectedBrowsers.length != 1) {
-            JSONArray browsersJSON = new JSONArray();
-            for (String browser : selectedBrowsers) {
-                Browser browserInstance = sauceBrowserFactory.webDriverBrowserForKey(browser);
-                browserAsJSON(browsersJSON, browserInstance);
-            }
-            String jsonString = browsersJSON.toString();
-            addVariable(variables, SODKeys.SAUCE_BROWSERS, jsonString);
+        JSONArray browsersJSON = new JSONArray();
+        for (String browser : selectedBrowsers) {
+            Browser browserInstance = sauceBrowserFactory.webDriverBrowserForKey(browser);
+            browserAsJSON(browsersJSON, browserInstance);
         }
+        String jsonString = browsersJSON.toString();
+        addVariable(variables, SODKeys.SAUCE_BROWSERS, jsonString);
+
 
         return variables;
     }
@@ -88,7 +87,6 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     }
 
 
-
     private void addVariable(Map variables, String key, String value) {
         variables.put(key, new VariableDefinitionContextImpl(key, value, VariableType.CUSTOM));
     }
@@ -98,7 +96,6 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      * <ul>
      * <li></li>
      * </ul>
-
      */
     private void createCommonEnvironmentVariables(Map<String, VariableDefinitionContext> variables, AdministrationConfiguration adminConfig) {
 
