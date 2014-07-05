@@ -9,14 +9,13 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
-import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
+import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ import static org.mockito.Mockito.when;
 public class BuildConfiguratorTest extends AbstractTestHelper {
 
     private BuildConfigurator buildConfigurator;
-    private SauceTunnelManager tunnelManager;
+    private SauceConnectTwoManager tunnelManager;
     private BuildDefinition buildDefinition;
     private SauceTunnel sauceTunnel;
 
@@ -42,20 +41,19 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
     @Before
     public void setUp() throws Exception {
         this.buildConfigurator = new BuildConfigurator();
-        this.tunnelManager = new SauceTunnelManager(){
+        this.tunnelManager = new SauceConnectTwoManager(){
 
             public Map getTunnelMap() {
                 return tunnelMap;
             }
 
 
-            public void closeTunnelsForPlan(String username, PrintStream printStream) {
-                //To change body of implemented methods use File | Settings | File Templates.
+            public void closeTunnelsForPlan(String username, String options, PrintStream printStream) {
             }
 
-            public Process openConnection(String username, String apiKey, int port, File sauceConnectJar, PrintStream printStream) throws IOException {
-                tunnelMap.put(username, new Object());
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
+            public Process openConnection(String username, String apiKey, int port, File sauceConnectJar, String options, String httpsProtocol, PrintStream printStream, Boolean verboseLogging) throws SauceConnectException {
+                tunnelMap.put(username, mock(Process.class));
+                return null;
             }
         };
         buildConfigurator.setSauceTunnelManager(tunnelManager);

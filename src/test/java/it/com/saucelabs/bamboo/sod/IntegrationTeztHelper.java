@@ -51,7 +51,7 @@ public class IntegrationTeztHelper {
                 }
         );
         sauceTunnelManager = new SauceConnectTwoManager();
-        Process sauceConnect = sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), 4445, null, null);
+        Process sauceConnect = sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), 4445, null, null, null, null, true);
         System.out.println("tunnel established");
         String driver = System.getenv("SELENIUM_DRIVER");
         if (driver == null || driver.equals("")) {
@@ -67,7 +67,7 @@ public class IntegrationTeztHelper {
 
     @After
     public void tearDown() throws Exception {
-        sauceTunnelManager.closeTunnelsForPlan(c.getUsername(), null);
+        sauceTunnelManager.closeTunnelsForPlan(c.getUsername(), null, null);
         selenium.close();
 
     }
