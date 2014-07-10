@@ -63,13 +63,13 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         String[] selectedBrowsers = config.getSelectedBrowsers();
         JSONArray browsersJSON = new JSONArray();
         for (String browser : selectedBrowsers) {
-            Browser browserInstance = sauceBrowserFactory.webDriverBrowserForKey(browser);
+            Browser browserInstance = sauceBrowserFactory.webDriverBrowserForKey(browser.replaceAll(" ", "_"));
             browserAsJSON(browsersJSON, browserInstance);
         }
         String jsonString = browsersJSON.toString();
         addVariable(variables, SODKeys.SAUCE_BROWSERS, jsonString);
-
-
+        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+        createCommonEnvironmentVariables(variables, adminConfig);
         return variables;
     }
 
@@ -88,7 +88,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
 
     private void addVariable(Map variables, String key, String value) {
-        variables.put(key, new VariableDefinitionContextImpl(key, value, VariableType.CUSTOM));
+        variables.put(key, new VariableDefinitionContextImpl(key, value, VariableType.ENVIRONMENT));
     }
 
     /**
@@ -99,13 +99,13 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      */
     private void createCommonEnvironmentVariables(Map<String, VariableDefinitionContext> variables, AdministrationConfiguration adminConfig) {
 
-        if (StringUtils.isNotEmpty(config.getUsername())) {
+        if (config.shouldOverrideAuthentication() && StringUtils.isNotEmpty(config.getUsername())) {
             config.setTempUsername(config.getUsername());
         } else {
             config.setTempUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         }
 
-        if (StringUtils.isNotEmpty(config.getAccessKey())) {
+        if (config.shouldOverrideAuthentication() && StringUtils.isNotEmpty(config.getAccessKey())) {
             config.setTempApikey(config.getAccessKey());
         } else {
             config.setTempApikey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
@@ -177,9 +177,9 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         if (selectedBrowsers.length == 1) {
             Browser browser;
             if (config.getSeleniumVersion().equals(SeleniumVersion.ONE)) {
-                browser = sauceBrowserFactory.seleniumBrowserForKey(config.getSelectedBrowsers()[0]);
+                browser = sauceBrowserFactory.seleniumBrowserForKey(config.getSelectedBrowsers()[0].replaceAll(" ", "_"));
             } else {
-                browser = sauceBrowserFactory.webDriverBrowserForKey(config.getSelectedBrowsers()[0]);
+                browser = sauceBrowserFactory.webDriverBrowserForKey(config.getSelectedBrowsers()[0].replaceAll(" ", "_"));
             }
             if (browser != null) {
                 sb.append("&os=").append(browser.getOs());
@@ -236,7 +236,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         createCommonEnvironmentVariables(prefix, stringBuilder, adminConfig);
         String[] selectedBrowsers = config.getSelectedBrowsers();
         if (selectedBrowsers.length == 1) {
-            Browser browser = sauceBrowserFactory.webDriverBrowserForKey(selectedBrowsers[0]);
+            Browser browser = sauceBrowserFactory.webDriverBrowserForKey(selectedBrowsers[0].replaceAll(" ", "_"));
             //DefaultCapabilities information
             if (browser != null) {
                 stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PLATFORM_ENV).append(EQUALS).append(browser.getOs()).append('"');
