@@ -82,7 +82,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      */
     private PlanManager planManager;
 
-    private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
+    private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
     private static final String DEFAULT_IDLE_TIMEOUT = "90";
     private static final String DEFAULT_SELENIUM_URL = "http://saucelabs.com";
