@@ -38,12 +38,12 @@
     [@ui.bambooSection dependsOn='custom.sauceondemand.seleniumrc' showOn='true']
             [@ww.select
                 label="Selenium RC Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
-                name="custom.sauceondemand.browser"
+                name="custom.sauceondemand.rcbrowser"
                 listKey="key"
                 listValue="name"
                 list=seleniumRCBrowserList
                 multiple="true"
-                value="selectedBrowsers"
+                value="selectedRCBrowsers"
                 size="10"
                 cssStyle="height: 160px; width: 600px;"/]
         [/@ui.bambooSection]
