@@ -2,13 +2,11 @@ package com.saucelabs.bamboo.sod.plan;
 
 import com.atlassian.bamboo.build.Job;
 import com.atlassian.bamboo.build.ViewBuildResults;
-import com.atlassian.bamboo.chains.ChainResultsSummary;
-import com.atlassian.bamboo.chains.ChainStageResult;
+import com.atlassian.bamboo.chains.Chain;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanKeys;
-import com.atlassian.bamboo.resultsummary.BuildResultsSummary;
 import com.atlassian.bamboo.resultsummary.ResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
@@ -28,7 +26,10 @@ import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Handles invoking the Sauce REST API to find the Sauce Job id that corresponds to the Bamboo build.
@@ -92,22 +93,21 @@ public class ViewSODAction extends ViewBuildResults {
             }
         }
 
-        setResultsSummary(resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(getBuildKey(), getBuildNumber())));
-        if (buildResultsSummary == null) {
-            //we are on the Plan results pages, so drill down to the chain results to find the custom data
-            if (resultsSummary instanceof ChainResultsSummary) {
-                ChainResultsSummary chainSummary = (ChainResultsSummary) resultsSummary;
-                List<ChainStageResult> chainStageResults = chainSummary.getStageResults();
-                for (ChainStageResult chainStageResult : chainStageResults) {
-                    Set<BuildResultsSummary> buildResultSummaries = chainStageResult.getBuildResults();
-                    for (BuildResultsSummary summary : buildResultSummaries) {
-                        processBuildResultsSummary(username, accessKey);
-                    }
+        ResultsSummary resultSummary = resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(getBuildKey(), getBuildNumber()));
+        if (!(resultSummary instanceof Chain)) {
+            //the build number stored within Sauce will be that of the default chain, find the default chain and retrieve the corresponding result summary
+            List<Chain> chains = planManager.getPlansByProject(plan.getProject(), Chain.class);
+            for (Chain chain : chains) {
+                if (getBuildKey().startsWith(chain.getPlanKey().toString())) {
+                    setResultsSummary(resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(chain.getPlanKey(), getBuildNumber())));
                 }
             }
         } else {
-            processBuildResultsSummary(username, accessKey);
+            setResultsSummary(resultSummary);
         }
+
+        processBuildResultsSummary(username, accessKey);
+
 
         return super.doDefault();
     }
@@ -136,7 +136,7 @@ public class ViewSODAction extends ViewBuildResults {
      */
     private void retrieveJobIdsFromSauce(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         //invoke Sauce Rest API to find plan results with those values
-        String url = String.format(JOB_DETAILS_URL, username, getResultsSummary().getBuildResultKey());
+        String url = String.format(JOB_DETAILS_URL, username, PlanKeys.getPlanResultKey(resultsSummary.getPlanKey(), getResultsSummary().getBuildNumber()).getKey());
         logger.info("Invoking REST API for " + url);
         String jsonResponse = null;
         try {

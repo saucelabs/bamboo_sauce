@@ -19,7 +19,7 @@ public class SODMappedBuildConfiguration {
     }
 
     public boolean shouldOverrideAuthentication() {
-        return map.get(OVERRIDE_AUTHENTICATION_KEY) != null &&map.get(OVERRIDE_AUTHENTICATION_KEY).equals("true");
+        return map.get(OVERRIDE_AUTHENTICATION_KEY) != null && map.get(OVERRIDE_AUTHENTICATION_KEY).equals("true");
     }
 
     public String getUsername() {
@@ -31,7 +31,11 @@ public class SODMappedBuildConfiguration {
     }
 
     public String[] getSelectedBrowsers() {
-        return fromString(map.get(BROWSER_KEY));
+        String browsers = map.get(BROWSER_KEY);
+        if (browsers == null) {
+            map.get(BROWSER_RC_KEY);
+        }
+        return fromString(browsers);
     }
 
     public static String[] fromString(String string) {
