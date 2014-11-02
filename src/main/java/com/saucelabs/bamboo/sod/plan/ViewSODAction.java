@@ -74,25 +74,8 @@ public class ViewSODAction extends ViewBuildResults {
     @Override
     public String doDefault() throws Exception {
         logger.info("Processing ViewSODAction");
-        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
 
-        String username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
-        String accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
         Plan plan = planManager.getPlanByKey(PlanKeys.getPlanKey(getBuildKey()));
-        List<Job> jobs;
-        if (plan != null) {
-            jobs = planManager.getPlansByProject(plan.getProject(), Job.class);
-            for (Job job : jobs) {
-                if (job.getKey().startsWith(getBuildKey())) {
-                    final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
-                    if (StringUtils.isNotEmpty(config.getUsername())) {
-                        username = config.getUsername();
-                        accessKey = config.getAccessKey();
-                    }
-                }
-            }
-        }
-
         ResultsSummary resultSummary = resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(getBuildKey(), getBuildNumber()));
         if (!(resultSummary instanceof Chain)) {
             //the build number stored within Sauce will be that of the default chain, find the default chain and retrieve the corresponding result summary
@@ -106,25 +89,31 @@ public class ViewSODAction extends ViewBuildResults {
             setResultsSummary(resultSummary);
         }
 
-        processBuildResultsSummary(username, accessKey);
+        jobInformation = new ArrayList<JobInformation>();
+        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
 
+        String username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
+        String accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
+        retrieveJobIdsFromSauce(username, accessKey);
+
+        List<Job> jobs;
+        if (plan != null) {
+            jobs = planManager.getPlansByProject(plan.getProject(), Job.class);
+            for (Job job : jobs) {
+                if (job.getKey().startsWith(getBuildKey())) {
+                    final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
+                    if (StringUtils.isNotEmpty(config.getUsername())) {
+                        username = config.getUsername();
+                        accessKey = config.getAccessKey();
+                        retrieveJobIdsFromSauce(username, accessKey);
+                    }
+                }
+            }
+        }
 
         return super.doDefault();
     }
 
-    /**
-     * @param username
-     * @param accessKey
-     * @throws InvalidKeyException          thrown if an error occurs generating the key
-     * @throws NoSuchAlgorithmException     thrown if an error occurs generating the key
-     * @throws UnsupportedEncodingException thrown if an error occurs generating the key
-     */
-    private void processBuildResultsSummary(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
-        logger.info("Processing build summary");
-        jobInformation = new ArrayList<JobInformation>();
-        retrieveJobIdsFromSauce(username, accessKey);
-
-    }
 
     /**
      * Invokes the Sauce REST API to retrieve the details for the jobs the user has access to.  Iterates over the jobs
@@ -138,7 +127,7 @@ public class ViewSODAction extends ViewBuildResults {
         //invoke Sauce Rest API to find plan results with those values
         String url = String.format(JOB_DETAILS_URL, username, PlanKeys.getPlanResultKey(resultsSummary.getPlanKey(), getResultsSummary().getBuildNumber()).getKey());
         logger.info("Invoking REST API for " + url);
-        String jsonResponse = null;
+        String jsonResponse;
         try {
             jsonResponse = sauceAPIFactory.doREST(url, username, accessKey);
         } catch (IOException e) {
