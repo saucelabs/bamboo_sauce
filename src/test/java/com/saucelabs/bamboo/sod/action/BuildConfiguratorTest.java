@@ -1,19 +1,27 @@
 package com.saucelabs.bamboo.sod.action;
 
+import com.atlassian.bamboo.ResultKey;
 import com.atlassian.bamboo.build.BuildDefinition;
+import com.atlassian.bamboo.build.BuildLoggerManager;
+import com.atlassian.bamboo.build.logger.BuildLogger;
+import com.atlassian.bamboo.build.logger.LogInterceptorStack;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
+import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
-import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
+import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.io.File;
 import java.io.PrintStream;
@@ -25,23 +33,26 @@ import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
  * @author Ross Rowe
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest(ContainerManager.class)
 public class BuildConfiguratorTest extends AbstractTestHelper {
 
     private BuildConfigurator buildConfigurator;
-    private SauceConnectTwoManager tunnelManager;
+    private SauceConnectFourManager tunnelManager;
     private BuildDefinition buildDefinition;
     private SauceTunnel sauceTunnel;
 
-    private final Map<String,Object> tunnelMap = new HashMap<String,Object>();
+    private final Map<String, Object> tunnelMap = new HashMap<String, Object>();
 
     @Before
     public void setUp() throws Exception {
         this.buildConfigurator = new BuildConfigurator();
-        this.tunnelManager = new SauceConnectTwoManager(){
+        this.tunnelManager = new SauceConnectFourManager() {
 
             public Map getTunnelMap() {
                 return tunnelMap;
@@ -52,20 +63,22 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             }
 
             public Process openConnection(String username, String apiKey, int port, File sauceConnectJar, String options, String httpsProtocol, PrintStream printStream, Boolean verboseLogging) throws SauceConnectException {
-                tunnelMap.put(username, mock(Process.class));
+                BuildConfiguratorTest.this.tunnelMap.put(username, mock(Process.class));
                 return null;
             }
         };
-        buildConfigurator.setSauceTunnelManager(tunnelManager);
+        buildConfigurator.setSauceConnectFourTunnelManager(tunnelManager);
 
         BuildContext buildContext = mock(BuildContext.class);
         CurrentBuildResult buildResult = mock(CurrentBuildResult.class);
         buildDefinition = mock(BuildDefinition.class);
         when(buildContext.getBuildResult()).thenReturn(buildResult);
+        ResultKey planResultKey = mock(ResultKey.class);
+        when(buildContext.getResultKey()).thenReturn(planResultKey);
         when(buildContext.getBuildDefinition()).thenReturn(buildDefinition);
         when(buildContext.getPlanKey()).thenReturn("PLAN");
         Map<String, String> customBuildData = new HashMap<String, String>();
-        
+
         when(buildResult.getCustomBuildData()).thenReturn(customBuildData);
         Map<String, String> customConfiguration = new HashMap<String, String>();
         customConfiguration.put(SODKeys.TEMP_USERNAME, "tempUser");
@@ -74,20 +87,24 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         customConfiguration.put(SODKeys.SSH_LOCAL_PORTS_KEY, "1234");
 
         when(buildDefinition.getCustomConfiguration()).thenReturn(customConfiguration);
-        
+
         SauceTunnelFactory sauceTunnelFactory = mock(SauceTunnelFactory.class);
-//        sauceTunnel = mock(SauceTunnel.class);
-//        when(sauceTunnel.isRunning()).thenReturn(true);
-        //when(sauceTunnel.connect(Integer.parseInt("5678"), "sshhost", Integer.parseInt("1234")));
         when(sauceTunnelFactory.create(any(List.class))).thenReturn(sauceTunnel);
         BambooSauceFactory sauceAPIFactory = mock(BambooSauceFactory.class);
-//        when(sauceAPIFactory.createSauceTunnelFactory("tempUser", "apiKey")).thenReturn(sauceTunnelFactory);
-        
+
         buildConfigurator.setSauceAPIFactory(sauceAPIFactory);
         buildConfigurator.init(buildContext);
 
-    }
+        mockStatic(ContainerManager.class);
+        BuildLoggerManager buildLoggerManager = mock(BuildLoggerManager.class);
+        BuildLogger buildLogger = mock(BuildLogger.class);
+        LogInterceptorStack interceptorStack = mock(LogInterceptorStack.class);
+        when(buildLogger.getInterceptorStack()).thenReturn(interceptorStack);
+        when(buildLoggerManager.getLogger(planResultKey)).thenReturn(buildLogger);
+        when(ContainerManager.getComponent("buildLoggerManager")).thenReturn(buildLoggerManager);
 
+
+    }
 
 
     @Test
@@ -127,9 +144,9 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
     }
 
     @Test
-   	public void browserFromSaucelabs() throws Exception {
-           BrowserFactory factory = new BrowserFactory();
-           List<Browser> browsers = factory.getWebDriverBrowsers();
-           assertFalse("browsers is empty", browsers.isEmpty());
-   	}
+    public void browserFromSaucelabs() throws Exception {
+        BrowserFactory factory = new BrowserFactory();
+        List<Browser> browsers = factory.getWebDriverBrowsers();
+        assertFalse("browsers is empty", browsers.isEmpty());
+    }
 }

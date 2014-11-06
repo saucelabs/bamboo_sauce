@@ -20,7 +20,12 @@ public class ConfigureSODActionTest extends AbstractTestHelper {
     
     @Before
     public void setUp() throws Exception {
-        configureSODAction = new ConfigureSODAction();
+        configureSODAction = new ConfigureSODAction() {
+            @Override
+            public String getText(String key) {
+                return "";
+            }
+        };
         AdministrationConfigurationManager adminConfigManager = mock(AdministrationConfigurationManager.class);
         AdministrationConfiguration adminConfig = mock(AdministrationConfiguration.class);
         when(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY)).thenReturn("defaultUser");

@@ -8,15 +8,17 @@ import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
+import com.atlassian.bamboo.variable.VariableContext;
+import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.ci.Browser;
+import com.saucelabs.ci.BrowserFactory;
+import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Platform;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.io.IOException;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -33,6 +35,9 @@ public class EnvironmentConfiguratorTest {
     private Map<String, String> customConfiguration;
     private ArrayList<TaskDefinition> taskDefinitions;
     private Map<String, String> updatedConfiguration;
+    private Map<String, VariableDefinitionContext> variableDefinitions = new HashMap<String,VariableDefinitionContext>();
+
+    private Browser browser = new Browser("Windows 2008firefox7", "Windows 2008", "Firefox", "7", "7", "Firefox");
 
     @Before
     public void setUp() throws Exception {
@@ -42,14 +47,18 @@ public class EnvironmentConfiguratorTest {
         BuildDefinition buildDefinition = mock(BuildDefinition.class);
         PlanManager planManager = mock(PlanManager.class);
         Plan plan = mock(Plan.class);
+        VariableContext variableContext = mock(VariableContext.class);
         AdministrationConfigurationManager adminConfigManager = mock(AdministrationConfigurationManager.class);
         AdministrationConfiguration adminConfig = mock(AdministrationConfiguration.class);
         TaskDefinition definition = mock(TaskDefinition.class);
 
+
+        when(variableContext.getDefinitions()).thenReturn(variableDefinitions);
         when(buildContext.getBuildResult()).thenReturn(buildResult);
         when(buildContext.getBuildDefinition()).thenReturn(buildDefinition);
         when(buildContext.getPlanName()).thenReturn("PLAN");
         when(buildContext.getPlanKey()).thenReturn("PLAN");
+        when(buildContext.getVariableContext()).thenReturn(variableContext);
         when(planManager.getPlanByKey(eq("PLAN"))).thenReturn(plan);
         when(plan.getBuildDefinition()).thenReturn(buildDefinition);
 
@@ -63,7 +72,7 @@ public class EnvironmentConfiguratorTest {
         customConfiguration.put(SODKeys.TEMP_USERNAME, "tempUser");
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
         customConfiguration.put(SODKeys.ENABLED_KEY, "true");
-        customConfiguration.put(SODKeys.BROWSER_KEY, "[Windows 2008firefox7, Windows 2008firefox7]" );
+        customConfiguration.put(SODKeys.BROWSER_KEY, "Windows 2008firefox7" );
 
         this.taskDefinitions = new ArrayList<TaskDefinition>();
         taskDefinitions.add(definition);
@@ -74,6 +83,25 @@ public class EnvironmentConfiguratorTest {
 
         when(buildDefinition.getCustomConfiguration()).thenReturn(customConfiguration);
         environmentConfigurator.init(buildContext);
+
+        environmentConfigurator.setSauceBrowserFactory(new BrowserFactory() {
+
+            @Override
+            public Browser webDriverBrowserForKey(String key) {
+
+                return browser;
+            }
+
+            @Override
+            public List<Browser> getSeleniumBrowsers() throws IOException, JSONException {
+                return Arrays.asList(browser);
+            }
+
+            @Override
+            public List<Browser> getWebDriverBrowsers() throws IOException, JSONException {
+                return Arrays.asList(browser);
+            }
+        });
     }
 
     @Test
@@ -99,11 +127,11 @@ public class EnvironmentConfiguratorTest {
 
         String platform = map.get(SODKeys.SELENIUM_PLATFORM_ENV);
         assertNotNull("Platform not set", platform);
-        assertEquals("Platfom not WINDOWS", platform, Platform.VISTA.toString());
+        assertEquals("Platfom not WINDOWS", platform, "Windows 2008");
 		
 		String browser = map.get(SODKeys.SELENIUM_BROWSER_ENV);
 		assertNotNull("Browser not set", browser);
-        assertEquals("Browser not firefox", browser, "firefox");
+        assertEquals("Browser not firefox", browser, "Firefox");
 
 		String version = map.get(SODKeys.SELENIUM_VERSION_ENV);
 		assertNotNull("Version not set", version);

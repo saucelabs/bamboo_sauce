@@ -14,15 +14,16 @@ import java.util.Map;
 /**
  * Handles writing and restoring the Sauce OnDemand environment variables to the TaskDefinition instance (for Bamboo 3 instances).
  * The variables are saved to the plan's configuration, and are removed by the {@link PostBuildAction} class.
+ *
  * @author Ross Rowe
  */
-public class Bamboo3Modifier extends DefaultVariableModifier  {
+public class Bamboo3Modifier extends DefaultVariableModifier {
 
     public Bamboo3Modifier(SODMappedBuildConfiguration config, BuildDefinition definition, BuildContext buildContext) {
         super(config, definition, buildContext);
     }
 
-    public Map<String,VariableDefinitionContext> getVariables() {
+    public Map<String, VariableDefinitionContext> getVariables() {
         return createSeleniumVariableContext();
     }
 
@@ -30,26 +31,26 @@ public class Bamboo3Modifier extends DefaultVariableModifier  {
      * {@inheritDoc}
      */
     public void storeVariables() {
-            String envBuffer = createSeleniumEnvironmentVariables();
-            try {
-                Class taskDefinitionClass = TaskDefinition.class;
-                if (taskDefinitionClass != null) {
-                    List<TaskDefinition> taskDefinitions = definition.getTaskDefinitions();
-                    for (TaskDefinition taskDefinition : taskDefinitions) {
-                        Map<String, String> configuration = taskDefinition.getConfiguration();
-                        String originalEnv = configuration.get("environmentVariables");
-                        if (StringUtils.isNotBlank(originalEnv)) {
-                            envBuffer = originalEnv + " " + envBuffer;
-                        }
-
-                        config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
-                        configuration.put("environmentVariables", envBuffer);
+        String envBuffer = createSeleniumEnvironmentVariables();
+        try {
+            Class taskDefinitionClass = TaskDefinition.class;
+            if (taskDefinitionClass != null) {
+                List<TaskDefinition> taskDefinitions = definition.getTaskDefinitions();
+                for (TaskDefinition taskDefinition : taskDefinitions) {
+                    Map<String, String> configuration = taskDefinition.getConfiguration();
+                    String originalEnv = configuration.get("environmentVariables");
+                    if (StringUtils.isNotBlank(originalEnv)) {
+                        envBuffer = originalEnv + " " + envBuffer;
                     }
+
+                    config.getMap().put(SODKeys.TEMP_ENV_VARS, originalEnv);
+                    configuration.put("environmentVariables", envBuffer);
                 }
-            } catch (Exception e) {
-                //ignore and attempt to continue
             }
+        } catch (Exception e) {
+            //ignore and attempt to continue
         }
+    }
 
 
 }
