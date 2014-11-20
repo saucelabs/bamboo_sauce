@@ -66,6 +66,8 @@ public final class SODKeys
     public static final String SELENIUM_STARTING_URL_ENV = "SELENIUM_STARTING_URL";
     public static final String SAUCE_CUSTOM_DATA_ENV = "SAUCE_BAMBOO_BUILDNUMBER";
     public static final String BAMBOO_BUILD_NUMBER_ENV = "SAUCE_BAMBOO_BUILDNUMBER";
+    public static final String SAUCE_USERNAME_ENV = "SAUCE_USERNAME";
+    public static final String SAUCE_ACCESS_KEY_ENV = "SAUCE_ACCESS_KEY";
 
     public static final String TEMP_ENV_VARS = CUSTOM_PREFIX + "temp.env.vars";
     public static final String TEMP_USERNAME = CUSTOM_PREFIX + "temp.username";

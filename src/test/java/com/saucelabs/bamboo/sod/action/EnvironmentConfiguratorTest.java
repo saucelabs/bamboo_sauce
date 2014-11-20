@@ -37,7 +37,7 @@ public class EnvironmentConfiguratorTest {
     private Map<String, String> updatedConfiguration;
     private Map<String, VariableDefinitionContext> variableDefinitions = new HashMap<String,VariableDefinitionContext>();
 
-    private Browser browser = new Browser("Windows 2008firefox7", "Windows 2008", "Firefox", "7", "7", "Firefox");
+    private Browser browser = new Browser("Windows 2008firefox7", "Windows 2008", "Firefox", "Firefox", "7", "7", "Firefox");
 
     @Before
     public void setUp() throws Exception {

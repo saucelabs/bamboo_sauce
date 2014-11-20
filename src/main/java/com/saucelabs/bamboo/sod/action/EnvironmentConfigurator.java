@@ -52,7 +52,7 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
         variableModifier.setSauceBrowserFactory(getSauceBrowserFactory());
 
         variableModifier.storeVariables();
-        buildContext.getVariableContext().getDefinitions().putAll(variableModifier.getVariables());
+        variableModifier.populateVariables(buildContext.getVariableContext());
     }
 
     public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {

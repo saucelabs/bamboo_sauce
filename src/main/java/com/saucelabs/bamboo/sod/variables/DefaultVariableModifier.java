@@ -4,8 +4,8 @@ import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.v2.build.BuildContext;
+import com.atlassian.bamboo.variable.VariableContext;
 import com.atlassian.bamboo.variable.VariableDefinitionContext;
-import com.atlassian.bamboo.variable.VariableDefinitionContextImpl;
 import com.atlassian.bamboo.variable.VariableType;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
@@ -49,15 +49,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         this.buildContext = buildContext;
     }
 
-
-    /**
-     * @return String representing the set of environment variables to apply
-     */
-    protected Map<String, VariableDefinitionContext> createSeleniumVariableContext() {
-        return createSelenium2VariableContext();
-    }
-
-    private Map<String, VariableDefinitionContext> createSelenium2VariableContext() {
+    protected Map<String, VariableDefinitionContext> createSelenium2VariableContext(VariableContext variableContext) {
         Map<String, VariableDefinitionContext> variables = new HashMap<String, VariableDefinitionContext>();
 
         String[] selectedBrowsers = config.getSelectedBrowsers();
@@ -67,9 +59,9 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             browserAsJSON(browsersJSON, browserInstance);
         }
         String jsonString = browsersJSON.toString();
-        addVariable(variables, SODKeys.SAUCE_BROWSERS, jsonString);
+        addVariable(variableContext, SODKeys.SAUCE_BROWSERS, jsonString);
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
-        createCommonEnvironmentVariables(variables, adminConfig);
+        createCommonEnvironmentVariables(variableContext, adminConfig);
         return variables;
     }
 
@@ -87,8 +79,11 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     }
 
 
-    private void addVariable(Map variables, String key, String value) {
-        variables.put(key, new VariableDefinitionContextImpl(key, value, VariableType.ENVIRONMENT));
+    private void addVariable(VariableContext variables, String key, String value) {
+        variables.addLocalVariable(key, value);
+        VariableDefinitionContext variableDefinitionContext = variables.getEffectiveVariables().get(key);
+        variableDefinitionContext.setVariableType(VariableType.ENVIRONMENT);
+        //variables.put(key, new VariableDefinitionContextImpl(key, value, VariableType.ENVIRONMENT));
     }
 
     /**
@@ -97,7 +92,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      * <li></li>
      * </ul>
      */
-    private void createCommonEnvironmentVariables(Map<String, VariableDefinitionContext> variables, AdministrationConfiguration adminConfig) {
+    private void createCommonEnvironmentVariables(VariableContext variables, AdministrationConfiguration adminConfig) {
 
         if (config.shouldOverrideAuthentication() && StringUtils.isNotEmpty(config.getUsername())) {
             config.setTempUsername(config.getUsername());
@@ -127,8 +122,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         }
     }
 
-    private void addVariable(Map<String, VariableDefinitionContext> variables, String key, int value) {
-        variables.put(key, new VariableDefinitionContextImpl(key, String.valueOf(value), VariableType.GLOBAL));
+    private void addVariable(VariableContext variables, String key, int value) {
+        addVariable(variables, key, String.valueOf(value));
     }
 
     /**
@@ -245,6 +240,14 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             }
         } //multiple browsers are populated within the bamboo_SAUCE_ONDEMAND_BROWSERS environment variable
 
+//        JSONArray browsersJSON = new JSONArray();
+//        for (String browser : selectedBrowsers) {
+//            Browser browserInstance = sauceBrowserFactory.webDriverBrowserForKey(browser.replaceAll(" ", "_"));
+//            browserAsJSON(browsersJSON, browserInstance);
+//        }
+//        String jsonString = browsersJSON.toString();
+//        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_BROWSERS).append(EQUALS).append(StringEscapeUtils.escapeJava(jsonString)).append('"');;
+
         return stringBuilder.toString();
     }
 
@@ -307,6 +310,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_IDLE_TIMEOUT_ENV).append(EQUALS).append(config.getIdleTimeout()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_USER_NAME).append(EQUALS).append(config.getTempUsername()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_API_KEY).append(EQUALS).append(config.getTempApikey()).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_USERNAME_ENV).append(EQUALS).append(config.getTempUsername()).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_ACCESS_KEY_ENV).append(EQUALS).append(config.getTempApikey()).append('"');
         if (buildContext.getParentBuildContext() == null) {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
         } else {

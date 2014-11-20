@@ -3,6 +3,7 @@ package com.saucelabs.bamboo.sod.variables;
 import com.atlassian.bamboo.build.BuildDefinition;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
+import com.atlassian.bamboo.variable.VariableContext;
 import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
@@ -23,8 +24,9 @@ public class Bamboo3Modifier extends DefaultVariableModifier {
         super(config, definition, buildContext);
     }
 
-    public Map<String, VariableDefinitionContext> getVariables() {
-        return createSeleniumVariableContext();
+
+    public void populateVariables(VariableContext variableContext) {
+        createSelenium2VariableContext(variableContext);
     }
 
     /**
