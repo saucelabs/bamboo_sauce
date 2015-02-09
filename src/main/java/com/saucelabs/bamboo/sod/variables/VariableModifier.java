@@ -22,8 +22,6 @@ public interface VariableModifier {
      * with 'bamboo_', this will be the preferred approach moving forward.
      */
     void storeVariables();
-    
-    //Map<String, VariableDefinitionContext> getVariables();
 
     void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager);
 

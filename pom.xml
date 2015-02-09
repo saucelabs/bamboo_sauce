@@ -145,7 +145,7 @@
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>ci-sauce</artifactId>
-            <version>1.84</version>
+            <version>1.90</version>
         </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>

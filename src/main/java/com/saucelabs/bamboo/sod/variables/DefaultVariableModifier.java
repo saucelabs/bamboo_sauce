@@ -82,8 +82,10 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     private void addVariable(VariableContext variables, String key, String value) {
         variables.addLocalVariable(key, value);
         VariableDefinitionContext variableDefinitionContext = variables.getEffectiveVariables().get(key);
-        variableDefinitionContext.setVariableType(VariableType.ENVIRONMENT);
-        //variables.put(key, new VariableDefinitionContextImpl(key, value, VariableType.ENVIRONMENT));
+        if (variableDefinitionContext != null)
+        {
+            variableDefinitionContext.setVariableType(VariableType.ENVIRONMENT);
+        }
     }
 
     /**
