@@ -51,7 +51,7 @@ public class IntegrationTeztHelper {
                 }
         );
         sauceTunnelManager = new SauceConnectTwoManager();
-        Process sauceConnect = sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), 4445, null, null, null, null, true);
+        Process sauceConnect = sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), 4445, null, null, null, null, true, null);
         System.out.println("tunnel established");
         String driver = System.getenv("SELENIUM_DRIVER");
         if (driver == null || driver.equals("")) {
