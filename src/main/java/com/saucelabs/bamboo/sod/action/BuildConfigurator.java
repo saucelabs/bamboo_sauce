@@ -9,6 +9,8 @@ import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
+import com.atlassian.bamboo.variable.CustomVariableContext;
+import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork2.ActionContext;
@@ -35,10 +37,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static com.saucelabs.bamboo.sod.config.SODKeys.BROWSER_KEY;
-import static com.saucelabs.bamboo.sod.config.SODKeys.BROWSER_RC_KEY;
-import static com.saucelabs.bamboo.sod.config.SODKeys.SELENIUMRC_KEY;
+import static com.saucelabs.bamboo.sod.config.SODKeys.*;
 
 /**
  * Pre-Build Action which will start a SSH Tunnel via the Sauce REST API if the build is configured to run
@@ -57,6 +59,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private SauceConnectTwoManager sauceTunnelManager;
 
     private SauceConnectFourManager sauceConnectFourTunnelManager;
+
+    private CustomVariableContext customVariableContext;
 
     /**
      * Populated by dependency injection.
@@ -83,7 +87,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      */
     private PlanManager planManager;
 
-    private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "unknown", "unknown","ERROR Retrieving Browser List!");
+    private static final Browser DEFAULT_BROWSER = new Browser("unknown", "unknown", "unknown", "unknown", "unknown", "unknown", "ERROR Retrieving Browser List!");
     private static final String DEFAULT_MAX_DURATION = "300";
     private static final String DEFAULT_IDLE_TIMEOUT = "90";
     private static final String DEFAULT_SELENIUM_URL = "http://saucelabs.com";
@@ -149,8 +153,32 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * @throws IOException
      */
     public void startTunnel(SODMappedBuildConfiguration config) throws IOException {
-        SauceTunnelManager sauceTunnelManager = config.isSauceConnect3() ? getSauceTunnelManager() : getSauceConnectFourTunnelManager();
-        sauceTunnelManager.openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, config.getSauceConnectOptions(), config.getHttpsProtocol(), null, false, null);
+        SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();
+        String options = getResolvedOptions(config.getSauceConnectOptions());
+        sauceTunnelManager.openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, options, config.getHttpsProtocol(), null, false, null);
+    }
+
+    private String getResolvedOptions(String sauceConnectOptions) {
+        String options = sauceConnectOptions;
+
+        if (options != null) {
+            Map<String, VariableDefinitionContext> variableMap = customVariableContext.getVariableContexts(buildContext);
+            //check to see if options contains any environment variables to be resolved
+            Pattern pattern = Pattern.compile("(\\$\\{.+\\})");
+            Matcher matcher = pattern.matcher(options);
+            while (matcher.find()) {
+                String match = matcher.group();
+                String key = match.replaceAll("[\\$\\{\\}]", "");
+                if (key.startsWith("bamboo.")) {
+                    key = key.replaceAll("bamboo.", "");
+                }
+                VariableDefinitionContext context = variableMap.get(key);
+                if (context != null) {
+                    options = options.replace(match, context.getValue());
+                }
+            }
+        }
+        return options;
     }
 
 
@@ -324,5 +352,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     public void setSauceConnectFourTunnelManager(SauceConnectFourManager sauceConnectFourTunnelManager) {
         this.sauceConnectFourTunnelManager = sauceConnectFourTunnelManager;
+    }
+
+    public void setCustomVariableContext(CustomVariableContext customVariableContext) {
+        this.customVariableContext = customVariableContext;
     }
 }
