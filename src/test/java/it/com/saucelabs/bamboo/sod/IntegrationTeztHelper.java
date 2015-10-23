@@ -2,7 +2,7 @@ package it.com.saucelabs.bamboo.sod;
 
 
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
-import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
+import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.rest.Credential;
 import com.saucelabs.selenium.client.factory.SeleniumFactory;
@@ -50,8 +50,8 @@ public class IntegrationTeztHelper {
                     }
                 }
         );
-        sauceTunnelManager = new SauceConnectTwoManager();
-        Process sauceConnect = sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), 4445, null, null, null, null, true, null);
+        sauceTunnelManager = new SauceConnectFourManager();
+        Process sauceConnect = sauceTunnelManager.openConnection(c.getUsername(), c.getKey(), 4445, null, null, null, true, null);
         System.out.println("tunnel established");
         String driver = System.getenv("SELENIUM_DRIVER");
         if (driver == null || driver.equals("")) {
@@ -74,6 +74,6 @@ public class IntegrationTeztHelper {
 
     @Test
 	public void empty() throws Exception {}
-    
+
 
 }

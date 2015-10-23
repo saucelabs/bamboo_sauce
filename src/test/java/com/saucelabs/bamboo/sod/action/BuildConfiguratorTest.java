@@ -14,6 +14,7 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
+import com.saucelabs.ci.sauceconnect.AbstractSauceTunnelManager;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
@@ -62,7 +63,8 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             public void closeTunnelsForPlan(String username, String options, PrintStream printStream) {
             }
 
-            public Process openConnection(String username, String apiKey, int port, File sauceConnectJar, String options, String httpsProtocol, PrintStream printStream, Boolean verboseLogging) throws SauceConnectException {
+            @Override
+            public Process openConnection(String username, String apiKey, int port, File sauceConnectJar, String options, PrintStream printStream, Boolean verboseLogging, String sauceConnectPath) throws SauceConnectException {
                 BuildConfiguratorTest.this.tunnelMap.put(username, mock(Process.class));
                 return null;
             }
