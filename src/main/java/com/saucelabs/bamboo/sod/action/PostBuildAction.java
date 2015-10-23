@@ -14,7 +14,6 @@ import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
-import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.io.FileUtils;
@@ -63,10 +62,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     private BuildLoggerManager buildLoggerManager;
 
 
-    /**
-     * Populated via dependency injection.
-     */
-    private SauceConnectTwoManager sauceTunnelManager;
+
 
     private SauceConnectFourManager sauceConnectFourTunnelManager;
 
@@ -76,7 +72,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {
             try {
-                SauceTunnelManager sauceTunnelManager = config.isSauceConnect3() ? getSauceTunnelManager() : getSauceConnectFourTunnelManager();
+                SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();
                 sauceTunnelManager.closeTunnelsForPlan(config.getTempUsername(), config.getSauceConnectOptions(), null);
                 recordSauceJobResult(config);
             } catch (IOException e) {
@@ -92,18 +88,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     public void setPlanManager(PlanManager planManager) {
         this.planManager = planManager;
-    }
-
-    public void setSauceTunnelManager(SauceConnectTwoManager sauceTunnelManager) {
-        this.sauceTunnelManager = sauceTunnelManager;
-    }
-
-    public SauceConnectTwoManager getSauceTunnelManager() {
-        if (sauceTunnelManager == null) {
-            //this will occur when a remote agent runs, as it doesn't have Spring components available
-            setSauceTunnelManager(new SauceConnectTwoManager());
-        }
-        return sauceTunnelManager;
     }
 
     /**

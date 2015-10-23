@@ -24,7 +24,6 @@ import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
-import com.saucelabs.ci.sauceconnect.SauceConnectTwoManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -53,10 +52,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     private static final Logger logger = Logger.getLogger(BuildConfigurator.class);
 
-    /**
-     * Populated via dependency injection.
-     */
-    private SauceConnectTwoManager sauceTunnelManager;
+
 
     private SauceConnectFourManager sauceConnectFourTunnelManager;
 
@@ -155,7 +151,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public void startTunnel(SODMappedBuildConfiguration config) throws IOException {
         SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
-        sauceTunnelManager.openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, options, config.getHttpsProtocol(), null, false, null);
+        sauceTunnelManager.openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, options, null, false, null);
     }
 
     private String getResolvedOptions(String sauceConnectOptions) {
@@ -302,9 +298,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.administrationConfigurationAccessor = administrationConfigurationAccessor;
     }
 
-    public void setSauceTunnelManager(SauceConnectTwoManager sauceTunnelManager) {
-        this.sauceTunnelManager = sauceTunnelManager;
-    }
+
 
     public void setSauceBrowserFactory(BrowserFactory sauceBrowserFactory) {
         this.sauceBrowserFactory = sauceBrowserFactory;
@@ -314,12 +308,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.sauceAPIFactory = sauceAPIFactory;
     }
 
-    public SauceConnectTwoManager getSauceTunnelManager() {
-        if (sauceTunnelManager == null) {
-            setSauceTunnelManager(new SauceConnectTwoManager());
-        }
-        return sauceTunnelManager;
-    }
+
 
     public SauceConnectFourManager getSauceConnectFourTunnelManager() {
         if (sauceConnectFourTunnelManager == null) {

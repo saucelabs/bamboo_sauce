@@ -37,8 +37,12 @@
     </developers>
     <properties>
         <bamboo.version>5.8.1</bamboo.version>
-        <bamboo.data.version>2.6.1</bamboo.data.version>
-        <atlassian.plugins.version>3.3.1</atlassian.plugins.version>
+        <bamboo.data.version>5.8.1</bamboo.data.version>
+        <atlassian.plugins.version>6.1.2</atlassian.plugins.version>
+        <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
+        <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
+        <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
+        <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/saucelabs/bamboo_sauce.git</connection>
@@ -61,24 +65,57 @@
                 <configuration>
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
-                    <instructions>
-                        <Export-Package>org.codehaus.jackson*</Export-Package>
-                        <Import-Package>org.apache.log4j;version="0.0", org.apache.commons.logging;version="0.0",
+					<enableQuickReload>true</enableQuickReload>
+                    <enableFastdev>false</enableFastdev>
+                    <instructions>   
+	                    <Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key> 
+                        <Export-Package>org.codehaus.jackson*</Export-Package> 
+						 <Import-Package>
+	                            org.springframework.osgi.*;resolution:="optional",
+	                            org.eclipse.gemini.blueprint.*;resolution:="optional",
+	                            *
+	                        </Import-Package>
+                        <!--Import-Package>org.apache.log4j;version="0.0", org.apache.commons.logging;version="0.0",
                             org.apache.commons.lang*;version="0.0", org.apache.commons.io*;version="0.0",
                             org.apache.commons.codec*;version="0.0", com.atlassian.bamboo.*;version="0.0",
                             com.atlassian.spring.*;version="0.0",com.atlassian.event.*;version="0.0",
                             com.atlassian.core.util;version="4.5.3", com.atlassian.bamboo;version="0.0",
                             com.atlassian.plugin;version="2.7.3", javax.crypto.spec;version="0.0",
-                            javax.crypto;version="0.0",com.opensymphony.xwork2*;version="0.0",
-                        </Import-Package>
+                            javax.crypto;version="0.0",com.opensymphony.xwork2*;version="0.0",*
+                        </Import-Package-->    
+						<!-- Ensure plugin is spring powered - see https://extranet.atlassian.com/x/xBS9hQ  -->
+                        <Spring-Context>*</Spring-Context>
                     </instructions>
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>com.atlassian.plugin</groupId>
+                <artifactId>atlassian-spring-scanner-maven-plugin</artifactId>
+                <version>1.2.6</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>atlassian-spring-scanner</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <scannedDependencies>
+                        <dependency>
+                            <groupId>com.atlassian.plugin</groupId>
+                            <artifactId>atlassian-spring-scanner-external-jar</artifactId>
+                        </dependency>
+                    </scannedDependencies>
+                    <verbose>false</verbose>
+                </configuration>
+            </plugin>
+          
+            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -147,7 +184,7 @@
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>ci-sauce</artifactId>
-            <version>1.104</version>
+            <version>1.107</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.saucelabs</groupId>
