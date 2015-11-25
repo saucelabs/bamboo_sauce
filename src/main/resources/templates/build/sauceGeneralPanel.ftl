@@ -84,10 +84,6 @@
 
         <br clear="all"/>
     [@ww.textfield name='custom.sauceondemand.sauceConnectOptions' label='Sauce Connect Options' description='Additional command line options for Sauce Connect' /]
-        <br clear="all"/>
-    [@ww.checkbox label='Sauce Connect v3?' name='custom.sauceondemand.sauceConnect3' toggle='true' description='Launch the legacy version of Sauce Connect' /]
-
-
 
     </div>
 </div>

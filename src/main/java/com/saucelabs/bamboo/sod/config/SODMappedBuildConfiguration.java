@@ -159,12 +159,5 @@ public class SODMappedBuildConfiguration {
         return map.get(SAUCE_CONNECT_OPTIONS);
     }
 
-    public boolean isSauceConnect3() {
-        String sauceConnect3 = map.get(SAUCE_CONNECT_V3);
-        if (sauceConnect3 == null || sauceConnect3.equals("")) {
-            return false;
-        }
-        return Boolean.parseBoolean(sauceConnect3);
-    }
 
 }
