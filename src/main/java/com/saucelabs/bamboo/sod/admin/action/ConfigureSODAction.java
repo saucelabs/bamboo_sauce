@@ -1,23 +1,43 @@
 package com.saucelabs.bamboo.sod.admin.action;
 
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
+import com.atlassian.bamboo.configuration.AdministrationConfigurationAccessor;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.atlassian.bamboo.configuration.ConfigurationAction;
+import com.atlassian.bamboo.configuration.AdministrationConfigurationPersister;
+import com.atlassian.bamboo.ww2.BambooActionSupport;
+import com.atlassian.bamboo.ww2.aware.permissions.GlobalAdminSecurityAware;
+import com.atlassian.plugin.PluginAccessor;
+import com.atlassian.sal.api.component.ComponentLocator;
 import com.opensymphony.xwork2.ActionContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.ci.BrowserFactory;
 import org.apache.commons.lang.StringUtils;
 
 /**
  * Handles the validation and storage of the Sauce administration variables.
- * 
+ *
  * The values entered here apply to all projects in the Bamboo environment.
  *
- * 
+ *
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */
-public class ConfigureSODAction extends ConfigurationAction
+public class ConfigureSODAction extends BambooActionSupport implements GlobalAdminSecurityAware
 {
+
+    /**
+     * Populated via dependency injection.
+     */
+    private BrowserFactory sauceBrowserFactory;
+
+    public ConfigureSODAction(PluginAccessor pluginAccessor
+    ) {
+        super();
+        setAdministrationConfigurationAccessor(ComponentLocator.getComponent(AdministrationConfigurationAccessor.class));
+        setAdministrationConfigurationManager(ComponentLocator.getComponent(AdministrationConfigurationManager.class));
+        setAdministrationConfigurationPersister(ComponentLocator.getComponent(AdministrationConfigurationPersister.class));
+    }
+
     private String username;
     private String accessKey;
 
@@ -27,19 +47,13 @@ public class ConfigureSODAction extends ConfigurationAction
     private String proxyPassword;
 
     /**
-     * Populated via dependency injection.
-     */
-    private transient AdministrationConfigurationManager administrationConfigurationManager;
-
-    /**
      * Invoked when the Sauce Administration screen is opened, populates the underlying variables
      * with some default values.
      * @return 'input'
      */
-    @Override
-    public String doDefault()
+    public String doEdit()
     {
-        final AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+        final AdministrationConfiguration adminConfig = this.getAdministrationConfiguration();
         setUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         setAccessKey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
         setProxyHost(adminConfig.getSystemProperty(SODKeys.PROXY_HOST_KEY));
@@ -51,13 +65,12 @@ public class ConfigureSODAction extends ConfigurationAction
 
     /**
      * Invoked when a user clicks 'Save' on the Sauce Administration screen.
-     * 
+     *
      * @return 'success'
      */
     public String doSave()
     {
-
-        final AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+        final AdministrationConfiguration adminConfig = this.getAdministrationConfiguration();
         adminConfig.setSystemProperty(SODKeys.SOD_USERNAME_KEY, getUsername());
         adminConfig.setSystemProperty(SODKeys.SOD_ACCESSKEY_KEY, getAccessKey());
         adminConfig.setSystemProperty(SODKeys.PROXY_HOST_KEY, getProxyHost());
@@ -79,7 +92,7 @@ public class ConfigureSODAction extends ConfigurationAction
 
     /**
      * Performs validation over the variables that are populated from the administration.
-     * interface.  
+     * interface.
      */
     @Override
     public void validate()
@@ -94,16 +107,6 @@ public class ConfigureSODAction extends ConfigurationAction
             addFieldError("accessKey", "Access Key is required.");
         }
 
-    }
-
-    public AdministrationConfigurationManager getAdministrationConfigurationManager()
-    {
-        return administrationConfigurationManager;
-    }
-
-    public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager)
-    {
-        this.administrationConfigurationManager = administrationConfigurationManager;
     }
 
     public String getAccessKey()

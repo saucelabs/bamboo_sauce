@@ -1,13 +1,15 @@
-<atlassian-plugin key="com.saucelabs.bamboo.bamboo-sauceondemand-plugin" name="Bamboo Sauce OnDemand Plugin"
-                  plugins-version="2">
+<?xml version="1.0" encoding="UTF-8"?>
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
     <plugin-info>
-        <description>This is the Sauce OnDemand plugin for Bamboo</description>
+        <description>${project.description}</description>
         <version>${project.version}</version>
-        <vendor name="Sauce Labs" url="http://www.saucelabs.com/"/>
-        <bundle-instructions>
-            <Import-Package>com.saucelabs.bamboo.sod;resolution:=optional</Import-Package>
-        </bundle-instructions>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="atlassian-data-center-compatible">true</param>
     </plugin-info>
+
+    <!--<component-import key="administrationConfigurationAccessor" interface="com.atlassian.bamboo.configuration.AdministrationConfigurationAccessor"/>-->
 
     <web-resource key="sauceImages" name="sauceImages">
         <resource type="download" name="sauce_labs_horizontal.png" location="images/sauce_labs_horizontal.png"/>
@@ -46,11 +48,11 @@
 
     <xwork key="sodActions" name="Sauce OnDemand Actions">
         <package name="sodAdmin" extends="admin" namespace="/admin/sauceondemand">
-            <action name="configureSauceOnDemand" class="com.saucelabs.bamboo.sod.admin.action.ConfigureSODAction"
-                    method="default">
+            <action name="configureSauceOnDemand" class="com.saucelabs.bamboo.sod.admin.action.ConfigureSODAction" method="edit">
                 <result name="input" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
+                <param name="mode">edit</param>
             </action>
 
             <action name="configureSauceOnDemandSave" class="com.saucelabs.bamboo.sod.admin.action.ConfigureSODAction"
@@ -123,11 +125,10 @@
         </condition>
     </web-item>
 
-    <component-import key="buildLoggerManager" interface="com.atlassian.bamboo.build.BuildLoggerManager"/>
+    <!--<component-import key="buildLoggerManager" interface="com.atlassian.bamboo.build.BuildLoggerManager"/>-->
 
     <bambooEventListener key="buildHungNotificationListener" name="Build Notification Listener"
                          class="com.saucelabs.bamboo.sod.listener.SauceBuildListener">
         <description>Listens for if a build has hung.</description>
     </bambooEventListener>
-
 </atlassian-plugin>
