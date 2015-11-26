@@ -6,28 +6,27 @@ import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
 import org.apache.log4j.Logger;
 
 /**
- * Handles the invocation of update checks for the Sauce Connect library. 
+ * Handles the invocation of update checks for the Sauce Connect library.
  * @author Ross Rowe
  */
 public class CheckSauceConnectVersionAction extends ConfigurationAction {
 
     private static final Logger logger = Logger.getLogger(CheckSauceConnectVersionAction.class);
-    
+
     private SystemInfo systemInfo;
-    
+
     /**
      * Populated via dependency injection.
      */
     private transient BambooSauceLibraryManager sauceLibraryManager;
 
     /**
-     * Invoked when the 'Check for updates to Sauce Connect' link is clicked.  
-     * @return 'success' if a new version of Sauce Connect is available, 'none' if no new versions are available, 
+     * Invoked when the 'Check for updates to Sauce Connect' link is clicked.
+     * @return 'success' if a new version of Sauce Connect is available, 'none' if no new versions are available,
      * 'error' if an error occurs
-     * @throws Exception
      */
     @Override
-    public String doDefault() throws Exception {
+    public String doDefault() {
         try {
             boolean laterVersionAvailable = sauceLibraryManager.checkForLaterVersion();
             if (laterVersionAvailable) {
@@ -63,8 +62,8 @@ public class CheckSauceConnectVersionAction extends ConfigurationAction {
         }
         return ERROR;
     }
-    
-    
+
+
     @Override
     public void validate()
     {

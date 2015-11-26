@@ -13,18 +13,20 @@ import java.util.Map;
  */
 public class ViewSODCondition implements Condition {
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void init(Map<String, String> map) throws PluginParseException {
-
     }
 
     /**
-     * Always returns true.
-     *
-     * @param planMap
-     * @return
+     * Sauce on demand tab should always be shown
+     * {@inheritDoc}
+     * @return true
      */
-    public boolean shouldDisplay(Map<String, Object> planMap) {
-
+    @Override
+    public boolean shouldDisplay(Map<String, Object> context) {
         return true;
     }
 }

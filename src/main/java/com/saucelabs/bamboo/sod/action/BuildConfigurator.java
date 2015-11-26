@@ -94,12 +94,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     /**
      * Entry point into build action.
      *
-     * @return
-     * @throws IOException
+     * @return FIXME - ???
      */
     @NotNull
-    //@Override
-    public BuildContext call() throws IOException {
+    @Override
+    public BuildContext call() {
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             BambooSauceFactory factory = getSauceAPIFactory();
@@ -145,8 +144,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     /**
      * Opens the tunnel and adds the tunnel instance to the sauceTunnelManager map.
      *
-     * @param config
-     * @throws IOException
+     * @param config Configuration as provided for the job
+     * @throws IOException when unable to create tunnel for various reasons
      */
     public void startTunnel(SODMappedBuildConfiguration config) throws IOException {
         SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();

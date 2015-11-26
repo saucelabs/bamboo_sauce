@@ -14,13 +14,6 @@ import java.util.Map;
  * @author Ross Rowe
  */
 public interface VariableModifier {
-
-
-    /**
-     * @deprecated populates the build configuration with the environment variable definitions.  The {@link #getVariables()}
-     * will produce a map of variables, which will be set within the variable context.  Although these variables are prefixed
-     * with 'bamboo_', this will be the preferred approach moving forward.
-     */
     void storeVariables();
 
     void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager);

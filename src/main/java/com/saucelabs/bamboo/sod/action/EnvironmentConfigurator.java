@@ -31,10 +31,10 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
     /**
      * Entry point into build action.
      *
-     * @return
+     * @return ??? FIXME
      */
     @NotNull
-    //@Override
+    @Override
     public BuildContext call() {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {

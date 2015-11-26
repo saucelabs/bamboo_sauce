@@ -50,13 +50,16 @@ public class ViewSauceJobAction extends ViewBuildResults {
     private String jobId;
 
     /**
+     * <p>
      * Attempts to retrieve the Sauce Session Id from the custom build data (it will be set if the {@link com.saucelabs.bamboo.sod.action.PostBuildAction} class detects if
      * the test output contains a line starting with 'SauceOnDemandSessionID').  If the session id has not been set in the custom build data,
      * then we attempt to retrieve the job id via the Sauce REST API.
-     * <p/>
+     * </p>
+     * <p>
      * If a job id is found, then it is stored in the <code>jobId</code> instance variable,
      * for use by the sodView.ftl template. A HMAC token is also generated, which will be used
      * to authenticate the embedded job result requests.
+     * </p>
      *
      * @return 'default'
      * @throws Exception thrown if an error occurs during the invocation of the Sauce REST API

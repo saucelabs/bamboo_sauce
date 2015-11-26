@@ -19,10 +19,9 @@ public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlug
      * Return a new {@link VariableModifier} instance that will be used to construct the environment
      * variables.
      *
-     *
-     * @param config
-     * @param definition
-     * @return
+     * @param config        Mapped config for project
+     * @param definition    Project definition
+     * @return instance that will be used to construct the environment variables
      */
     protected VariableModifier getVariableModifier(SODMappedBuildConfiguration config, BuildDefinition definition) {
         return new Bamboo3Modifier(config, definition, buildContext);

@@ -9,15 +9,17 @@ import java.net.URISyntaxException;
 //import de.schlichtherle.truezip.file.TFile;
 
 /**
+ * <p>
  * Handles checking for and installing updates to the SauceConnect library.  Updates are checked by
  * sending a request to https://saucelabs.com/versions.json, and comparing the version attribute of the
  * 'Sauce Connect 2' entry in the JSON response to the SauceConnect.RELEASE() variable.
- * <p/>
+ * </p>
+ * <p>
  * If the version number in the JSON response is greater than the value in the SauceConnect library,
  * we need to perform a HTTP get on the URL specified in the download_url attribute of the JSON response
  * (which will be a ZIP file).  We then unzip the zip file, and include the Sauce-Connect.jar file into the
  * Bamboo plugin.
- * <p/>
+ * </p>
  *
  * @author Ross Rowe
  */

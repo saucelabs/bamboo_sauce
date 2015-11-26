@@ -90,9 +90,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
     /**
      * Writes the following environment variables to the <code>stringBuilder</code>:
-     * <ul>
-     * <li></li>
-     * </ul>
+     * @param variables      FIXME
+     * @param adminConfig    FIXME
      */
     private void createCommonEnvironmentVariables(VariableContext variables, AdministrationConfiguration adminConfig) {
 
@@ -129,10 +128,10 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     }
 
     /**
-     * @param username
-     * @param apiKey
-     * @param config
-     * @return
+     * @param username    Sauce Username
+     * @param apiKey      Sauce API Key
+     * @param config      ??? FIXME
+     * @return JSON FIXME
      */
     protected String getSodJson(String username, String apiKey, SODMappedBuildConfiguration config) {
 
@@ -158,10 +157,9 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      * Generates a String that represents the Sauce OnDemand driver URL. This is used by the
      * <a href="http://selenium-client-factory.infradna.com/">selenium-client-factory</a> library to instantiate the Sauce-specific drivers.
      *
-     * @param username
-     * @param apiKey
-     * @param config
-     * @param config
+     * @param username    Sauce Username
+     * @param apiKey      Sauce API Key
+     * @param config      ??? FIXME
      * @return String representing the Sauce OnDemand driver URI
      */
     protected String getSodDriverUri(String username, String apiKey, SODMappedBuildConfiguration config) {
@@ -202,7 +200,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     }
 
     /**
-     * @return
+     * @return String representing the set of environment variables to apply
      */
     protected String createSeleniumEnvironmentVariables() {
         return createSeleniumEnvironmentVariables("");
@@ -221,11 +219,6 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         }
     }
 
-    /**
-     * @param prefix Prefix for each environment variable (eg '-D'), can be null
-     * @return
-     * @deprecated
-     */
     private String createSelenium2EnvironmentVariables(String prefix) {
 
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
@@ -255,8 +248,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
 
     /**
-     * @param prefix
-     * @return
+     * @param prefix Prefix for each environment variable (eg '-D'), can be null
+     * @return String representing the set of environment variables to apply
      * @deprecated
      */
     private String createSelenium1EnvironmentVariables(String prefix) {
@@ -281,11 +274,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
     /**
      * Writes the following environment variables to the <code>stringBuilder</code>:
-     * <ul>
-     * <li></li>
-     * </ul>
      *
-     * @param prefix
+     * @param prefix Prefix for each environment variable (eg '-D'), can be null
      * @param stringBuilder
      * @param adminConfig
      */
