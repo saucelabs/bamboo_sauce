@@ -58,12 +58,6 @@
         <developerConnection>scm:git:git@github.com:saucelabs/bamboo_sauce.git</developerConnection>
         <url>git@github.com:saucelabs/bamboo_sauce.git</url>
     </scm>
-    <distributionManagement>
-        <repository>
-            <id>cloudbees.private.release.repository</id>
-            <url>dav:https://repository-saucelabs.forge.cloudbees.com/release</url>
-        </repository>
-    </distributionManagement>
     <build>
         <plugins>
             <plugin>
@@ -322,16 +316,6 @@
                         <enabled>true</enabled>
                         <checksumPolicy>warn</checksumPolicy>
                     </releases>
-                </repository>
-                <repository>
-                    <id>saucelabs-repository</id>
-                    <url>https://repository-saucelabs.forge.cloudbees.com/release</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                    <snapshots>
-                        <enabled>true</enabled>
-                    </snapshots>
                 </repository>
             </repositories>
             <pluginRepositories>
