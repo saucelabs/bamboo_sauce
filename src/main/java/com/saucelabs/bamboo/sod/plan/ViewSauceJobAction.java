@@ -1,5 +1,7 @@
 package com.saucelabs.bamboo.sod.plan;
 
+import com.saucelabs.ci.JobInformation;
+
 import com.atlassian.bamboo.build.ViewBuildResults;
 import com.atlassian.bamboo.chains.ChainResultsSummary;
 import com.atlassian.bamboo.chains.ChainStageResult;
@@ -94,6 +96,7 @@ public class ViewSauceJobAction extends ViewBuildResults {
         jobInformation = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
     }
 
+    // FIXME this belongs in saucerest
     public String calcHMAC(String username, String accessKey, String jobId) throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
         Calendar calendar = Calendar.getInstance();
 

@@ -7,23 +7,28 @@
 [@cp.resultsSubMenu selectedTab='sauce' /]
 
 [#if jobInformation?exists ]
-<table>
+<table style="width: 100%">
     <tr>
-        <th>Job Id</th>
-        <th>Name</th>
-        <th>Status</th>
+      <th align="left">Job Name</th>
+      <th align="left">OS/Browser</th>
+      <th align="left">Pass/Fail</th>
+      <th align="left">Job Links</th>
     </tr>
-    [#list jobInformation as jobInfo]
+    [#list jobInformation as job]
         <tr>
             <td>
-                <a href="build/result/viewSauceJobResult.action?job=${jobInfo.jobId}">${jobInfo.jobId}</a>
+                <a href="build/result/viewSauceJobResult.action?job=${job.jobId}">${job.jobId}</a>
             </td>
             <td>
-                ${jobInfo.name}
-            </td>
-            <td>
-                ${jobInfo.status}
-            </td>
+                 <a href="${from.urlName}/jobReport?jobId=${job.getJobId()}">${job.getName()}</a>
+             </td>
+             <td>${job.getOs()} ${job.getBrowser()} ${job.getVersion()}</td>
+             <td>${job.getStatus()}</td>
+             <td>
+                 <a href="${job.getVideoUrl()}">Video</a>
+                 -
+                 <a href="${job.getLogUrl()}">Logs</a>
+             </td>
         </tr>
     [/#list]
 </table>

@@ -1,5 +1,7 @@
 package com.saucelabs.bamboo.sod.plan;
 
+import com.saucelabs.ci.JobInformation;
+
 import com.atlassian.bamboo.build.Job;
 import com.atlassian.bamboo.build.ViewBuildResults;
 import com.atlassian.bamboo.chains.Chain;
@@ -15,9 +17,9 @@ import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -139,29 +141,24 @@ public class ViewSODAction extends ViewBuildResults {
             return;
         }
         logger.info("REST response " + jsonResponse);
-        JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonResponse);
-        JSONArray jobs = (JSONArray) jsonObject.get("jobs");
-        for (Object object : jobs) {
-            JSONObject jobObject = (JSONObject) object;
-            String jobId = (String) jobObject.get("id");
-            if (jobId != null) {
-                logger.info("Adding jobInformation for " + jobId);
-                JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
-                Object passed = jobObject.get("passed");
-                if (passed != null) {
-                    if (passed.equals(Boolean.TRUE)) {
-                        information.setStatus("Passed");
-                    } else {
-                        information.setStatus("Failed");
-                    }
+        try {
+            JSONObject jsonObject = new JSONObject(jsonResponse);
+            JSONArray jobs = jsonObject.getJSONArray("jobs");
+            for(int i = 0 ; i < jobs.length(); i++){
+                JSONObject jobData = jobs.getJSONObject(i);
+                String jobId = jobData.getString("id");
+                if (jobId != null) {
+                    logger.info("Adding jobInformation for " + jobId);
+                    JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
+                    information.populateFromJson(jobData);
+                    jobInformation.add(information);
+                } else {
+                    logger.warn("Unable to find jobId in jsonData");
                 }
-                information.setJobName(StringUtils.defaultString((String) jobObject.get("name")));
-                jobInformation.add(information);
-            } else {
-                logger.warn("Unable to find jobId in jsonData");
             }
+        } catch (JSONException e) {
+            logger.error("Unable to process json returned by saucelabs", e);
         }
-
     }
 
     /**
