@@ -97,6 +97,10 @@ public class SODMappedBuildConfiguration {
         return Boolean.parseBoolean(map.get(SSH_ENABLED_KEY));
     }
 
+    public boolean isVerboseSSHLogging() {
+        return Boolean.parseBoolean(map.get(SSH_VERBOSE_KEY));
+    }
+
     public String getSshPorts() {
 
         String port = map.get(SELENIUM_PORT_KEY);

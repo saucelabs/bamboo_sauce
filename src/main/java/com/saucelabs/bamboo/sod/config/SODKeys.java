@@ -2,7 +2,7 @@ package com.saucelabs.bamboo.sod.config;
 
 /**
  * Collection of constants that relate to the Bamboo Sauce OnDemand plugin.
- * 
+ *
  * @author <a href="http://www.sysbliss.com">Jonathan Doklovic</a>
  * @author Ross Rowe
  */
@@ -41,6 +41,7 @@ public final class SODKeys
 
     /* SSH BASIC TUNNEL OPTIONS */
     public static final String SSH_ENABLED_KEY = SSH_PREFIX + "enabled";
+    public static final String SSH_VERBOSE_KEY = SSH_PREFIX + "verbose";
     public static final String SSH_USE_DEFAULTS_KEY = SSH_PREFIX + "defaults";
     public static final String SSH_LOCAL_HOST_KEY = SSH_PREFIX + "local.host";
     //NOTE: ports and tunnel ports must be same length

@@ -25,13 +25,17 @@ import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -148,9 +152,26 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * @throws IOException when unable to create tunnel for various reasons
      */
     public void startTunnel(SODMappedBuildConfiguration config) throws IOException {
+        BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
+        final BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
+        PrintStream printLogger = new PrintStream(new NullOutputStream()) {
+            @Override
+            public void println(String x) {
+                buildLogger.addBuildLogEntry(x);
+            }
+        };
         SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
-        sauceTunnelManager.openConnection(config.getTempUsername(), config.getTempApikey(), Integer.parseInt(config.getSshPorts()), null, options, null, false, null);
+        sauceTunnelManager.openConnection(
+            config.getTempUsername(),
+            config.getTempApikey(),
+            Integer.parseInt(config.getSshPorts()),
+            null,
+            options,
+            printLogger,
+            config.isVerboseSSHLogging(),
+            null
+        );
     }
 
     private String getResolvedOptions(String sauceConnectOptions) {
@@ -253,6 +274,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         //only set SSH enabled if we don't have any properties set
         if (!buildConfiguration.getKeys(SODKeys.CUSTOM_PREFIX).hasNext()) {
             addDefaultStringValue(buildConfiguration, SODKeys.SSH_ENABLED_KEY, Boolean.TRUE.toString());
+            addDefaultStringValue(buildConfiguration, SODKeys.SSH_VERBOSE_KEY, Boolean.FALSE.toString());
+
         }
         addDefaultNumberValue(buildConfiguration, SODKeys.MAX_DURATION_KEY, DEFAULT_MAX_DURATION);
         addDefaultNumberValue(buildConfiguration, SODKeys.IDLE_TIMEOUT_KEY, DEFAULT_IDLE_TIMEOUT);

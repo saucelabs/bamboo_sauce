@@ -9,7 +9,9 @@
                 To enable access from our cloud to a specific test server on your private network, enable <a
                     href="http://saucelabs.com/docs/sauce-connect">Sauce Connect</a> below.</span>
         </div>
-    [@ww.checkbox label='Enable Sauce Connect' name='custom.sauceondemand.ssh.enabled' toggle='true' description='Invokes Sauce Connect to run Selenium tests within a SSH Tunnel' /]
+    [@ww.checkbox label='Enable Sauce Connect' name='custom.sauceondemand.ssh.enabled' toggle='true' description='Enabling Sauce Connect will launch a SSH tunnel, which creates a secure and reliable tunnel from our cloud to your private network that can only be accessed by you' /]
+
+    [@ww.checkbox label='Verbose Sauce Connect Logging' name='custom.sauceondemand.ssh.verbose' toggle='false' description='If selected, the output from the Sauce Connect process will be included in the console output for the Jenkins job' /]
 
     [@ww.checkbox label='Override Default Authentication' name='custom.sauceondemand.auth.enabled' toggle='true' description='Specify a different username/access key for this build' /]
 
