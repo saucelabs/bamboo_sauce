@@ -20,15 +20,15 @@
                 <a href="build/result/viewSauceJobResult.action?job=${job.jobId}">${job.jobId}</a>
             </td>
             <td>
-                 <a href="${from.urlName}/jobReport?jobId=${job.getJobId()}">${job.getName()}</a>
-             </td>
-             <td>${job.getOs()} ${job.getBrowser()} ${job.getVersion()}</td>
-             <td>${job.getStatus()}</td>
-             <td>
-                 <a href="${job.getVideoUrl()}">Video</a>
-                 -
-                 <a href="${job.getLogUrl()}">Logs</a>
-             </td>
+                <a href="build/result/viewSauceJobResult.action?job=${job.jobId}">${job.getName()}</a>
+            </td>
+            <td>${job.getOs()} ${job.getBrowser()} ${job.getVersion()}</td>
+            <td>${job.getStatus()}</td>
+            <td>
+                <a href="${job.getVideoUrl()}">Video</a>
+                -
+                <a href="${job.getLogUrl()}">Logs</a>
+            </td>
         </tr>
     [/#list]
 </table>

@@ -24,7 +24,7 @@
                 <a href="build/result/viewSauceJobResult.action?jobId=${job.jobId}&buildKey=${buildKey}&buildNumber=${buildNumber}">${job.jobId}</a>
             </td>
             <td>
-                <a href="${from.urlName}/jobReport?jobId=${job.getJobId()}">${job.getName()}</a>
+                <a href="build/result/viewSauceJobResult.action?jobId=${job.jobId}&buildKey=${buildKey}&buildNumber=${buildNumber}">${job.getName()}</a>
             </td>
             <td>${job.getOs()} ${job.getBrowser()} ${job.getVersion()}</td>
             <td>${job.getStatus()}</td>
