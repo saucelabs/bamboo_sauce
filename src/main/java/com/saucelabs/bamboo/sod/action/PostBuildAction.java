@@ -11,12 +11,15 @@ import com.atlassian.bamboo.results.tests.TestResults;
 import com.atlassian.bamboo.resultsummary.tests.TestState;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
+import com.atlassian.bamboo.variable.CustomVariableContext;
+import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +29,7 @@ import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.HashMap;
@@ -65,15 +69,30 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
 
     private SauceConnectFourManager sauceConnectFourTunnelManager;
+    private CustomVariableContext customVariableContext;
 
     @NotNull
     public BuildContext call() {
 
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
         if (config.isEnabled()) {
+            BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
+            final BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
+            PrintStream printLogger = new PrintStream(new NullOutputStream()) {
+                @Override
+                public void println(String x) {
+                    buildLogger.addBuildLogEntry(x);
+                }
+            };
+
             try {
                 SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();
-                sauceTunnelManager.closeTunnelsForPlan(config.getTempUsername(), config.getSauceConnectOptions(), null);
+                String options = customVariableContext.substituteString(config.getSauceConnectOptions(), buildContext, null);
+                sauceTunnelManager.closeTunnelsForPlan(
+                    config.getTempUsername(),
+                    options,
+                    printLogger
+                );
                 recordSauceJobResult(config);
             } catch (IOException e) {
                 logger.error(e);
@@ -275,6 +294,10 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     public void setSauceConnectFourTunnelManager(SauceConnectFourManager sauceConnectFourTunnelManager) {
         this.sauceConnectFourTunnelManager = sauceConnectFourTunnelManager;
+    }
+
+    public void setCustomVariableContext(CustomVariableContext customVariableContext) {
+        this.customVariableContext = customVariableContext;
     }
 
 }

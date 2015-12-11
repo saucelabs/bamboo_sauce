@@ -178,21 +178,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         String options = sauceConnectOptions;
 
         if (options != null) {
-            Map<String, VariableDefinitionContext> variableMap = customVariableContext.getVariableContexts(buildContext);
-            //check to see if options contains any environment variables to be resolved
-            Pattern pattern = Pattern.compile("(\\$\\{.+\\})");
-            Matcher matcher = pattern.matcher(options);
-            while (matcher.find()) {
-                String match = matcher.group();
-                String key = match.replaceAll("[\\$\\{\\}]", "");
-                if (key.startsWith("bamboo.")) {
-                    key = key.replaceAll("bamboo.", "");
-                }
-                VariableDefinitionContext context = variableMap.get(key);
-                if (context != null) {
-                    options = options.replace(match, context.getValue());
-                }
-            }
+            return customVariableContext.substituteString(options, buildContext, null);
         }
         return options;
     }
