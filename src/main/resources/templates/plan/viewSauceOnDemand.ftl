@@ -17,10 +17,10 @@
     [#list jobInformation as job]
         <tr>
             <td>
-                <a href="build/result/viewSauceJobResult.action?job=${job.jobId}">${job.jobId}</a>
+                <a href="build/result/viewSauceJobResult.action?job=${job.jobId}">${job.name}</a>
             </td>
             <td>
-                <a href="build/result/viewSauceJobResult.action?job=${job.jobId}">${job.getName()}</a>
+                <a href="build/result/viewSauceJobResult.action?job=${job.jobId}">${job.jobId}</a>
             </td>
             <td>${job.getOs()} ${job.getBrowser()} ${job.getVersion()}</td>
             <td>${job.getStatus()}</td>
