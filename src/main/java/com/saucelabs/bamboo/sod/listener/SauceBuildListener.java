@@ -43,7 +43,7 @@ public class SauceBuildListener implements HibernateEventListener {
 
             SauceREST sauceREST = new SauceREST(username, accessKey);
             try {
-                String jsonResponse = sauceREST.retrieveResults(new URL(String.format(JOB_DETAILS_URL, username)));
+                String jsonResponse = sauceREST.getFullJobs();
                 JSONArray jobResults = (JSONArray) new JSONParser().parse(jsonResponse);
                 if (jobResults == null) {
                     logger.info("Unable to find job data for " + buildCanceledEvent.getPlanKey());
@@ -61,9 +61,6 @@ public class SauceBuildListener implements HibernateEventListener {
 
                     }
                 }
-
-            } catch (MalformedURLException e) {
-                logger.error(e);
             } catch (ParseException e) {
                 logger.error(e);
             }

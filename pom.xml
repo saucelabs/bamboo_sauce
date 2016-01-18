@@ -43,7 +43,7 @@
         </developer>
     </developers>
     <properties>
-        <sauce.rest.version>1.0.28</sauce.rest.version>
+        <sauce.rest.version>1.0.32</sauce.rest.version>
         <bamboo.version>5.9.7</bamboo.version>
         <bamboo.data.version>5.9.7</bamboo.data.version>
         <atlassian.plugins.version>6.1.2</atlassian.plugins.version>
