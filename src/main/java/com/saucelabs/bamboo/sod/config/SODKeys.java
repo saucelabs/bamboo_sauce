@@ -1,5 +1,8 @@
 package com.saucelabs.bamboo.sod.config;
 
+import com.atlassian.bamboo.util.BuildUtils;
+import com.saucelabs.saucerest.SauceREST;
+
 /**
  * Collection of constants that relate to the Bamboo Sauce OnDemand plugin.
  *
@@ -10,6 +13,13 @@ public final class SODKeys
 {
     public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
     public static final String SAUCE_API_KEY = "SAUCE_API_KEY";
+    static {
+        /* doesn't belong here, but its a heavily used class so the code is absolutely run */
+        String ver = "Bamboo/" + BuildUtils.getCurrentVersion() + " " +
+            "BambooSauceOnDemand/" + BuildUtils.getCurrentVersion();
+        SauceREST.setExtraUserAgent(ver);
+    }
+
     public static final String SAUCE_BROWSERS = "SAUCE_ONDEMAND_BROWSERS";
     public static final String SELENIUM_MAX_DURATION_ENV = "SELENIUM_MAX_DURATION";
     public static final String SELENIUM_IDLE_TIMEOUT_ENV = "SELENIUM_IDLE_TIMEOUT";
