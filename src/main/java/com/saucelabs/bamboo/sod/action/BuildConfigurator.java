@@ -114,9 +114,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
             SauceLogInterceptor logInterceptor = new SauceLogInterceptor(buildContext);
             buildLogger.getInterceptorStack().add(logInterceptor);
-            //checkVersionIsCurrent();
             if (config.isEnabled() && config.isSshEnabled()) {
-                //checkVersionIsCurrent();
                 startTunnel(config);
             }
         } catch (Exception e) {
@@ -124,25 +122,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             logger.error("Error running Sauce OnDemand BuildConfigurator, attempting to continue", e);
         }
         return buildContext;
-    }
-
-    /**
-     * Checks whether the version of the Sauce Connect library is up to date, and if not, adds an error message
-     * to the build log.
-     */
-    private void checkVersionIsCurrent() {
-        try {
-            boolean laterVersionIsAvailable = sauceLibraryManager.checkForLaterVersion();
-            if (laterVersionIsAvailable) {
-                //log a message to the system log and build console
-                Plan plan = planManager.getPlanByKey(buildContext.getPlanKey());
-                plan.getBuildLogger().addErrorLogEntry("A later version of the Sauce Connect library is available");
-                plan.getBuildLogger().addErrorLogEntry("The Sauce Connect library can be updated via the Sauce On Demand link on the Administration page");
-                logger.warn("A later version of the Sauce Connect library is available");
-            }
-        } catch (Exception e) {
-            logger.error("Error attempting to check whether sauce connect is up to date, attempting to continue", e);
-        }
     }
 
     /**
