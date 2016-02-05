@@ -12,7 +12,7 @@ import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.resultsummary.ResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
-import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
+import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -23,7 +23,6 @@ import org.json.JSONObject;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -53,10 +52,6 @@ public class ViewSODAction extends ViewBuildResults {
      */
     private AdministrationConfigurationManager administrationConfigurationManager;
 
-    /**
-     * Populated by dependency injection.
-     */
-    private BambooSauceFactory sauceAPIFactory;
     private static final String HMAC_KEY = "HMACMD5";
 
     private List<JobInformation> jobInformation;
@@ -129,17 +124,10 @@ public class ViewSODAction extends ViewBuildResults {
      * @throws Exception
      */
     private void retrieveJobIdsFromSauce(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+        String buildName = PlanKeys.getPlanResultKey(resultsSummary.getPlanKey(), getResultsSummary().getBuildNumber()).getKey();
+        SauceREST sauceREST = new SauceREST(username, accessKey);
         //invoke Sauce Rest API to find plan results with those values
-        String url = String.format(JOB_DETAILS_URL, username, PlanKeys.getPlanResultKey(resultsSummary.getPlanKey(), getResultsSummary().getBuildNumber()).getKey());
-        logger.info("Invoking REST API for " + url);
-        String jsonResponse;
-        try {
-            jsonResponse = sauceAPIFactory.doREST(url, username, accessKey);
-        } catch (IOException e) {
-            //error occurred performing REST call.  Log the error and return out
-            logger.error("Error occurred invoking Sauce REST API", e);
-            return;
-        }
+        String jsonResponse = sauceREST.getBuildFullJobs(buildName);
         logger.info("REST response " + jsonResponse);
         try {
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -183,10 +171,6 @@ public class ViewSODAction extends ViewBuildResults {
         byte[] hmacBytes = mac.doFinal(jobId.getBytes());
         byte[] hexBytes = new Hex().encode(hmacBytes);
         return new String(hexBytes, "ISO-8859-1");
-    }
-
-    public void setSauceAPIFactory(BambooSauceFactory sauceAPIFactory) {
-        this.sauceAPIFactory = sauceAPIFactory;
     }
 
     public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {

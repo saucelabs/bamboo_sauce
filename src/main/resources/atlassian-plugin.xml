@@ -125,24 +125,8 @@
         </condition>
     </web-item>
 
-    <!--<component-import key="buildLoggerManager" interface="com.atlassian.bamboo.build.BuildLoggerManager"/>-->
-
     <bambooEventListener key="buildHungNotificationListener" name="Build Notification Listener"
                          class="com.saucelabs.bamboo.sod.listener.SauceBuildListener">
         <description>Listens for if a build has hung.</description>
     </bambooEventListener>
-
-    <component key="sauceConnectFourTunnelManager"
-                class="com.saucelabs.bamboo.sod.ci.SauceConnectFourManager">
-    </component>
-
-    <component key="sauceBrowserFactory" class="com.saucelabs.bamboo.sod.ci.BrowserFactory">
-    </component>
-
-    <component key="sauceAPIFactory" class="com.saucelabs.bamboo.sod.util.BambooSauceFactory">
-    </component>
-
-    <component key="sauceLibraryManager"
-                class="com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager">
-    </component>
 </atlassian-plugin>

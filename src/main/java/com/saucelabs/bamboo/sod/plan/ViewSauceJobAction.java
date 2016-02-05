@@ -12,7 +12,6 @@ import com.atlassian.bamboo.resultsummary.BuildResultsSummary;
 
 import com.atlassian.bamboo.resultsummary.ResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
-import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import org.apache.commons.codec.binary.Hex;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,10 +40,6 @@ public class ViewSauceJobAction extends ViewBuildResults {
      */
     private AdministrationConfigurationManager administrationConfigurationManager;
 
-    /**
-     * Populated by dependency injection.
-     */
-    private BambooSauceFactory sauceAPIFactory;
     private static final String HMAC_KEY = "HMACMD5";
 
     private JobInformation jobInformation;
@@ -110,10 +105,6 @@ public class ViewSauceJobAction extends ViewBuildResults {
         byte[] hmacBytes = mac.doFinal(jobId.getBytes());
         byte[] hexBytes = new Hex().encode(hmacBytes);
         return new String(hexBytes, "ISO-8859-1");
-    }
-
-    public void setSauceAPIFactory(BambooSauceFactory sauceAPIFactory) {
-        this.sauceAPIFactory = sauceAPIFactory;
     }
 
     public void setAdministrationConfigurationManager(AdministrationConfigurationManager administrationConfigurationManager) {

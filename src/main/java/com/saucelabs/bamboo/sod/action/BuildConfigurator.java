@@ -10,7 +10,6 @@ import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.variable.CustomVariableContext;
-import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork2.ActionContext;
@@ -18,7 +17,6 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
-import com.saucelabs.bamboo.sod.util.BambooSauceLibraryManager;
 import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
@@ -32,16 +30,12 @@ import org.apache.commons.lang.math.NumberUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.BufferedOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.saucelabs.bamboo.sod.config.SODKeys.*;
 
@@ -71,11 +65,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
      * Populated via dependency injection.
      */
     private AdministrationConfigurationAccessor administrationConfigurationAccessor;
-
-    /**
-     * Populated via dependency injection.
-     */
-    private BambooSauceLibraryManager sauceLibraryManager;
 
     /**
      * Populated via dependency injection.
@@ -316,10 +305,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             setSauceBrowserFactory(BrowserFactory.getInstance());
         }
         return sauceBrowserFactory;
-    }
-
-    public void setSauceLibraryManager(BambooSauceLibraryManager sauceLibraryManager) {
-        this.sauceLibraryManager = sauceLibraryManager;
     }
 
     public void setPlanManager(PlanManager planManager) {

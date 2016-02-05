@@ -14,7 +14,6 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
-import com.saucelabs.ci.sauceconnect.AbstractSauceTunnelManager;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.rest.SauceTunnel;
 import com.saucelabs.rest.SauceTunnelFactory;
@@ -44,22 +43,16 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 public class BuildConfiguratorTest extends AbstractTestHelper {
 
     private BuildConfigurator buildConfigurator;
-    private SauceConnectFourManager tunnelManager;
     private BuildDefinition buildDefinition;
     private SauceTunnel sauceTunnel;
 
-    private final Map<String, Object> tunnelMap = new HashMap<String, Object>();
+    private final Map<String, Object> tunnelMap = new HashMap<>();
 
     @Before
     public void setUp() throws Exception {
         this.buildConfigurator = new BuildConfigurator();
-        this.tunnelManager = new SauceConnectFourManager() {
-
-            public Map getTunnelMap() {
-                return tunnelMap;
-            }
-
-
+        SauceConnectFourManager tunnelManager = new SauceConnectFourManager() {
+            @Override
             public void closeTunnelsForPlan(String username, String options, PrintStream printStream) {
             }
 
@@ -79,10 +72,10 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         when(buildContext.getResultKey()).thenReturn(planResultKey);
         when(buildContext.getBuildDefinition()).thenReturn(buildDefinition);
         when(buildContext.getPlanKey()).thenReturn("PLAN");
-        Map<String, String> customBuildData = new HashMap<String, String>();
+        Map<String, String> customBuildData = new HashMap<>();
 
         when(buildResult.getCustomBuildData()).thenReturn(customBuildData);
-        Map<String, String> customConfiguration = new HashMap<String, String>();
+        Map<String, String> customConfiguration = new HashMap<>();
         customConfiguration.put(SODKeys.TEMP_USERNAME, "tempUser");
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
         customConfiguration.put(SODKeys.SSH_LOCAL_HOST_KEY, "sshhost");
