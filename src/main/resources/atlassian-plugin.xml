@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
     <plugin-info>
         <description>${project.description}</description>
         <version>${project.version}</version>
-        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
         <param name="plugin-icon">images/pluginIcon.png</param>
         <param name="plugin-logo">images/pluginLogo.png</param>
         <param name="atlassian-data-center-compatible">true</param>
@@ -57,22 +56,6 @@
 
             <action name="configureSauceOnDemandSave" class="com.saucelabs.bamboo.sod.admin.action.ConfigureSODAction"
                     method="save">
-                <result name="input" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
-                <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
-                <result name="error" type="freemarker">/error.ftl</result>
-            </action>
-
-            <action name="checkSauceConnectVersion"
-                    class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
-                    method="default">
-                <result name="success" type="freemarker">/templates/admin/updateSauceConnect.ftl</result>
-                <result name="none" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
-                <result name="error" type="freemarker">/error.ftl</result>
-            </action>
-
-            <action name="checkSauceConnectVersionSubmit"
-                    class="com.saucelabs.bamboo.sod.admin.action.CheckSauceConnectVersionAction"
-                    method="submit">
                 <result name="input" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="success" type="freemarker">/templates/admin/configureSauceOnDemand.ftl</result>
                 <result name="error" type="freemarker">/error.ftl</result>
