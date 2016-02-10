@@ -114,6 +114,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         addVariable(variables, SODKeys.SELENIUM_STARTING_URL_ENV, config.getSeleniumStartingUrl());
         addVariable(variables, SODKeys.SELENIUM_MAX_DURATION_ENV, config.getMaxDuration());
         addVariable(variables, SODKeys.SELENIUM_IDLE_TIMEOUT_ENV, config.getIdleTimeout());
+        addVariable(variables, SODKeys.SAUCE_USERNAME, config.getTempUsername());
         addVariable(variables, SODKeys.SAUCE_USER_NAME, config.getTempUsername());
         addVariable(variables, SODKeys.SAUCE_API_KEY, config.getTempApikey());
         if (buildContext.getParentBuildContext() == null) {
@@ -300,6 +301,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(config.getSeleniumStartingUrl()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_MAX_DURATION_ENV).append(EQUALS).append(config.getMaxDuration()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_IDLE_TIMEOUT_ENV).append(EQUALS).append(config.getIdleTimeout()).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_USERNAME).append(EQUALS).append(config.getTempUsername()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_USER_NAME).append(EQUALS).append(config.getTempUsername()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_API_KEY).append(EQUALS).append(config.getTempApikey()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_USERNAME_ENV).append(EQUALS).append(config.getTempUsername()).append('"');

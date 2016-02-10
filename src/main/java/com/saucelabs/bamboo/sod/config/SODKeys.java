@@ -11,8 +11,6 @@ import com.saucelabs.saucerest.SauceREST;
  */
 public final class SODKeys
 {
-    public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
-    public static final String SAUCE_API_KEY = "SAUCE_API_KEY";
     static {
         /* doesn't belong here, but its a heavily used class so the code is absolutely run */
         String ver = "Bamboo/" + BuildUtils.getCurrentVersion() + " " +
@@ -20,6 +18,9 @@ public final class SODKeys
         SauceREST.setExtraUserAgent(ver);
     }
 
+    public static final String SAUCE_USERNAME = "SAUCE_USERNAME";
+    public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
+    public static final String SAUCE_API_KEY = "SAUCE_ACCESS_KEY";
     public static final String SAUCE_BROWSERS = "SAUCE_ONDEMAND_BROWSERS";
     public static final String SELENIUM_MAX_DURATION_ENV = "SELENIUM_MAX_DURATION";
     public static final String SELENIUM_IDLE_TIMEOUT_ENV = "SELENIUM_IDLE_TIMEOUT";
