@@ -81,7 +81,6 @@ public final class SODKeys
     public static final String SAUCE_USERNAME_ENV = "SAUCE_USERNAME";
     public static final String SAUCE_ACCESS_KEY_ENV = "SAUCE_ACCESS_KEY";
 
-    public static final String TEMP_ENV_VARS = CUSTOM_PREFIX + "temp.env.vars";
     public static final String TEMP_USERNAME = CUSTOM_PREFIX + "temp.username";
     public static final String TEMP_API_KEY = CUSTOM_PREFIX + "temp.apikey";
 

@@ -43,10 +43,6 @@ public class ViewSODAction extends ViewBuildResults {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
 
-    public static final String JOB_DETAILS_URL = "http://saucelabs.com/rest/v1/%1$s/build/%2$s/jobs?full=true";
-
-    public static final String JOB_DETAIL_URL = "http://saucelabs.com/rest/v1/%1$s/jobs/%2$s";
-
     /**
      * Populated by dependency injection.
      */
