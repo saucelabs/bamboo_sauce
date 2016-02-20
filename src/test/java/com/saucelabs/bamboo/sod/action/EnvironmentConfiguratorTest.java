@@ -5,6 +5,8 @@ import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanManager;
+import com.atlassian.bamboo.process.EnvironmentVariableAccessor;
+import com.atlassian.bamboo.process.EnvironmentVariableAccessorImpl;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
@@ -48,10 +50,13 @@ public class EnvironmentConfiguratorTest {
         PlanManager planManager = mock(PlanManager.class);
         Plan plan = mock(Plan.class);
         VariableContext variableContext = mock(VariableContext.class);
+        EnvironmentVariableAccessor environmentVariableAccessor = new EnvironmentVariableAccessorImpl(
+            null,
+            null
+        );
         AdministrationConfigurationManager adminConfigManager = mock(AdministrationConfigurationManager.class);
         AdministrationConfiguration adminConfig = mock(AdministrationConfiguration.class);
         TaskDefinition definition = mock(TaskDefinition.class);
-
 
         when(variableContext.getDefinitions()).thenReturn(variableDefinitions);
         when(buildContext.getBuildResult()).thenReturn(buildResult);
@@ -102,6 +107,7 @@ public class EnvironmentConfiguratorTest {
                 return Arrays.asList(browser);
             }
         });
+        environmentConfigurator.setEnvironmentVariableAccessor(environmentVariableAccessor);
     }
 
     @Test
