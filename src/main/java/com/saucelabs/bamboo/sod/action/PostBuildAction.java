@@ -221,7 +221,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             if (!jobInformation.hasJobName()) {
                 jobInformation.setName(jobName);
             }
-            if (!jobInformation.hasBuildNumber()) {
+            if (!jobInformation.hasBuild()) {
                 jobInformation.setBuild(getBuildNumber());
             }
             if (jobInformation.hasChanges()) {
