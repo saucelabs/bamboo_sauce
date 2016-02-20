@@ -11,13 +11,9 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
-import java.net.MalformedURLException;
-import java.net.URL;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * @author Ross Rowe
@@ -44,25 +40,25 @@ public class SauceBuildListener implements HibernateEventListener {
             SauceREST sauceREST = new SauceREST(username, accessKey);
             try {
                 String jsonResponse = sauceREST.getFullJobs();
-                JSONArray jobResults = (JSONArray) new JSONParser().parse(jsonResponse);
+                JSONArray jobResults = new JSONArray(jsonResponse);
                 if (jobResults == null) {
                     logger.info("Unable to find job data for " + buildCanceledEvent.getPlanKey());
 
                 } else {
-                    for (int i = 0; i < jobResults.size(); i++) {
+                    for (int i = 0; i < jobResults.length(); i++) {
                         //check custom data to find job that was for build
-                        JSONObject jobData = (JSONObject) jobResults.get(i);
+                        JSONObject jobData = jobResults.getJSONObject(i);
                         //if job is in progress
-                        String status = (String) jobData.get("status");
+                        String status = jobData.getString("status");
                         if (status.equals("in progress")) {
-                            String jobId = (String) jobData.get("id");
+                            String jobId = jobData.getString("id");
                             sauceREST.stopJob(jobId);
                         }
 
                     }
                 }
-            } catch (ParseException e) {
-                logger.error(e);
+            } catch (JSONException e) {
+                logger.error("Unable to fetch jobs from sauce", e);
             }
 
 
