@@ -6,8 +6,6 @@ sudo: false
 install: "mvn install:install-file -DgroupId=jta -DartifactId=jta -Dversion=1.0.1 -Dpackaging=jar -Dfile=lib/jta-1_0_1B-classes.jar && mvn install:install-file -DgroupId=jndi -DartifactId=jndi -Dversion=1.2.1 -Dpackaging=jar -Dfile=lib/jndi-1.2.1.jar && mvn verify -B -Dgpg.skip=true"
 jdk:
   - oraclejdk8
-  - oraclejdk7
-  - openjdk7
 before_install:
   - pip install --user codecov
 after_success:
