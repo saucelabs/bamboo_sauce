@@ -343,10 +343,10 @@
         </profile>
     </profiles>
     <distributionManagement>
-        <snapshotRepository>
+        <!-- <snapshotRepository>
             <id>sonatype-nexus-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
+        </snapshotRepository> -->
         <repository>
             <id>sonatype-nexus-staging</id>
             <name>Nexus Release Repository</name>

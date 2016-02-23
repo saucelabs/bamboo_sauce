@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.text.MessageFormat;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -113,7 +112,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      * store the session id from the line in the custom build data of the build, and invoke the Sauce REST API
      * to store the Bamboo build number
      *
-     * @param config
+     * @param config sauceondemand configuration
+     * @throws IOException when it has trouble reading from log file
      */
     protected void recordSauceJobResult(SODMappedBuildConfiguration config) throws IOException {
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
@@ -197,9 +197,9 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     /**
      * Invokes the Sauce REST API to store the build number and pass/fail status against the Sauce Job.
      *
-     * @param config
+     * @param config bamboo/sauce configuration
      * @param sessionId the Sauce Job Id
-     * @param jobName
+     * @param jobName newly parsed job name
      */
 
     protected void storeBambooBuildNumberInSauce(SODMappedBuildConfiguration config, String sessionId, String jobName) {
