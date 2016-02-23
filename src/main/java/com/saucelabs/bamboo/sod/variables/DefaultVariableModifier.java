@@ -111,6 +111,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         addVariable(variables, SODKeys.SELENIUM_HOST_ENV, config.getSshHost());
         addVariable(variables, SODKeys.SELENIUM_PORT_ENV, config.getSshPorts());
         addVariable(variables, SODKeys.SELENIUM_STARTING_URL_ENV, config.getSeleniumStartingUrl());
+        addVariable(variables, SODKeys.SELENIUM_URL_ENV, config.getSeleniumStartingUrl());
         addVariable(variables, SODKeys.SELENIUM_MAX_DURATION_ENV, config.getMaxDuration());
         addVariable(variables, SODKeys.SELENIUM_IDLE_TIMEOUT_ENV, config.getIdleTimeout());
         addVariable(variables, SODKeys.SAUCE_USERNAME, config.getTempUsername());
@@ -307,6 +308,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_DRIVER_ENV).append(EQUALS).append(sodDriverURI).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_HOST_ENV).append(EQUALS).append(config.getSshHost()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_PORT_ENV).append(EQUALS).append(config.getSshPorts()).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_URL_ENV).append(EQUALS).append(config.getSeleniumStartingUrl()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_STARTING_URL_ENV).append(EQUALS).append(config.getSeleniumStartingUrl()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_MAX_DURATION_ENV).append(EQUALS).append(config.getMaxDuration()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_IDLE_TIMEOUT_ENV).append(EQUALS).append(config.getIdleTimeout()).append('"');
