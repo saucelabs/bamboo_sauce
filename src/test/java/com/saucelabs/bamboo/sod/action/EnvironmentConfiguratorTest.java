@@ -11,10 +11,12 @@ import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.variable.VariableContext;
+import com.atlassian.bamboo.variable.VariableContextImpl;
 import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
+import org.apache.xpath.operations.Bool;
 import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,19 +39,19 @@ public class EnvironmentConfiguratorTest {
     private Map<String, String> customConfiguration;
     private ArrayList<TaskDefinition> taskDefinitions;
     private Map<String, String> updatedConfiguration;
-    private Map<String, VariableDefinitionContext> variableDefinitions = new HashMap<String,VariableDefinitionContext>();
 
     private Browser browser = new Browser("Windows 2008firefox7", "Windows 2008", "Firefox", "Firefox", "7", "7", "Firefox");
+    private BuildContext buildContext;
 
     @Before
     public void setUp() throws Exception {
         this.environmentConfigurator = new EnvironmentConfigurator();
-        BuildContext buildContext = mock(BuildContext.class);
+        buildContext = mock(BuildContext.class);
         CurrentBuildResult buildResult = mock(CurrentBuildResult.class);
         BuildDefinition buildDefinition = mock(BuildDefinition.class);
         PlanManager planManager = mock(PlanManager.class);
         Plan plan = mock(Plan.class);
-        VariableContext variableContext = mock(VariableContext.class);
+        VariableContext variableContext = new VariableContextImpl(Collections.<String, VariableDefinitionContext>emptyMap());
         EnvironmentVariableAccessor environmentVariableAccessor = new EnvironmentVariableAccessorImpl(
             null,
             null
@@ -58,7 +60,6 @@ public class EnvironmentConfiguratorTest {
         AdministrationConfiguration adminConfig = mock(AdministrationConfiguration.class);
         TaskDefinition definition = mock(TaskDefinition.class);
 
-        when(variableContext.getDefinitions()).thenReturn(variableDefinitions);
         when(buildContext.getBuildResult()).thenReturn(buildResult);
         when(buildContext.getBuildDefinition()).thenReturn(buildDefinition);
         when(buildContext.getPlanName()).thenReturn("PLAN");
@@ -73,6 +74,7 @@ public class EnvironmentConfiguratorTest {
         when(adminConfigManager.getAdministrationConfiguration()).thenReturn(adminConfig);
         environmentConfigurator.setAdministrationConfigurationManager(adminConfigManager);
         this.customConfiguration = new HashMap<String, String>();
+        customConfiguration.put(SODKeys.ENABLED_KEY, Boolean.TRUE.toString());
         customConfiguration.put(SODKeys.SELENIUM_URL_KEY, "http://localhost");
         customConfiguration.put(SODKeys.TEMP_USERNAME, "tempUser");
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
@@ -116,9 +118,9 @@ public class EnvironmentConfiguratorTest {
         environmentConfigurator.call();
         String variables = updatedConfiguration.get("environmentVariables");
         assertNotNull("Variables not set", variables);
-		Map<String, String> map = convertVariablesToMap(variables);
+		Map<String, VariableDefinitionContext> map = buildContext.getVariableContext().getEffectiveVariables();
 
-        String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV);
+        String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV).getValue();
         assertNotNull("Starting URL not set", startingUrl);
         assertEquals("Starting URL not localhost", startingUrl, "http://localhost");
     }
@@ -128,22 +130,22 @@ public class EnvironmentConfiguratorTest {
         customConfiguration.put(SODKeys.SELENIUM_VERSION_KEY, "2.x");
         environmentConfigurator.call();
         String variables = updatedConfiguration.get("environmentVariables");
-        assertNotNull("Variables not set", variables);	
-		Map<String, String> map = convertVariablesToMap(variables);
+        assertNotNull("Variables not set", variables);
+        Map<String, VariableDefinitionContext> map = buildContext.getVariableContext().getEffectiveVariables();
 
-        String platform = map.get(SODKeys.SELENIUM_PLATFORM_ENV);
+        String platform = map.get(SODKeys.SELENIUM_PLATFORM_ENV).getValue();
         assertNotNull("Platform not set", platform);
         assertEquals("Platfom not WINDOWS", platform, "Windows 2008");
-		
-		String browser = map.get(SODKeys.SELENIUM_BROWSER_ENV);
+
+		String browser = map.get(SODKeys.SELENIUM_BROWSER_ENV).getValue();
 		assertNotNull("Browser not set", browser);
         assertEquals("Browser not firefox", browser, "Firefox");
 
-		String version = map.get(SODKeys.SELENIUM_VERSION_ENV);
+		String version = map.get(SODKeys.SELENIUM_VERSION_ENV).getValue();
 		assertNotNull("Version not set", version);
         assertEquals("Version not 7", version, "7");
 
-        String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV);
+        String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV).getValue();
         assertNotNull("Starting URL not set", startingUrl);
         assertEquals("Starting URL not localhost", startingUrl, "http://localhost");
 

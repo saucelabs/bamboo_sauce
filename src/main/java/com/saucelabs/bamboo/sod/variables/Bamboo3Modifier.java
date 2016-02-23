@@ -85,7 +85,8 @@ public class Bamboo3Modifier extends DefaultVariableModifier {
                     for (Map.Entry<String, String> entry : envMap.entrySet())
                     {
                         if (entry.getKey().startsWith("SELENIUM_") || entry.getKey().startsWith("SAUCE_")) {
-                            origMap.put(entry.getKey(), entry.getValue());
+                            origMap.put(entry.getKey(), "${bamboo." + entry.getKey() + "}");
+
                         }
                     }
 

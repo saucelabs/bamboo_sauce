@@ -121,6 +121,16 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         } else {
             addVariable(variables, SODKeys.BAMBOO_BUILD_NUMBER_ENV, buildContext.getParentBuildContext().getBuildResultKey());
         }
+        String[] selectedBrowsers = config.getSelectedBrowsers();
+        if (selectedBrowsers.length == 1) {
+            Browser browser = sauceBrowserFactory.webDriverBrowserForKey(selectedBrowsers[0].replaceAll(" ", "_"));
+            //DefaultCapabilities information
+            if (browser != null) {
+                addVariable(variables, SODKeys.SELENIUM_PLATFORM_ENV, browser.getOs());
+                addVariable(variables, SODKeys.SELENIUM_BROWSER_ENV, browser.getBrowserName());
+                addVariable(variables, SODKeys.SELENIUM_VERSION_ENV, browser.getVersion());
+            }
+        }
     }
 
     private void addVariable(VariableContext variables, String key, int value) {
