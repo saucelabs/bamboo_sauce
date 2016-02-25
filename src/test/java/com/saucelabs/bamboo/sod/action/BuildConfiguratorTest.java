@@ -11,6 +11,7 @@ import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
@@ -62,7 +63,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
                 return null;
             }
         };
-        buildConfigurator.setSauceConnectFourTunnelManager(tunnelManager);
+        SauceConnectFourManagerSingleton.setSauceConnectFourTunnelManager(tunnelManager);
 
         BuildContext buildContext = mock(BuildContext.class);
         CurrentBuildResult buildResult = mock(CurrentBuildResult.class);

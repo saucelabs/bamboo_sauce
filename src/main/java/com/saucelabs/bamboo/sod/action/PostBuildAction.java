@@ -15,6 +15,7 @@ import com.atlassian.bamboo.variable.CustomVariableContext;
 import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
 import com.saucelabs.ci.JobInformation;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
@@ -52,7 +53,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     private static final Pattern SESSION_ID_PATTERN = Pattern.compile("SauceOnDemandSessionID=([0-9a-fA-F]+)(?:.job-name=(.*))?");
     private static final String JOB_NAME_PATTERN = "\\b({0})\\b";
 
-
     /**
      * Populated via dependency injection.
      */
@@ -63,10 +63,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private BuildLoggerManager buildLoggerManager;
 
-
-
-
-    private SauceConnectFourManager sauceConnectFourTunnelManager;
     private CustomVariableContext customVariableContext;
 
     @NotNull
@@ -84,7 +80,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             };
 
             try {
-                SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();
+                SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
                 String options = customVariableContext.substituteString(config.getSauceConnectOptions(), buildContext, null);
                 sauceTunnelManager.closeTunnelsForPlan(
                     config.getTempUsername(),
@@ -290,17 +286,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
         this.buildLoggerManager = buildLoggerManager;
-    }
-
-    public SauceConnectFourManager getSauceConnectFourTunnelManager() {
-        if (sauceConnectFourTunnelManager == null) {
-            setSauceConnectFourTunnelManager(new SauceConnectFourManager());
-        }
-        return sauceConnectFourTunnelManager;
-    }
-
-    public void setSauceConnectFourTunnelManager(SauceConnectFourManager sauceConnectFourTunnelManager) {
-        this.sauceConnectFourTunnelManager = sauceConnectFourTunnelManager;
     }
 
     public void setCustomVariableContext(CustomVariableContext customVariableContext) {

@@ -16,6 +16,7 @@ import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
+import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
 import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
 import com.saucelabs.ci.Browser;
@@ -128,7 +129,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
                 buildLogger.addBuildLogEntry(x);
             }
         };
-        SauceTunnelManager sauceTunnelManager = getSauceConnectFourTunnelManager();
+        SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
         sauceTunnelManager.openConnection(
             config.getTempUsername(),
@@ -284,15 +285,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.sauceAPIFactory = sauceAPIFactory;
     }
 
-
-
-    public SauceConnectFourManager getSauceConnectFourTunnelManager() {
-        if (sauceConnectFourTunnelManager == null) {
-            setSauceConnectFourTunnelManager(new SauceConnectFourManager());
-        }
-        return sauceConnectFourTunnelManager;
-    }
-
     public BambooSauceFactory getSauceAPIFactory() {
         if (sauceAPIFactory == null) {
             setSauceAPIFactory(new BambooSauceFactory());
@@ -309,10 +301,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     public void setPlanManager(PlanManager planManager) {
         this.planManager = planManager;
-    }
-
-    public void setSauceConnectFourTunnelManager(SauceConnectFourManager sauceConnectFourTunnelManager) {
-        this.sauceConnectFourTunnelManager = sauceConnectFourTunnelManager;
     }
 
     public void setCustomVariableContext(CustomVariableContext customVariableContext) {
