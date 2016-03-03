@@ -14,6 +14,7 @@
 <table style="width: 100%">
     <tr>
         <th align="left">Job Name</th>
+        <th align="left">Job ID</th>
         <th align="left">OS/Browser</th>
         <th align="left">Pass/Fail</th>
         <th align="left">Job Links</th>
