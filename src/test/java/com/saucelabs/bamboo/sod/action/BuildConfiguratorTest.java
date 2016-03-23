@@ -12,7 +12,6 @@ import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
-import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
@@ -86,9 +85,6 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
 
         SauceTunnelFactory sauceTunnelFactory = mock(SauceTunnelFactory.class);
         when(sauceTunnelFactory.create(any(List.class))).thenReturn(sauceTunnel);
-        BambooSauceFactory sauceAPIFactory = mock(BambooSauceFactory.class);
-
-        buildConfigurator.setSauceAPIFactory(sauceAPIFactory);
         buildConfigurator.init(buildContext);
 
         mockStatic(ContainerManager.class);
@@ -98,8 +94,6 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         when(buildLogger.getInterceptorStack()).thenReturn(interceptorStack);
         when(buildLoggerManager.getLogger(planResultKey)).thenReturn(buildLogger);
         when(ContainerManager.getComponent("buildLoggerManager")).thenReturn(buildLoggerManager);
-
-
     }
 
 

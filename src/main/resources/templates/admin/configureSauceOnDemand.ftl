@@ -17,14 +17,6 @@
             [@ww.textfield name='username' label='User Name' /]
             [@ww.textfield name="accessKey" label='Access Key' /]
         [/@ui.bambooSection]
-
-        [@ui.bambooSection title="Proxy configuration"]
-            [@ww.textfield name='proxyHost' label='Host' /]
-            [@ww.textfield name='proxyPort' label='Port' /]
-            [@ww.textfield name='proxyUsername' label='User Name' /]
-            [@ww.password name='proxyPassword' label='Password' /]
-        [/@ui.bambooSection]
-
     [/@ww.form]
 </body>
 </html>

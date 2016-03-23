@@ -17,7 +17,6 @@ import com.opensymphony.xwork2.util.ValueStack;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
-import com.saucelabs.bamboo.sod.util.BambooSauceFactory;
 import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
@@ -58,11 +57,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private CustomVariableContext customVariableContext;
 
     /**
-     * Populated by dependency injection.
-     */
-    private BambooSauceFactory sauceAPIFactory;
-
-    /**
      * Populated via dependency injection.
      */
     private AdministrationConfigurationAccessor administrationConfigurationAccessor;
@@ -95,11 +89,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public BuildContext call() {
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-            BambooSauceFactory factory = getSauceAPIFactory();
-            if (factory != null) {
-                //should never be null, but NPEs were being thrown for users when using remote agents
-                factory.setupProxy(administrationConfigurationAccessor);
-            }
             BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
             BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
             SauceLogInterceptor logInterceptor = new SauceLogInterceptor(buildContext);
@@ -162,7 +151,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
         try {
-            getSauceAPIFactory().setupProxy(administrationConfigurationAccessor);
             if (Boolean.parseBoolean(buildConfiguration.getString(SELENIUMRC_KEY))) {
                 String[] selectedBrowsers = getSelectedRCBrowsers(buildConfiguration);
                 ValueStack stack = ActionContext.getContext().getValueStack();
@@ -275,21 +263,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         this.administrationConfigurationAccessor = administrationConfigurationAccessor;
     }
 
-
-
     public void setSauceBrowserFactory(BrowserFactory sauceBrowserFactory) {
         this.sauceBrowserFactory = sauceBrowserFactory;
-    }
-
-    public void setSauceAPIFactory(BambooSauceFactory sauceAPIFactory) {
-        this.sauceAPIFactory = sauceAPIFactory;
-    }
-
-    public BambooSauceFactory getSauceAPIFactory() {
-        if (sauceAPIFactory == null) {
-            setSauceAPIFactory(new BambooSauceFactory());
-        }
-        return sauceAPIFactory;
     }
 
     public BrowserFactory getSauceBrowserFactory() {
