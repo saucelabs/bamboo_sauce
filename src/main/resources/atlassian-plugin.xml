@@ -112,4 +112,8 @@
                          class="com.saucelabs.bamboo.sod.listener.SauceBuildListener">
         <description>Listens for if a build has hung.</description>
     </bambooEventListener>
+
+    <component key="startupHandler" class="com.saucelabs.bamboo.sod.StartupHandler" public="true">
+        <interface>com.atlassian.sal.api.lifecycle.LifecycleAware</interface>
+    </component>
 </atlassian-plugin>

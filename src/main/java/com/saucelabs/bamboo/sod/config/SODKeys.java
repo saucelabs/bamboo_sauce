@@ -11,13 +11,6 @@ import com.saucelabs.saucerest.SauceREST;
  */
 public final class SODKeys
 {
-    static {
-        /* doesn't belong here, but its a heavily used class so the code is absolutely run */
-        String ver = "Bamboo/" + BuildUtils.getCurrentVersion() + " " +
-            "BambooSauceOnDemand/" + BuildUtils.getCurrentVersion();
-        SauceREST.setExtraUserAgent(ver);
-    }
-
     public static final String SAUCE_USERNAME = "SAUCE_USERNAME";
     public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
     public static final String SAUCE_API_KEY = "SAUCE_ACCESS_KEY";
