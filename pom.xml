@@ -44,7 +44,7 @@
     </developers>
     <properties>
         <sauce.rest.version>1.0.32</sauce.rest.version>
-        <ci-sauce.version>1.112</ci-sauce.version>
+        <ci-sauce.version>1.113</ci-sauce.version>
         <bamboo.version>5.10.0</bamboo.version>
         <bamboo.data.version>5.9.7</bamboo.data.version>
         <amps.version>6.2.1</amps.version>
