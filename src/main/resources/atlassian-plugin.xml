@@ -95,7 +95,6 @@
         <label key="Sauce Jobs"/>
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>
         <condition class="com.saucelabs.bamboo.sod.plan.ViewSODCondition">
-
         </condition>
     </web-item>
 
@@ -104,7 +103,6 @@
         <label key="Sauce Jobs"/>
         <link linkId="saucePlanDetails">/build/result/viewSauceOnDemandResult.action?buildKey=${buildKey}&amp;buildNumber=${buildNumber}</link>
         <condition class="com.saucelabs.bamboo.sod.plan.ViewSODCondition">
-
         </condition>
     </web-item>
 
