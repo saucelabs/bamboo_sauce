@@ -19,16 +19,11 @@ import java.util.Map;
  * @author Ross Rowe
  */
 public class ViewSODCondition implements Condition {
-    protected PlanManager planManager;
-
-    public PlanManager getPlanManager() {
-        return planManager;
-    }
+    private PlanManager planManager;
 
     public void setPlanManager(PlanManager planManager) {
         this.planManager = planManager;
     }
-
 
     /**
      * {@inheritDoc}
