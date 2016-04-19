@@ -42,7 +42,7 @@ public class ViewSODCondition implements Condition {
      */
     @Override
     public boolean shouldDisplay(Map<String, Object> context) {
-        if (!context.containsValue("buildKey")) { return true; }
+        if (!context.containsKey("buildKey")) { return true; }
         Plan plan = planManager.getPlanByKey(PlanKeys.getPlanKey(context.get("buildKey").toString()));
         if (plan == null) { return true; }
         SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(
