@@ -50,6 +50,7 @@ public final class SODKeys
     public static final String SSH_LOCAL_HOST_KEY = SSH_PREFIX + "local.host";
     //NOTE: ports and tunnel ports must be same length
     public static final String SSH_LOCAL_PORTS_KEY = SSH_PREFIX + "local.ports";
+    public static final String SSH_USE_GENERATED_TUNNEL_ID = SSH_PREFIX + "useGeneratedTunnelIdentifier";
 
     /* ADMIN CONFIG KEYS */
     public static final String SOD_USERNAME_KEY = "sauceondemand.username";
@@ -78,4 +79,5 @@ public final class SODKeys
     public static final String SAUCE_CONNECT_V3 = CUSTOM_PREFIX + "sauceConnect3";
 
     public static final String SAUCE_SESSION_ID = "sauceondemand.sessionId";
+    public static final String TEMP_TUNNEL_ID = "TEMP_TUNNEL_ID";
 }

@@ -7,6 +7,8 @@ import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.build.logger.LogInterceptorStack;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
+import com.atlassian.bamboo.variable.CustomVariableContext;
+import com.atlassian.bamboo.variable.CustomVariableContextImpl;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractTestHelper;
@@ -29,10 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.saucelabs.bamboo.sod.config.SODKeys.TEMP_TUNNEL_ID;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
@@ -72,6 +74,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         when(buildContext.getResultKey()).thenReturn(planResultKey);
         when(buildContext.getBuildDefinition()).thenReturn(buildDefinition);
         when(buildContext.getPlanKey()).thenReturn("PLAN");
+        when(buildContext.getPlanName()).thenReturn("PLAN NAME");
         Map<String, String> customBuildData = new HashMap<>();
 
         when(buildResult.getCustomBuildData()).thenReturn(customBuildData);
@@ -127,6 +130,18 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         buildDefinition.getCustomConfiguration().put(SODKeys.ENABLED_KEY, "true");
         buildConfigurator.call();
         assertTrue("Sauce tunnels not empty", getTunnelMap().isEmpty());
+    }
+
+    @Test
+    public void sshEnabledWithUniqueKey() throws Exception {
+        buildDefinition.getCustomConfiguration().put(SODKeys.SSH_ENABLED_KEY, "true");
+        buildDefinition.getCustomConfiguration().put(SODKeys.SSH_USE_GENERATED_TUNNEL_ID, "true");
+        buildDefinition.getCustomConfiguration().put(SODKeys.ENABLED_KEY, "true");
+        CustomVariableContext customVariableContext = mock(CustomVariableContext.class);
+        buildConfigurator.setCustomVariableContext(customVariableContext);
+        buildConfigurator.call();
+        verify(customVariableContext, times(1)).addCustomData(anyString(), anyString());
+        assertFalse("No sauce tunnels exist for unique key", getTunnelMap().isEmpty());
     }
 
     public Map<String, Object> getTunnelMap() {

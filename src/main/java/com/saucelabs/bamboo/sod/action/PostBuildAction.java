@@ -17,7 +17,6 @@ import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
 import com.saucelabs.ci.JobInformation;
-import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.io.FileUtils;
@@ -36,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.saucelabs.bamboo.sod.config.SODKeys.*;
 
 /**
  * Invoked after a build has finished to reset the environment variables for the builder back to what they were prior
@@ -82,6 +83,10 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             try {
                 SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
                 String options = customVariableContext.substituteString(config.getSauceConnectOptions(), buildContext, null);
+                if (config.useGeneratedTunnelIdentifier()) {
+                    String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(TEMP_TUNNEL_ID);
+                    options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
+                }
                 sauceTunnelManager.closeTunnelsForPlan(
                     config.getTempUsername(),
                     options,

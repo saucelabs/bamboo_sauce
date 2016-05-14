@@ -14,6 +14,7 @@ import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.saucelabs.bamboo.sod.BuildUtils;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
@@ -120,6 +121,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         };
         SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
+        if (config.useGeneratedTunnelIdentifier()) {
+            String tunnelIdentifier = generateTunnelIdentifier(buildContext.getPlanName());
+            customVariableContext.addCustomData(TEMP_TUNNEL_ID, tunnelIdentifier);
+            options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
+        }
         sauceTunnelManager.openConnection(
             config.getTempUsername(),
             config.getTempApikey(),
@@ -134,7 +140,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     private String getResolvedOptions(String sauceConnectOptions) {
         String options = sauceConnectOptions;
-
         if (options != null) {
             return customVariableContext.substituteString(options, buildContext, null);
         }
@@ -280,5 +285,13 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     public void setCustomVariableContext(CustomVariableContext customVariableContext) {
         this.customVariableContext = customVariableContext;
+    }
+
+    //only allow word, digit, and hyphen characters
+    private final String PATTERN_DISALLOWED_TUNNEL_ID_CHARS = "[^\\w\\d-]+";
+
+    private String generateTunnelIdentifier(final String projectName) {
+        String sanitizedName = projectName.replaceAll(PATTERN_DISALLOWED_TUNNEL_ID_CHARS, "_");
+        return sanitizedName + "-" + System.currentTimeMillis();
     }
 }
