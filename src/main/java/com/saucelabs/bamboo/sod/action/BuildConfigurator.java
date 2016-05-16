@@ -38,8 +38,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.saucelabs.bamboo.sod.config.SODKeys.*;
-
 /**
  * Pre-Build Action which will start a SSH Tunnel via the Sauce REST API if the build is configured to run
  * Selenium tests via the Sauce Connect tunnel.
@@ -123,7 +121,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         String options = getResolvedOptions(config.getSauceConnectOptions());
         if (config.useGeneratedTunnelIdentifier()) {
             String tunnelIdentifier = generateTunnelIdentifier(buildContext.getPlanName());
-            customVariableContext.addCustomData(TEMP_TUNNEL_ID, tunnelIdentifier);
+            customVariableContext.addCustomData(SODKeys.TEMP_TUNNEL_ID, tunnelIdentifier);
             options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
         }
         sauceTunnelManager.openConnection(
@@ -156,7 +154,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
         try {
-            if (Boolean.parseBoolean(buildConfiguration.getString(SELENIUMRC_KEY))) {
+            if (Boolean.parseBoolean(buildConfiguration.getString(SODKeys.SELENIUMRC_KEY))) {
                 String[] selectedBrowsers = getSelectedRCBrowsers(buildConfiguration);
                 ValueStack stack = ActionContext.getContext().getValueStack();
                 stack.getContext().put("selectedRCBrowsers", selectedBrowsers);
@@ -180,7 +178,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private String[] getSelectedBrowsers(BuildConfiguration buildConfiguration) throws Exception {
         List<Browser> browsers;
         List<String> selectedBrowsers = new ArrayList<String>();
-        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(BROWSER_KEY));
+        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(SODKeys.BROWSER_KEY));
 
         browsers = getSauceBrowserFactory().getWebDriverBrowsers();
 
@@ -195,7 +193,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private String[] getSelectedRCBrowsers(BuildConfiguration buildConfiguration) throws Exception {
         List<Browser> browsers;
         List<String> selectedBrowsers = new ArrayList<String>();
-        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(BROWSER_RC_KEY));
+        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(SODKeys.BROWSER_RC_KEY));
 
         browsers = getSauceBrowserFactory().getSeleniumBrowsers();
 
