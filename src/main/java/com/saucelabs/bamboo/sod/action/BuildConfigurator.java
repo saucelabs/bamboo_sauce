@@ -14,6 +14,7 @@ import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
+import com.saucelabs.bamboo.sod.BuildUtils;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
@@ -36,8 +37,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import static com.saucelabs.bamboo.sod.config.SODKeys.*;
 
 /**
  * Pre-Build Action which will start a SSH Tunnel via the Sauce REST API if the build is configured to run
@@ -120,6 +119,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         };
         SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
+        if (config.useGeneratedTunnelIdentifier()) {
+            String tunnelIdentifier = generateTunnelIdentifier(buildContext.getPlanName());
+            customVariableContext.addCustomData(SODKeys.TEMP_TUNNEL_ID, tunnelIdentifier);
+            options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
+        }
         sauceTunnelManager.openConnection(
             config.getTempUsername(),
             config.getTempApikey(),
@@ -134,7 +138,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     private String getResolvedOptions(String sauceConnectOptions) {
         String options = sauceConnectOptions;
-
         if (options != null) {
             return customVariableContext.substituteString(options, buildContext, null);
         }
@@ -151,7 +154,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
         try {
-            if (Boolean.parseBoolean(buildConfiguration.getString(SELENIUMRC_KEY))) {
+            if (Boolean.parseBoolean(buildConfiguration.getString(SODKeys.SELENIUMRC_KEY))) {
                 String[] selectedBrowsers = getSelectedRCBrowsers(buildConfiguration);
                 ValueStack stack = ActionContext.getContext().getValueStack();
                 stack.getContext().put("selectedRCBrowsers", selectedBrowsers);
@@ -175,7 +178,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private String[] getSelectedBrowsers(BuildConfiguration buildConfiguration) throws Exception {
         List<Browser> browsers;
         List<String> selectedBrowsers = new ArrayList<String>();
-        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(BROWSER_KEY));
+        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(SODKeys.BROWSER_KEY));
 
         browsers = getSauceBrowserFactory().getWebDriverBrowsers();
 
@@ -190,7 +193,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private String[] getSelectedRCBrowsers(BuildConfiguration buildConfiguration) throws Exception {
         List<Browser> browsers;
         List<String> selectedBrowsers = new ArrayList<String>();
-        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(BROWSER_RC_KEY));
+        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(SODKeys.BROWSER_RC_KEY));
 
         browsers = getSauceBrowserFactory().getSeleniumBrowsers();
 
@@ -280,5 +283,13 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     public void setCustomVariableContext(CustomVariableContext customVariableContext) {
         this.customVariableContext = customVariableContext;
+    }
+
+    //only allow word, digit, and hyphen characters
+    private final String PATTERN_DISALLOWED_TUNNEL_ID_CHARS = "[^\\w\\d-]+";
+
+    private String generateTunnelIdentifier(final String projectName) {
+        String sanitizedName = projectName.replaceAll(PATTERN_DISALLOWED_TUNNEL_ID_CHARS, "_");
+        return sanitizedName + "-" + System.currentTimeMillis();
     }
 }

@@ -14,10 +14,10 @@ import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.variable.CustomVariableContext;
 import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
+import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
 import com.saucelabs.ci.JobInformation;
-import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.io.FileUtils;
@@ -82,6 +82,10 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             try {
                 SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
                 String options = customVariableContext.substituteString(config.getSauceConnectOptions(), buildContext, null);
+                if (config.useGeneratedTunnelIdentifier()) {
+                    String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TEMP_TUNNEL_ID);
+                    options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
+                }
                 sauceTunnelManager.closeTunnelsForPlan(
                     config.getTempUsername(),
                     options,

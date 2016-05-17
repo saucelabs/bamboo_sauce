@@ -101,6 +101,10 @@ public class SODMappedBuildConfiguration {
         return Boolean.parseBoolean(map.get(SSH_VERBOSE_KEY));
     }
 
+    public boolean useGeneratedTunnelIdentifier() {
+        return Boolean.parseBoolean(map.get(SSH_USE_GENERATED_TUNNEL_ID));
+    }
+
     public String getSshPorts() {
 
         String port = map.get(SELENIUM_PORT_KEY);
