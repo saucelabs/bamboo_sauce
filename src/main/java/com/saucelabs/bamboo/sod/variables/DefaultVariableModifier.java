@@ -338,8 +338,8 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getParentBuildContext().getBuildResultKey()).append('"');
         }
         if (config.useGeneratedTunnelIdentifier()) {
-            String tunnelId = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
-            stringBuilder.append(' ').append(prefix).append(SODKeys.TUNNEL_IDENTIFIER).append(EQUALS).append(tunnelId).append('"');
+            String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
+            stringBuilder.append(' ').append(prefix).append(SODKeys.TUNNEL_IDENTIFIER).append(EQUALS).append(tunnelIdentifier).append('"');
         }
     }
 

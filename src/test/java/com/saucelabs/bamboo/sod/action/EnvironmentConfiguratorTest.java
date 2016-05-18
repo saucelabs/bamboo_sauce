@@ -117,7 +117,7 @@ public class EnvironmentConfiguratorTest {
         environmentConfigurator.setEnvironmentVariableAccessor(environmentVariableAccessor);
         customConfiguration.put(SODKeys.SSH_USE_GENERATED_TUNNEL_ID, Boolean.TRUE.toString());
         Map<String, String> tempMap = new HashMap<>();
-        tempMap.put(SODKeys.TUNNEL_IDENTIFIER, "TunnelId");
+        tempMap.put(SODKeys.TUNNEL_IDENTIFIER, "TUNNEL_IDENTIFIER");
         when(customVariableContext.getVariables(buildContext)).thenReturn(tempMap);
     }
 
@@ -188,9 +188,9 @@ public class EnvironmentConfiguratorTest {
         assertNotNull("Starting URL not set", startingUrl);
         assertEquals("Starting URL not localhost", startingUrl, "http://localhost");
 
-        String tunnelId = map.get(SODKeys.TUNNEL_IDENTIFIER).getValue();
-        assertNotNull("TunnelID not set", tunnelId);
-        assertEquals("Tunnel_ID not TunnelId", tunnelId, "TunnelId");
+        String tunnelIdentifier = map.get(SODKeys.TUNNEL_IDENTIFIER).getValue();
+        assertNotNull("TUNNEL_IDENTIFIER not set", tunnelIdentifier);
+        assertEquals("TUNNEL_IDENTIFIER not TunnelId", tunnelIdentifier, "TUNNEL_IDENTIFIER");
 
         Field[] fields = SODKeys.class.getDeclaredFields();
 
