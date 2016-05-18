@@ -85,7 +85,7 @@ public class Bamboo3Modifier extends DefaultVariableModifier {
                     Map<String, String> origMap = environmentVariableAccessor.splitEnvironmentAssignments(originalEnv, false);
                     for (Map.Entry<String, String> entry : envMap.entrySet())
                     {
-                        if (entry.getKey().startsWith("SELENIUM_") || entry.getKey().startsWith("SAUCE_")) {
+                        if (entry.getKey().startsWith("SELENIUM_") || entry.getKey().startsWith("SAUCE_") || entry.getKey().equals(SODKeys.TUNNEL_ID)) {
                             origMap.put(entry.getKey(), "${bamboo." + entry.getKey() + "}");
 
                         }

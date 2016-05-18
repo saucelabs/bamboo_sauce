@@ -79,5 +79,5 @@ public final class SODKeys
     public static final String SAUCE_CONNECT_V3 = CUSTOM_PREFIX + "sauceConnect3";
 
     public static final String SAUCE_SESSION_ID = "sauceondemand.sessionId";
-    public static final String TUNNEL_ID = "SAUCE_TUNNEL_IDENTIFIER";
+    public static final String TUNNEL_ID = "TUNNEL_IDENTIFIER";
 }

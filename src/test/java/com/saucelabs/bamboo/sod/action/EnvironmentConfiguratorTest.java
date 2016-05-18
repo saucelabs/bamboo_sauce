@@ -189,7 +189,7 @@ public class EnvironmentConfiguratorTest {
         assertEquals("Starting URL not localhost", startingUrl, "http://localhost");
 
         String tunnelId = map.get(SODKeys.TUNNEL_ID).getValue();
-        assertNotNull("TunnelID not set", startingUrl);
+        assertNotNull("TunnelID not set", tunnelId);
         assertEquals("Tunnel_ID not TunnelId", tunnelId, "TunnelId");
 
         Field[] fields = SODKeys.class.getDeclaredFields();
