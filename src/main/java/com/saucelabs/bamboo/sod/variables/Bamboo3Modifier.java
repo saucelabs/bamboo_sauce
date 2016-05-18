@@ -1,6 +1,7 @@
 package com.saucelabs.bamboo.sod.variables;
 
 import com.atlassian.bamboo.build.BuildDefinition;
+import com.atlassian.bamboo.variable.CustomVariableContext;
 import com.atlassian.bamboo.process.EnvironmentVariableAccessor;
 import com.atlassian.bamboo.process.EnvironmentVariableAccessorImpl;
 import com.atlassian.bamboo.task.TaskDefinition;
@@ -39,7 +40,6 @@ public class Bamboo3Modifier extends DefaultVariableModifier {
    */
     private static enum CreateEnvironmentAssignment implements Function<Map.Entry<String, String>, String> {
         INSTANCE;
-
         private CreateEnvironmentAssignment() {
         }
 
@@ -55,9 +55,10 @@ public class Bamboo3Modifier extends DefaultVariableModifier {
         SODMappedBuildConfiguration config,
         BuildDefinition definition,
         BuildContext buildContext,
-        EnvironmentVariableAccessor environmentVariableAccessor
+        EnvironmentVariableAccessor environmentVariableAccessor,
+        CustomVariableContext customVariableContext
     ) {
-        super(config, definition, buildContext);
+        super(config, definition, buildContext, customVariableContext);
         this.environmentVariableAccessor = environmentVariableAccessor;
     }
 

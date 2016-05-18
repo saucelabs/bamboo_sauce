@@ -13,6 +13,7 @@ import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.variable.VariableContext;
 import com.atlassian.bamboo.variable.VariableContextImpl;
 import com.atlassian.bamboo.variable.VariableDefinitionContext;
+import com.atlassian.bamboo.variable.CustomVariableContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
@@ -55,6 +56,8 @@ public class EnvironmentConfiguratorTest {
         PlanManager planManager = mock(PlanManager.class);
         Plan plan = mock(Plan.class);
         VariableContext variableContext = new VariableContextImpl(Collections.<String, VariableDefinitionContext>emptyMap());
+        CustomVariableContext customVariableContext = mock(CustomVariableContext.class);
+        environmentConfigurator.setCustomVariableContext(customVariableContext);
         environmentVariableAccessor = new EnvironmentVariableAccessorImpl(
             null,
             null
@@ -83,7 +86,6 @@ public class EnvironmentConfiguratorTest {
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
         customConfiguration.put(SODKeys.ENABLED_KEY, "true");
         customConfiguration.put(SODKeys.BROWSER_KEY, "Windows 2008firefox7" );
-
         this.taskDefinitions = new ArrayList<TaskDefinition>();
         taskDefinitions.add(definition);
 
@@ -113,6 +115,10 @@ public class EnvironmentConfiguratorTest {
             }
         });
         environmentConfigurator.setEnvironmentVariableAccessor(environmentVariableAccessor);
+        customConfiguration.put(SODKeys.SSH_USE_GENERATED_TUNNEL_ID, Boolean.TRUE.toString());
+        Map<String, String> tempMap = new HashMap<>();
+        tempMap.put(SODKeys.TUNNEL_ID, "TunnelId");
+        when(customVariableContext.getVariables(buildContext)).thenReturn(tempMap);
     }
 
     @Test
@@ -181,6 +187,10 @@ public class EnvironmentConfiguratorTest {
         String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV).getValue();
         assertNotNull("Starting URL not set", startingUrl);
         assertEquals("Starting URL not localhost", startingUrl, "http://localhost");
+
+        String tunnelId = map.get(SODKeys.TUNNEL_ID).getValue();
+        assertNotNull("TunnelID not set", startingUrl);
+        assertEquals("Tunnel_ID not TunnelId", tunnelId, "TunnelId");
 
         Field[] fields = SODKeys.class.getDeclaredFields();
 

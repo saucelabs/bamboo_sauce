@@ -120,8 +120,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
         if (config.useGeneratedTunnelIdentifier()) {
-            String tunnelIdentifier = generateTunnelIdentifier(buildContext.getPlanName());
-            customVariableContext.addCustomData(SODKeys.TEMP_TUNNEL_ID, tunnelIdentifier);
+            String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_ID);
             options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
         }
         sauceTunnelManager.openConnection(
@@ -283,13 +282,5 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     public void setCustomVariableContext(CustomVariableContext customVariableContext) {
         this.customVariableContext = customVariableContext;
-    }
-
-    //only allow word, digit, and hyphen characters
-    private final String PATTERN_DISALLOWED_TUNNEL_ID_CHARS = "[^\\w\\d-]+";
-
-    private String generateTunnelIdentifier(final String projectName) {
-        String sanitizedName = projectName.replaceAll(PATTERN_DISALLOWED_TUNNEL_ID_CHARS, "_");
-        return sanitizedName + "-" + System.currentTimeMillis();
     }
 }
