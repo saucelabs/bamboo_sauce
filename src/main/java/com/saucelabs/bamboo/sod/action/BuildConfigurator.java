@@ -120,7 +120,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
         if (config.useGeneratedTunnelIdentifier()) {
-            String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_ID);
+            String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
             options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
         }
         sauceTunnelManager.openConnection(

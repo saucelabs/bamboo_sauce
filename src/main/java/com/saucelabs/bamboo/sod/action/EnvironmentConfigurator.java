@@ -70,7 +70,7 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
         // setting unique tunnel identifier
         if (config.isEnabled() && config.useGeneratedTunnelIdentifier()) {
             String tunnelIdentifier = generateTunnelIdentifier(buildContext.getPlanName());
-            customVariableContext.addCustomData(SODKeys.TUNNEL_ID, tunnelIdentifier);
+            customVariableContext.addCustomData(SODKeys.TUNNEL_IDENTIFIER, tunnelIdentifier);
         }
 
         if (config.isEnabled()) {
