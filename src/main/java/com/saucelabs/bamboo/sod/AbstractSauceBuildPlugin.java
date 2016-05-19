@@ -6,6 +6,7 @@ import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.variables.Bamboo3Modifier;
 import com.saucelabs.bamboo.sod.variables.VariableModifier;
+import com.atlassian.bamboo.variable.CustomVariableContext;
 
 /**
  * Contains common logic for Sauce OnDemand plugin classes.
@@ -26,8 +27,9 @@ public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlug
     protected VariableModifier getVariableModifier(
         SODMappedBuildConfiguration config,
         BuildDefinition definition,
-        EnvironmentVariableAccessor environmentVariableAccessor
+        EnvironmentVariableAccessor environmentVariableAccessor,
+        CustomVariableContext customVariableContext
     ) {
-        return new Bamboo3Modifier(config, definition, buildContext, environmentVariableAccessor);
+        return new Bamboo3Modifier(config, definition, buildContext, environmentVariableAccessor, customVariableContext);
     }
 }

@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import com.atlassian.bamboo.variable.CustomVariableContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,6 +34,16 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
     private static final Logger logger = Logger.getLogger(DefaultVariableModifier.class);
 
+    public CustomVariableContext getCustomVariableContext() {
+        return customVariableContext;
+    }
+
+    public void setCustomVariableContext(CustomVariableContext customVariableContext) {
+        this.customVariableContext = customVariableContext;
+    }
+
+    private CustomVariableContext customVariableContext;
+
     protected static final String EQUALS = "=\"";
 
     protected static final String CUSTOM_DATA = "sauce:job-build=%1$s";
@@ -43,10 +54,11 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     protected BuildContext buildContext;
     private BrowserFactory sauceBrowserFactory;
 
-    public DefaultVariableModifier(SODMappedBuildConfiguration config, BuildDefinition definition, BuildContext buildContext) {
+    public DefaultVariableModifier(SODMappedBuildConfiguration config, BuildDefinition definition, BuildContext buildContext, CustomVariableContext customVariableContext) {
         this.config = config;
         this.definition = definition;
         this.buildContext = buildContext;
+        this.customVariableContext = customVariableContext;
     }
 
     protected Map<String, VariableDefinitionContext> createSelenium2VariableContext(VariableContext variableContext) {
@@ -131,6 +143,9 @@ public abstract class DefaultVariableModifier implements VariableModifier {
                 addVariable(variables, SODKeys.SELENIUM_BROWSER_ENV, browser.getBrowserName());
                 addVariable(variables, SODKeys.SELENIUM_VERSION_ENV, browser.getVersion());
             }
+        }
+        if (config.useGeneratedTunnelIdentifier()) {
+            addVariable(variables, SODKeys.TUNNEL_IDENTIFIER, customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER));
         }
     }
 
@@ -321,6 +336,10 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
         } else {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getParentBuildContext().getBuildResultKey()).append('"');
+        }
+        if (config.useGeneratedTunnelIdentifier()) {
+            String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
+            stringBuilder.append(' ').append(prefix).append(SODKeys.TUNNEL_IDENTIFIER).append(EQUALS).append(tunnelIdentifier).append('"');
         }
     }
 

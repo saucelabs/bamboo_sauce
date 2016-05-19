@@ -35,12 +35,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import com.atlassian.bamboo.v2.build.CommonContext;
 
 /**
  * @author Ross Rowe
@@ -145,7 +145,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         CustomVariableContext customVariableContext = mock(CustomVariableContext.class);
         buildConfigurator.setCustomVariableContext(customVariableContext);
         buildConfigurator.call();
-        verify(customVariableContext, times(1)).addCustomData(anyString(), anyString());
+        verify(customVariableContext, times(1)).getVariables(any(CommonContext.class));
         assertFalse("No sauce tunnels exist for unique key", getTunnelMap().isEmpty());
     }
 

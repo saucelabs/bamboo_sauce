@@ -17,6 +17,7 @@ import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.variables.VariableModifier;
 import com.saucelabs.ci.BrowserFactory;
+import com.atlassian.bamboo.variable.CustomVariableContext;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -43,9 +44,18 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
      */
     private BrowserFactory sauceBrowserFactory;
     private EnvironmentVariableAccessor environmentVariableAccessor;
+    private CustomVariableContext customVariableContext;
 
     public EnvironmentConfigurator() {
         super();
+    }
+
+    public CustomVariableContext getCustomVariableContext() {
+        return customVariableContext;
+    }
+
+    public void setCustomVariableContext(CustomVariableContext customVariableContext) {
+        this.customVariableContext = customVariableContext;
     }
 
     /**
@@ -57,6 +67,11 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
     @Override
     public BuildContext call() {
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
+        // setting unique tunnel identifier
+        if (config.isEnabled() && config.useGeneratedTunnelIdentifier()) {
+            String tunnelIdentifier = generateTunnelIdentifier(buildContext.getPlanName());
+            customVariableContext.addCustomData(SODKeys.TUNNEL_IDENTIFIER, tunnelIdentifier);
+        }
 
         if (config.isEnabled()) {
             setSeleniumEnvironmentVars(config);
@@ -68,10 +83,9 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
      * @param config
      */
     private void setSeleniumEnvironmentVars(SODMappedBuildConfiguration config){
-        VariableModifier variableModifier = getVariableModifier(config, buildContext.getBuildDefinition(), environmentVariableAccessor);
+        VariableModifier variableModifier = getVariableModifier(config, buildContext.getBuildDefinition(), environmentVariableAccessor, customVariableContext);
         variableModifier.setAdministrationConfigurationManager(administrationConfigurationManager);
         variableModifier.setSauceBrowserFactory(getSauceBrowserFactory());
-
         variableModifier.storeVariables();
         variableModifier.populateVariables(buildContext.getVariableContext());
     }
@@ -97,6 +111,13 @@ public class EnvironmentConfigurator extends AbstractSauceBuildPlugin implements
 
     public void setEnvironmentVariableAccessor(EnvironmentVariableAccessor environmentVariableAccessor) {
         this.environmentVariableAccessor = environmentVariableAccessor;
+    }
+    //only allow word, digit, and hyphen characters
+    private final String PATTERN_DISALLOWED_TUNNEL_ID_CHARS = "[^\\w\\d-]+";
+
+    private String generateTunnelIdentifier(final String projectName) {
+        String sanitizedName = projectName.replaceAll(PATTERN_DISALLOWED_TUNNEL_ID_CHARS, "_");
+        return sanitizedName + "-" + System.currentTimeMillis();
     }
 
 }
