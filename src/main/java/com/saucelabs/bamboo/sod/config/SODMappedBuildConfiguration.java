@@ -93,7 +93,12 @@ public class SODMappedBuildConfiguration {
         map.put(IDLE_TIMEOUT_KEY, Integer.toString(timeout));
     }
 
+    @Deprecated
     public boolean isSshEnabled() {
+        return Boolean.parseBoolean(map.get(SSH_ENABLED_KEY));
+    }
+
+    public boolean isSauceConnectEnabled() {
         return Boolean.parseBoolean(map.get(SSH_ENABLED_KEY));
     }
 
