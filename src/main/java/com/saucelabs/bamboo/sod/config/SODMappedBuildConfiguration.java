@@ -156,14 +156,6 @@ public class SODMappedBuildConfiguration {
         return map;
     }
 
-    public SeleniumVersion getSeleniumVersion() {
-        Boolean useSeleniumRc = Boolean.parseBoolean(map.get(SELENIUMRC_KEY));
-        if (useSeleniumRc)
-            return SeleniumVersion.ONE;
-        else
-            return SeleniumVersion.TWO;
-    }
-
     public String getHttpsProtocol() {
         return map.get(HTTPS_PROTOCOL);
     }

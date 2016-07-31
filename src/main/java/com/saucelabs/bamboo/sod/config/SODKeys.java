@@ -29,7 +29,6 @@ public final class SODKeys
     public static final String BROWSER_RC_KEY = CUSTOM_PREFIX + "rcbrowser";
     public static final String SELENIUM_URL_KEY = CUSTOM_PREFIX + "selenium.url";
     public static final String SELENIUM_VERSION_KEY = CUSTOM_PREFIX + "selenium.version";
-    public static final String SELENIUMRC_KEY = CUSTOM_PREFIX + "seleniumrc";
     public static final String SAUCE_USER_KEY = CUSTOM_PREFIX + "user_name";
     public static final String OVERRIDE_AUTHENTICATION_KEY = CUSTOM_PREFIX + "auth.enabled";
     public static final String SAUCE_ACCESS_KEY = CUSTOM_PREFIX + "access_key";

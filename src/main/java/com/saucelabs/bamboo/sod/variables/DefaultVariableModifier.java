@@ -196,12 +196,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 
         String[] selectedBrowsers = config.getSelectedBrowsers();
         if (selectedBrowsers.length == 1) {
-            Browser browser;
-            if (config.getSeleniumVersion().equals(SeleniumVersion.ONE)) {
-                browser = sauceBrowserFactory.seleniumBrowserForKey(config.getSelectedBrowsers()[0].replaceAll(" ", "_"));
-            } else {
-                browser = sauceBrowserFactory.webDriverBrowserForKey(config.getSelectedBrowsers()[0].replaceAll(" ", "_"));
-            }
+            Browser browser = sauceBrowserFactory.webDriverBrowserForKey(config.getSelectedBrowsers()[0].replaceAll(" ", "_"));
             if (browser != null) {
                 sb.append("&os=").append(browser.getOs());
                 sb.append("&browser=").append(browser.getBrowserName());
@@ -238,15 +233,6 @@ public abstract class DefaultVariableModifier implements VariableModifier {
      * @deprecated
      */
     protected String createSeleniumEnvironmentVariables(String prefix) {
-        if (config.getSeleniumVersion().equals(SeleniumVersion.ONE)) {
-            return createSelenium1EnvironmentVariables(prefix);
-        } else {
-            return createSelenium2EnvironmentVariables(prefix);
-        }
-    }
-
-    private String createSelenium2EnvironmentVariables(String prefix) {
-
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         StringBuilder stringBuilder = new StringBuilder();
         createCommonEnvironmentVariables(prefix, stringBuilder, adminConfig);
@@ -269,32 +255,6 @@ public abstract class DefaultVariableModifier implements VariableModifier {
 //        String jsonString = browsersJSON.toString();
 //        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_BROWSERS).append(EQUALS).append(StringEscapeUtils.escapeJava(jsonString)).append('"');;
 
-        return stringBuilder.toString();
-    }
-
-
-    /**
-     * @param prefix Prefix for each environment variable (eg '-D'), can be null
-     * @return String representing the set of environment variables to apply
-     * @deprecated
-     */
-    private String createSelenium1EnvironmentVariables(String prefix) {
-        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
-        String sodUsername = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
-        String sodKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
-        String browserJson = getSodJson(sodUsername, sodKey, config);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        createCommonEnvironmentVariables(prefix, stringBuilder, adminConfig);
-
-        stringBuilder.append(' ').append(prefix).append(SODKeys.SELENIUM_BROWSER_ENV).append(EQUALS).append(browserJson).append('"');
-        if (buildContext.getParentBuildContext() == null) {
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA_ENV).append(EQUALS).append(
-                    String.format(CUSTOM_DATA, buildContext.getBuildResultKey())).append('"');
-        } else {
-            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_CUSTOM_DATA_ENV).append(EQUALS).append(
-                    String.format(CUSTOM_DATA, buildContext.getParentBuildContext().getBuildResultKey())).append('"');
-        }
         return stringBuilder.toString();
     }
 
