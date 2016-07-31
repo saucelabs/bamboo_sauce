@@ -25,42 +25,25 @@
                 clear="all"/>
     [/@ui.bambooSection]
 
-    [@ww.checkbox label='Selenium RC Support?' name='custom.sauceondemand.seleniumrc' toggle='true' description='' /]
-
-    [@ui.bambooSection dependsOn='custom.sauceondemand.seleniumrc' showOn='false']
-        [@ww.select
-        label="WebDriver Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
-        name="custom.sauceondemand.browser"
-        id="custom.sauceondemand.browser"
-        listKey="key"
-        listValue="name"
-        list=webDriverBrowserList
-        multiple="true"
-        value="selectedBrowsers"
-        size="20"
-        cssStyle="max-width: 100%"/]
-    [/@ui.bambooSection]
-
-    [@ui.bambooSection dependsOn='custom.sauceondemand.seleniumrc' showOn='true']
-        [@ww.select
-        label="Selenium RC Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
-        name="custom.sauceondemand.rcbrowser"
-        id="custom.sauceondemand.rcbrowser"
-        listKey="key"
-        listValue="name"
-        list=seleniumRCBrowserList
-        multiple="true"
-        value="selectedRCBrowsers"
-        size="20"
-        cssStyle="max-width: 100%"/]
-    [/@ui.bambooSection]
+    [@ww.select
+    label="WebDriver Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
+    name="custom.sauceondemand.browser"
+    id="webDriverBrowsers"
+    listKey="key"
+    listValue="name"
+    list=webDriverBrowserList
+    multiple="true"
+    value="selectedBrowsers"
+    size="20"
+    cssStyle="max-width: 100%"/]
 
     [#--[@ww.checkbox label='Appium Support?' name='custom.sauceondemand.appium' toggle='true' description='' /]--]
 
     [#--[@ui.bambooSection dependsOn='custom.sauceondemand.appium' showOn='true']--]
     [#--[@ww.select--]
     [#--label="Appium Browser(s)" description="The OS/Browser combination to use for testing with Appium"--]
-    [#--name="custom.sauceondemand.browser"--]
+    [#--name="custom.sauceondemand.appiumBrowser"--]
+    [#--id="appiumBrowser"--]
     [#--listKey="key"--]
     [#--listValue="name"--]
     [#--list=appiumBrowserList--]

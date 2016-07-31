@@ -83,6 +83,7 @@ jQuery(document).ready(function()
         jQuery('#sauceBuilderTabs>div').hide().eq(index).show();
     }).eq(0).click();
 
+    jQuery("#webDriverBrowsers, #appiumBrowser").chosen({disable_search_threshold: 10});
 });
 
 

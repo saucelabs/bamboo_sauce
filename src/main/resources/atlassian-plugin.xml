@@ -21,10 +21,13 @@
         <dependency>bamboo.web.resources:extraJQuery</dependency>
         <resource type="download" name="jquery.blockUI-min.js" location="js/jquery.blockUI-min.js"/>
         <resource type="download" name="jquery.json-min.js" location="js/jquery.json-2.2.min.js"/>
+        <resource type="download" name="chosen.jquery.js" location="chosen_v1.6.1/chosen.jquery.js" />
         <resource type="download" name="sauceondemand.js" location="js/sauceondemand.js"/>
     </web-resource>
 
     <web-resource key="sodCSS" name="sodCSS">
+        <resource type="download" name="chosen.css" location="chosen_v1.6.1/chosen.css" />
+        <resource type="download" name="chosen_v1.6.1/" location="chosen_v1.6.1/"/>
         <resource type="download" name="sauceondemand.css" location="css/sauceondemand.css"/>
     </web-resource>
 
