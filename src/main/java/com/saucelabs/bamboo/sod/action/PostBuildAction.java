@@ -69,7 +69,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     public BuildContext call() {
 
         final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-        if (config.isEnabled()) {
+        if (config.isEnabled() && config.isSauceConnectEnabled()) {
             BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
             final BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
             PrintStream printLogger = new PrintStream(new NullOutputStream()) {
