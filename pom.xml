@@ -27,24 +27,24 @@
             <email>gavin@saucelabs.com</email>
             <organization>Sauce Labs</organization>
             <organizationUrl>http://www.saucelabs.com/</organizationUrl>
+            <timezone>America/Vancouver</timezone>
         </developer>
-        <developer>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Jonathan Doklovic</name>
             <organization>Systems Bliss Inc.</organization>
             <organizationUrl>http://www.sysbliss.com/</organizationUrl>
-        </developer>
-        <developer>
-            <organization>Sauce Labs</organization>
-            <organizationUrl>http://www.saucelabs.com/</organizationUrl>
-        </developer>
-        <developer>
+        </contributor>
+        <contributor>
             <name>Ross Rowe</name>
             <organization>Avain IT</organization>
             <organizationUrl>http://www.avainit.com/</organizationUrl>
-        </developer>
-    </developers>
+        </contributor>
+    </contributors>
     <properties>
         <sauce.rest.version>1.0.32</sauce.rest.version>
-        <ci-sauce.version>1.116</ci-sauce.version>
+        <ci-sauce.version>1.119</ci-sauce.version>
         <bamboo.version>5.10.0</bamboo.version>
         <bamboo.data.version>5.9.7</bamboo.data.version>
         <amps.version>6.2.6</amps.version>
