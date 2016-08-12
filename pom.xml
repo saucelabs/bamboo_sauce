@@ -27,27 +27,27 @@
             <email>gavin@saucelabs.com</email>
             <organization>Sauce Labs</organization>
             <organizationUrl>http://www.saucelabs.com/</organizationUrl>
+            <timezone>America/Vancouver</timezone>
         </developer>
-        <developer>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Jonathan Doklovic</name>
             <organization>Systems Bliss Inc.</organization>
             <organizationUrl>http://www.sysbliss.com/</organizationUrl>
-        </developer>
-        <developer>
-            <organization>Sauce Labs</organization>
-            <organizationUrl>http://www.saucelabs.com/</organizationUrl>
-        </developer>
-        <developer>
+        </contributor>
+        <contributor>
             <name>Ross Rowe</name>
             <organization>Avain IT</organization>
             <organizationUrl>http://www.avainit.com/</organizationUrl>
-        </developer>
-    </developers>
+        </contributor>
+    </contributors>
     <properties>
         <sauce.rest.version>1.0.32</sauce.rest.version>
-        <ci-sauce.version>1.116</ci-sauce.version>
+        <ci-sauce.version>1.120</ci-sauce.version>
         <bamboo.version>5.10.0</bamboo.version>
         <bamboo.data.version>5.9.7</bamboo.data.version>
-        <amps.version>6.2.1</amps.version>
+        <amps.version>6.2.6</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
@@ -59,7 +59,6 @@
         <url>git@github.com:saucelabs/bamboo_sauce.git</url>
         <tag>HEAD</tag>
     </scm>
-
     <dependencies>
         <!-- <dependency>
             <groupId>cglib</groupId>
@@ -118,35 +117,30 @@
             <version>${bamboo.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.atlassian.plugin</groupId>
             <artifactId>atlassian-spring-scanner-annotation</artifactId>
             <version>${atlassian.spring.scanner.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>com.atlassian.plugin</groupId>
             <artifactId>atlassian-spring-scanner-runtime</artifactId>
             <version>${atlassian.spring.scanner.version}</version>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
             <scope>test</scope>
         </dependency>
-
         <!-- WIRED TEST RUNNER DEPENDENCIES -->
         <dependency>
             <groupId>com.atlassian.plugins</groupId>
@@ -208,10 +202,10 @@
                         <configuration>
                             <tasks>
                                 <filterset id="filters">
-                                    <filter token="VERSION" value="${project.version}" />
+                                    <filter token="VERSION" value="${project.version}"/>
                                 </filterset>
                                 <copy preservelastmodified="true" file="./src/main/resources/com/saucelabs/bamboo/sod/BuildUtils.template" tofile="./src/main/java/com/saucelabs/bamboo/sod/BuildUtils.java" overwrite="true">
-                                    <filterset refid="filters" />
+                                    <filterset refid="filters"/>
                                 </copy>
                             </tasks>
                         </configuration>
@@ -234,12 +228,8 @@
                     <enableFastdev>false</enableFastdev>
                     <instructions>
                         <!--<Atlassian-Plugin-Key>${atlassian.plugin.key}</Atlassian-Plugin-Key> -->
-
                         <!-- Add package to export here -->
-                        <Export-Package>
-                            com.saucelabs.bamboo.sod.api,
-                        </Export-Package>
-
+                        <Export-Package>com.saucelabs.bamboo.sod.api,</Export-Package>
                         <!-- Add package import here -->
                         <!--<Import-Package>
                             org.json.simple;version="1.1.1",
@@ -249,7 +239,6 @@
                             com.saucelabs.saucerest;version="${sauce.rest.version}",
                             *
                         </Import-Package> -->
-
                         <!-- Ensure plugin is spring powered - see https://extranet.atlassian.com/x/xBS9hQ  -->
                         <Spring-Context>*</Spring-Context>
                     </instructions>

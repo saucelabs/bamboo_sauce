@@ -100,13 +100,7 @@ public class EnvironmentConfiguratorTest {
 
             @Override
             public Browser webDriverBrowserForKey(String key) {
-
                 return browser;
-            }
-
-            @Override
-            public List<Browser> getSeleniumBrowsers() throws IOException, JSONException {
-                return Arrays.asList(browser);
             }
 
             @Override

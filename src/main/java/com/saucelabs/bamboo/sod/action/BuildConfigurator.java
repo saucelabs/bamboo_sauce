@@ -153,20 +153,12 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
         try {
-            if (Boolean.parseBoolean(buildConfiguration.getString(SODKeys.SELENIUMRC_KEY))) {
-                String[] selectedBrowsers = getSelectedRCBrowsers(buildConfiguration);
-                ValueStack stack = ActionContext.getContext().getValueStack();
-                stack.getContext().put("selectedRCBrowsers", selectedBrowsers);
-                context.put("selectedRCBrowsers", selectedBrowsers);
-            } else {
-                String[] selectedBrowsers = getSelectedBrowsers(buildConfiguration);
-                ValueStack stack = ActionContext.getContext().getValueStack();
-                stack.getContext().put("selectedBrowsers", selectedBrowsers);
-                context.put("selectedBrowsers", selectedBrowsers);
-            }
+            String[] selectedBrowsers = getSelectedBrowsers(buildConfiguration);
+            ValueStack stack = ActionContext.getContext().getValueStack();
+            stack.getContext().put("selectedBrowsers", selectedBrowsers);
+            context.put("selectedBrowsers", selectedBrowsers);
 
             context.put("webDriverBrowserList", getSauceBrowserFactory().getWebDriverBrowsers());
-            context.put("seleniumRCBrowserList", getSauceBrowserFactory().getSeleniumBrowsers());
             context.put("appiumBrowserList", getSauceBrowserFactory().getAppiumBrowsers());
         } catch (Exception e) {
             //TODO detect a proxy exception as opposed to all exceptions?
@@ -180,21 +172,6 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(SODKeys.BROWSER_KEY));
 
         browsers = getSauceBrowserFactory().getWebDriverBrowsers();
-
-        for (Browser browser : browsers) {
-            if (ArrayUtils.contains(selectedKeys, browser.getKey())) {
-                selectedBrowsers.add(browser.getKey());
-            }
-        }
-        return selectedBrowsers.toArray(new String[selectedBrowsers.size()]);
-    }
-
-    private String[] getSelectedRCBrowsers(BuildConfiguration buildConfiguration) throws Exception {
-        List<Browser> browsers;
-        List<String> selectedBrowsers = new ArrayList<String>();
-        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(SODKeys.BROWSER_RC_KEY));
-
-        browsers = getSauceBrowserFactory().getSeleniumBrowsers();
 
         for (Browser browser : browsers) {
             if (ArrayUtils.contains(selectedKeys, browser.getKey())) {
