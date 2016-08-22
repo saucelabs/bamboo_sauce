@@ -22,6 +22,7 @@ public abstract class AbstractSauceBuildPlugin extends BaseConfigurableBuildPlug
      * @param config        Mapped config for project
      * @param definition    Project definition
      * @param environmentVariableAccessor passthrough to Bamboo3Modifier
+     * @param customVariableContext       FIXME -- ??
      * @return instance that will be used to construct the environment variables
      */
     protected VariableModifier getVariableModifier(
