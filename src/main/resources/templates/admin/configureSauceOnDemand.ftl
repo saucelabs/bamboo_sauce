@@ -14,10 +14,10 @@
         cancelUri='/admin/administer.action']
 
         [@ww.textfield
-          label='Sauce Connect Working Directory'
+          label='Override Sauce Connect Path'
           name='sauceConnectDirectory'
           toggle='true'
-          description='Specify the directory where the Sauce Connect process should be run from.  By default, the plugin will attempt to launch Sauce Connect using the USER_HOME directory as the working directory.'
+          description='By default, we extract a bundled/tested version of Sauce Connect to your $HOME directory and run it. If you want to use an already installed version instead, specify its full path.'
         /]
 
         [@ui.bambooSection title="Credentials"]
