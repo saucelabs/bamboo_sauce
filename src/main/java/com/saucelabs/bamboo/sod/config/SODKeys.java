@@ -54,6 +54,7 @@ public final class SODKeys
     /* ADMIN CONFIG KEYS */
     public static final String SOD_USERNAME_KEY = "sauceondemand.username";
     public static final String SOD_ACCESSKEY_KEY = "sauceondemand.accesskey";
+    public static final String SOD_SAUCE_CONNECT_DIRECTORY = "sauceondemand.sauceConnectDirectory";
 
     /* ENV Vars */
     public static final String SELENIUM_DRIVER_ENV = "SELENIUM_DRIVER";

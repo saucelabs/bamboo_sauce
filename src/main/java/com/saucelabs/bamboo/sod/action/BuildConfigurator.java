@@ -22,6 +22,7 @@ import com.saucelabs.bamboo.sod.util.SauceLogInterceptor;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
 import com.saucelabs.ci.SeleniumVersion;
+import com.saucelabs.ci.sauceconnect.AbstractSauceTunnelManager;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
 import org.apache.commons.io.output.NullOutputStream;
@@ -86,15 +87,17 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     @NotNull
     @Override
     public BuildContext call() {
+        BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
+        BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
         try {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-            BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
-            BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
             SauceLogInterceptor logInterceptor = new SauceLogInterceptor(buildContext);
             buildLogger.getInterceptorStack().add(logInterceptor);
             if (config.isEnabled() && config.isSshEnabled()) {
                 startTunnel(config);
             }
+        } catch (AbstractSauceTunnelManager.SauceConnectException e) {
+            buildLogger.addErrorLogEntry("Sauce Connect Error", e);
         } catch (Exception e) {
             //catch exceptions so that we don't stop the build from running
             logger.error("Error running Sauce OnDemand BuildConfigurator, attempting to continue", e);
@@ -131,7 +134,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             options,
             printLogger,
             config.isVerboseSSHLogging(),
-            null
+            getSauceConnectDirectory()
         );
     }
 
@@ -260,4 +263,12 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public void setCustomVariableContext(CustomVariableContext customVariableContext) {
         this.customVariableContext = customVariableContext;
     }
+
+    public String getSauceConnectDirectory() {
+        if (administrationConfigurationAccessor == null) { return null; }
+        AdministrationConfiguration adminConfig = administrationConfigurationAccessor.getAdministrationConfiguration();
+        if (adminConfig == null) { return null; }
+        return adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY);
+    }
+
 }
