@@ -30,6 +30,14 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
      */
     private BrowserFactory sauceBrowserFactory;
 
+    /**
+     * Config
+     */
+    private String sauceConnectDirectory;
+    private String username;
+    private String accessKey;
+
+
     public ConfigureSODAction(PluginAccessor pluginAccessor
     ) {
         super();
@@ -38,19 +46,18 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
         setAdministrationConfigurationPersister(ComponentLocator.getComponent(AdministrationConfigurationPersister.class));
     }
 
-    private String username;
-    private String accessKey;
 
     /**
      * Invoked when the Sauce Administration screen is opened, populates the underlying variables
      * with some default values.
+     *
      * @return 'input'
      */
-    public String doEdit()
-    {
+    public String doEdit() {
         final AdministrationConfiguration adminConfig = this.getAdministrationConfiguration();
         setUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         setAccessKey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
+        setSauceConnectDirectory(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY));
         return INPUT;
     }
 
@@ -64,6 +71,7 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
         final AdministrationConfiguration adminConfig = this.getAdministrationConfiguration();
         adminConfig.setSystemProperty(SODKeys.SOD_USERNAME_KEY, getUsername());
         adminConfig.setSystemProperty(SODKeys.SOD_ACCESSKEY_KEY, getAccessKey());
+        adminConfig.setSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY, getSauceConnectDirectory());
         administrationConfigurationManager.saveAdministrationConfiguration(adminConfig);
         //this is a bit of a hack to support unit testing
         //getBamboo() won't be null at runtime, but we can't mock the method
@@ -114,5 +122,13 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
     public void setUsername(String username)
     {
         this.username = username;
+    }
+
+    public void setSauceConnectDirectory(String sauceConnectDirectory) {
+        this.sauceConnectDirectory = sauceConnectDirectory;
+    }
+
+    public String getSauceConnectDirectory() {
+        return sauceConnectDirectory;
     }
 }

@@ -134,7 +134,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             options,
             printLogger,
             config.isVerboseSSHLogging(),
-            null
+            getSauceConnectDirectory()
         );
     }
 
@@ -263,4 +263,12 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     public void setCustomVariableContext(CustomVariableContext customVariableContext) {
         this.customVariableContext = customVariableContext;
     }
+
+    public String getSauceConnectDirectory() {
+        if (administrationConfigurationAccessor == null) { return null; }
+        AdministrationConfiguration adminConfig = administrationConfigurationAccessor.getAdministrationConfiguration();
+        if (adminConfig == null) { return null; }
+        return adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY);
+    }
+
 }
