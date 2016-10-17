@@ -1,23 +1,25 @@
 package com.saucelabs.bamboo.sod.plan;
 
+import com.atlassian.bamboo.plan.cache.ImmutableChain;
+import com.atlassian.bamboo.plan.cache.ImmutableJob;
+import com.atlassian.bamboo.plan.cache.ImmutablePlan;
+import com.google.common.base.Strings;
+import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.ci.JobInformation;
 
 import com.atlassian.bamboo.build.ViewBuildResults;
-import com.atlassian.bamboo.chains.ChainResultsSummary;
-import com.atlassian.bamboo.chains.ChainStageResult;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.atlassian.bamboo.plan.PlanKeys;
-import com.atlassian.bamboo.resultsummary.BuildResultsSummary;
 
 import com.atlassian.bamboo.resultsummary.ResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
+import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -33,8 +35,6 @@ public class ViewSauceJobAction extends ViewBuildResults {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
 
-    public static final String JOB_DETAILS_URL = "http://saucelabs.com/rest/v1/%1$s/jobs?full=true";
-
     /**
      * Populated by dependency injection.
      */
@@ -46,6 +46,34 @@ public class ViewSauceJobAction extends ViewBuildResults {
 
     private String jobId;
 
+    private Credentials findSauceRestForPlan(ImmutablePlan plan) {
+        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+        String username, accessKey;
+        SauceREST sauceREST;
+
+        // bad username or password probably
+        if (plan instanceof ImmutableChain) {
+            List<ImmutableChain> chains = cachedPlanManager.getPlansByProject(getImmutablePlan().getProject(), ImmutableChain.class);
+            for (ImmutableJob job : ((ImmutableChain) plan).getAllJobs()) {
+                final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
+                if (StringUtils.isNotEmpty(config.getUsername())) {
+                    username = config.getUsername();
+                    accessKey = config.getAccessKey();
+                    sauceREST = new SauceREST(username, accessKey);
+                    if (!Strings.isNullOrEmpty(sauceREST.getJobInfo(jobId))) {
+                        return new Credentials(username, accessKey);
+                    }
+                }
+            }
+        }
+        username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
+        accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
+        sauceREST = new SauceREST(username, accessKey);
+        if (!Strings.isNullOrEmpty(sauceREST.getJobInfo(jobId))) {
+            return new Credentials(username, accessKey);
+        }
+        return null;
+    }
     /**
      * <p>
      * Attempts to retrieve the Sauce Session Id from the custom build data (it will be set if the {@link com.saucelabs.bamboo.sod.action.PostBuildAction} class detects if
@@ -63,32 +91,9 @@ public class ViewSauceJobAction extends ViewBuildResults {
      */
     @Override
     public String doDefault() throws Exception {
-
-        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
-        String username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
-        String accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
-        setResultsSummary(resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(getBuildKey(), getBuildNumber())));
-        if (buildResultsSummary == null) {
-            //we are on the Plan results pages, so drill down to the chain results to find the custom data
-            if (resultsSummary instanceof ChainResultsSummary) {
-                ChainResultsSummary chainSummary = (ChainResultsSummary) resultsSummary;
-                List<ChainStageResult> chainStageResults = chainSummary.getStageResults();
-                for (ChainStageResult chainStageResult : chainStageResults) {
-                    Set<BuildResultsSummary> buildResultSummaries = chainStageResult.getBuildResults();
-                    for (BuildResultsSummary summary : buildResultSummaries) {
-                        processBuildResultsSummary(summary, username, accessKey);
-                    }
-                }
-            }
-        } else {
-            processBuildResultsSummary(buildResultsSummary, username, accessKey);
-        }
-
+        Credentials credentials = findSauceRestForPlan(getImmutablePlan());
+        jobInformation = new JobInformation(jobId, calcHMAC(credentials.username, credentials.accessKey, jobId));
         return super.doDefault();
-    }
-
-    private void processBuildResultsSummary(BuildResultsSummary summary, String username, String accessKey) throws IOException, InvalidKeyException, NoSuchAlgorithmException {
-        jobInformation = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
     }
 
     // FIXME this belongs in saucerest
@@ -122,5 +127,16 @@ public class ViewSauceJobAction extends ViewBuildResults {
     @Override
     public boolean isRestartable(@NotNull ResultsSummary resultsSummary) {
         return false;
+    }
+
+    private class Credentials {
+        public final String username;
+        public final String accessKey;
+
+        public Credentials(String username, String accessKey) {
+
+            this.username = username;
+            this.accessKey = accessKey;
+        }
     }
 }

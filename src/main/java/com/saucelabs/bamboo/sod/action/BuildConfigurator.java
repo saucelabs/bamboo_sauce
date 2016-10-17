@@ -93,7 +93,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
             SauceLogInterceptor logInterceptor = new SauceLogInterceptor(buildContext);
             buildLogger.getInterceptorStack().add(logInterceptor);
-            if (config.isEnabled() && config.isSshEnabled()) {
+            if (config.isEnabled() && config.isSauceConnectEnabled()) {
                 startTunnel(config);
             }
         } catch (AbstractSauceTunnelManager.SauceConnectException e) {

@@ -1,13 +1,14 @@
 package com.saucelabs.bamboo.sod.plan;
 
+import com.atlassian.bamboo.plan.cache.ImmutableChain;
+import com.atlassian.bamboo.plan.cache.ImmutableJob;
+import com.atlassian.bamboo.plan.cache.ImmutablePlan;
 import com.saucelabs.ci.JobInformation;
 
 import com.atlassian.bamboo.build.Job;
 import com.atlassian.bamboo.build.ViewBuildResults;
-import com.atlassian.bamboo.chains.Chain;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
-import com.atlassian.bamboo.plan.Plan;
 import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.resultsummary.ResultsSummary;
 import com.saucelabs.bamboo.sod.config.SODKeys;
@@ -69,42 +70,32 @@ public class ViewSODAction extends ViewBuildResults {
      */
     @Override
     public String doDefault() throws Exception {
+        String username, accessKey;
         logger.info("Processing ViewSODAction");
 
-        Plan plan = planManager.getPlanByKey(PlanKeys.getPlanKey(getBuildKey()));
-        ResultsSummary resultSummary = resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(getBuildKey(), getBuildNumber()));
-        if (!(resultSummary instanceof Chain)) {
-            //the build number stored within Sauce will be that of the default chain, find the default chain and retrieve the corresponding result summary
-            List<Chain> chains = planManager.getPlansByProject(plan.getProject(), Chain.class);
-            for (Chain chain : chains) {
-                if (getBuildKey().startsWith(chain.getPlanKey().toString())) {
-                    setResultsSummary(resultsSummaryManager.getResultsSummary(PlanKeys.getPlanResultKey(chain.getPlanKey(), getBuildNumber())));
-                }
-            }
-        } else {
-            setResultsSummary(resultSummary);
-        }
-
         jobInformation = new ArrayList<JobInformation>();
-        AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
 
-        String username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
-        String accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
-        retrieveJobIdsFromSauce(username, accessKey);
-
-        List<Job> jobs;
-        if (plan != null) {
-            jobs = planManager.getPlansByProject(plan.getProject(), Job.class);
-            for (Job job : jobs) {
-                if (job.getKey().startsWith(getBuildKey())) {
-                    final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
-                    if (StringUtils.isNotEmpty(config.getUsername())) {
-                        username = config.getUsername();
-                        accessKey = config.getAccessKey();
-                        retrieveJobIdsFromSauce(username, accessKey);
-                    }
+        ImmutablePlan plan = getImmutablePlan();
+        if (plan instanceof ImmutableChain) {
+            List<ImmutableChain> chains = cachedPlanManager.getPlansByProject(getImmutablePlan().getProject(), ImmutableChain.class);
+            for (ImmutableJob job : ((ImmutableChain) plan).getAllJobs()) {
+                final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(job.getBuildDefinition().getCustomConfiguration());
+                if (StringUtils.isNotEmpty(config.getUsername())) {
+                    username = config.getUsername();
+                    accessKey = config.getAccessKey();
+                    jobInformation.addAll(retrieveJobIdsFromSauce(username, accessKey));
+                }
+                if (jobInformation.size() != 0) {
+                    break;
                 }
             }
+        }
+        if (jobInformation.size() == 0) {
+            AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
+
+            username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
+            accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
+            jobInformation.addAll(retrieveJobIdsFromSauce(username, accessKey));
         }
 
         return super.doDefault();
@@ -119,7 +110,9 @@ public class ViewSODAction extends ViewBuildResults {
      * @param accessKey
      * @throws Exception
      */
-    private void retrieveJobIdsFromSauce(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    private ArrayList<JobInformation> retrieveJobIdsFromSauce(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+        ArrayList<JobInformation> jobInformations = new ArrayList<JobInformation>();
+
         String buildName = PlanKeys.getPlanResultKey(resultsSummary.getPlanKey(), getResultsSummary().getBuildNumber()).getKey();
         SauceREST sauceREST = new SauceREST(username, accessKey);
         //invoke Sauce Rest API to find plan results with those values
@@ -135,7 +128,7 @@ public class ViewSODAction extends ViewBuildResults {
                     logger.info("Adding jobInformation for " + jobId);
                     JobInformation information = new JobInformation(jobId, calcHMAC(username, accessKey, jobId));
                     information.populateFromJson(jobData);
-                    jobInformation.add(information);
+                    jobInformations.add(information);
                 } else {
                     logger.warn("Unable to find jobId in jsonData");
                 }
@@ -143,6 +136,7 @@ public class ViewSODAction extends ViewBuildResults {
         } catch (JSONException e) {
             logger.error("Unable to process json returned by saucelabs", e);
         }
+        return jobInformations;
     }
 
     /**
