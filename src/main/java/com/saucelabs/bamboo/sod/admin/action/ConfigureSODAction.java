@@ -8,6 +8,7 @@ import com.atlassian.bamboo.ww2.BambooActionSupport;
 import com.atlassian.bamboo.ww2.aware.permissions.GlobalAdminSecurityAware;
 import com.atlassian.plugin.PluginAccessor;
 import com.atlassian.sal.api.component.ComponentLocator;
+import com.google.common.base.Strings;
 import com.opensymphony.xwork2.ActionContext;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.ci.BrowserFactory;
@@ -37,6 +38,8 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
     private String username;
     private String accessKey;
 
+    private Integer sauceConnectMaxRetries = 0;
+    private Integer sauceConnectRetryWaitTime = 0;
 
     public ConfigureSODAction(PluginAccessor pluginAccessor
     ) {
@@ -58,6 +61,8 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
         setUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         setAccessKey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
         setSauceConnectDirectory(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY));
+        setSauceConnectMaxRetries(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_MAX_RETRIES));
+        setSauceConnectRetryWaitTime(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_RETRY_WAIT_TIME));
         return INPUT;
     }
 
@@ -72,6 +77,9 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
         adminConfig.setSystemProperty(SODKeys.SOD_USERNAME_KEY, getUsername());
         adminConfig.setSystemProperty(SODKeys.SOD_ACCESSKEY_KEY, getAccessKey());
         adminConfig.setSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY, getSauceConnectDirectory());
+        adminConfig.setSystemProperty(SODKeys.SOD_SAUCE_CONNECT_MAX_RETRIES, getSauceConnectMaxRetries().toString());
+        adminConfig.setSystemProperty(SODKeys.SOD_SAUCE_CONNECT_RETRY_WAIT_TIME, getSauceConnectRetryWaitTime().toString());
+
         administrationConfigurationManager.saveAdministrationConfiguration(adminConfig);
         //this is a bit of a hack to support unit testing
         //getBamboo() won't be null at runtime, but we can't mock the method
@@ -102,6 +110,18 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
             addFieldError("accessKey", "Access Key is required.");
         }
 
+        if (sauceConnectMaxRetries < 0) {
+            addFieldError("sauceConnectMaxRetries", "Max Retries must be greater than or equal to 0");
+        }
+
+        if (sauceConnectRetryWaitTime < 0) {
+            addFieldError("sauceConnectRetryWaitTime", "Max Retry Wait time must be greater than or equal to 0");
+        }
+
+        if (sauceConnectMaxRetries > 0 && sauceConnectRetryWaitTime == 0) {
+            addFieldError("sauceConnectRetryWaitTime", "Wait time should be non zero when retries is set");
+        }
+
     }
 
     public String getAccessKey()
@@ -130,5 +150,30 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
 
     public String getSauceConnectDirectory() {
         return sauceConnectDirectory;
+    }
+
+    public Integer getSauceConnectMaxRetries() {
+        return sauceConnectMaxRetries;
+    }
+
+    public void setSauceConnectMaxRetries(Integer sauceConnectMaxRetries) {
+        this.sauceConnectMaxRetries = sauceConnectMaxRetries;
+    }
+
+    public void setSauceConnectMaxRetries(String sauceConnectMaxRetries) {
+        this.sauceConnectMaxRetries = Strings.isNullOrEmpty(sauceConnectMaxRetries) ?
+            0 : Integer.parseInt(sauceConnectMaxRetries, 10);
+    }
+    public Integer getSauceConnectRetryWaitTime() {
+        return sauceConnectRetryWaitTime;
+    }
+
+    public void setSauceConnectRetryWaitTime(Integer sauceConnectRetryWaitTime) {
+        this.sauceConnectRetryWaitTime = sauceConnectRetryWaitTime;
+    }
+
+    public void setSauceConnectRetryWaitTime(String sauceConnectRetryWaitTime) {
+        this.sauceConnectRetryWaitTime = Strings.isNullOrEmpty(sauceConnectRetryWaitTime) ?
+            0 : Integer.parseInt(sauceConnectRetryWaitTime, 10);
     }
 }

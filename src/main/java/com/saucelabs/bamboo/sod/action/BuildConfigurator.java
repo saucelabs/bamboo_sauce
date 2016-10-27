@@ -54,6 +54,10 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
 
     private SauceConnectFourManager sauceConnectFourTunnelManager;
 
+    public CustomVariableContext getCustomVariableContext() {
+        return customVariableContext;
+    }
+
     private CustomVariableContext customVariableContext;
 
     /**
@@ -123,19 +127,52 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
         if (config.useGeneratedTunnelIdentifier()) {
-            String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
+            String tunnelIdentifier = getCustomVariableContext().getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
             options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
         }
-        sauceTunnelManager.openConnection(
-            config.getTempUsername(),
-            config.getTempApikey(),
-            Integer.parseInt(config.getSshPorts()),
-            null,
-            options,
-            printLogger,
-            config.isVerboseSSHLogging(),
-            getSauceConnectDirectory()
-        );
+        AdministrationConfiguration adminConfig = getAdministrationConfigurationAccessor().getAdministrationConfiguration();
+        int maxRetries = 0, retryWaitTime = 0, retryCount = 0;
+        try {
+            maxRetries = Integer.parseInt(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_MAX_RETRIES));
+        } catch (NumberFormatException e) {
+            maxRetries = 0;
+        }
+        try {
+            retryWaitTime = Integer.parseInt(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_RETRY_WAIT_TIME));
+        } catch (NumberFormatException e) {
+            retryWaitTime = 0;
+        }
+
+        do {
+            try {
+                sauceTunnelManager.openConnection(
+                    config.getTempUsername(),
+                    config.getTempApikey(),
+                    Integer.parseInt(config.getSshPorts()),
+                    null,
+                    options,
+                    printLogger,
+                    config.isVerboseSSHLogging(),
+                    getSauceConnectDirectory()
+                );
+                break;
+            } catch (AbstractSauceTunnelManager.SauceConnectDidNotStartException e) {
+                retryCount++;
+                if (retryCount > maxRetries) {
+                    throw new AbstractSauceTunnelManager.SauceConnectException(e);
+                } else {
+                    buildLogger.addBuildLogEntry(String.format("Error launching Sauce Connect, trying %s time(s) more.", (maxRetries - retryCount)));
+                }
+                if (retryWaitTime > 0) {
+                    try {
+                        Thread.sleep(1000 * retryWaitTime);
+                    } catch (InterruptedException ie) {
+                        throw new AbstractSauceTunnelManager.SauceConnectException(ie);
+                    }
+                }
+            }
+        }
+        while (retryCount <= maxRetries + 1);
     }
 
     private String getResolvedOptions(String sauceConnectOptions) {
@@ -143,7 +180,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         if (options != null) {
             return customVariableContext.substituteString(options, buildContext, null);
         }
-        return options;
+        return "";
     }
 
 

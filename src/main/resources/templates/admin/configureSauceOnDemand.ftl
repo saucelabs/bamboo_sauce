@@ -24,6 +24,11 @@
             [@ww.textfield name='username' label='User Name' /]
             [@ww.textfield name="accessKey" label='Access Key' /]
         [/@ui.bambooSection]
+
+        [@ui.bambooSection title="Sauce Connect"]
+            [@ww.textfield name='sauceConnectMaxRetries' label='Max Retries' /]
+            [@ww.textfield name="sauceConnectRetryWaitTime" label='Retry Wait Time' /]
+        [/@ui.bambooSection]
     [/@ww.form]
 </body>
 </html>
