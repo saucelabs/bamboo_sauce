@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
-    <version>1.6.73-SNAPSHOT</version>
+    <version>1.6.74-SNAPSHOT</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
     <packaging>atlassian-plugin</packaging>
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
@@ -52,6 +52,7 @@
         <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
+        <java.version>7</java.version>
     </properties>
     <scm>
         <connection>scm:git:git://github.com/saucelabs/bamboo_sauce.git</connection>
@@ -270,8 +271,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.${java.version}</source>
+                    <target>1.${java.version}</target>
                 </configuration>
             </plugin>
             <plugin>
