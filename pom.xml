@@ -86,7 +86,7 @@
         <dependency>
             <groupId>com.saucelabs</groupId>
             <artifactId>saucerest</artifactId>
-            <version>${sauce.rest.version}</version>
+            <version>${saucerest.version}</version>
         </dependency>
         <dependency>
             <groupId>com.saucelabs</groupId>
@@ -237,7 +237,7 @@
                             com.saucelabs.ci;version="${ci-sauce.version}",
                             com.saucelabs.ci.sauceconnect;version="${ci-sauce.version}",
                             org.json.simple.parser;version="1.1.1",
-                            com.saucelabs.saucerest;version="${sauce.rest.version}",
+                            com.saucelabs.saucerest;version="${saucerest.version}",
                             *
                         </Import-Package> -->
                         <!-- Ensure plugin is spring powered - see https://extranet.atlassian.com/x/xBS9hQ  -->
