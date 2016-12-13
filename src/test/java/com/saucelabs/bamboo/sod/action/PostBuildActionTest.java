@@ -1,30 +1,31 @@
 package com.saucelabs.bamboo.sod.action;
 
+import com.atlassian.bamboo.ResultKey;
+import com.atlassian.bamboo.build.BuildLoggerManager;
+import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.v2.build.BuildContext;
-import com.atlassian.bamboo.v2.build.CurrentBuildResult;
-import com.atlassian.bamboo.v2.build.CurrentBuildResultImpl;
+import com.atlassian.bamboo.variable.CustomVariableContext;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.saucerest.SauceREST;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.io.IOUtils;
-import org.hamcrest.core.AllOf;
-import org.hamcrest.core.Every;
-import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
-import org.omg.CORBA.Current;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Logger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -97,9 +98,61 @@ public class PostBuildActionTest {
         updates.put("name", "tests.BTF.test0_0server_admin_setup_wizard.TestServerAdminSetupWizard.test_setup_wizard_success");
 
         ArgumentCaptor<Map> argument = ArgumentCaptor.forClass(Map.class);
-        Mockito.verify(rest).getJobInfo(Matchers.eq("449f8e8f5940483ea6938ce6cdbea117"));
-        Mockito.verify(rest).updateJobInfo(Matchers.eq("449f8e8f5940483ea6938ce6cdbea117"), argument.capture());
+        verify(rest).getJobInfo(Matchers.eq("449f8e8f5940483ea6938ce6cdbea117"));
+        verify(rest).updateJobInfo(Matchers.eq("449f8e8f5940483ea6938ce6cdbea117"), argument.capture());
 
         assertEquals(argument.getValue(), updates);
+    }
+
+    private void assertRecordSauceJobResults(SODMappedBuildConfiguration config, int times) throws Exception {
+        final SauceREST rest = mock(SauceREST.class);
+        when(rest.getJobInfo(anyString())).thenReturn(
+            IOUtils.toString(getClass().getResourceAsStream("/job_info.json"), "UTF-8")
+        );
+
+        final BuildLoggerManager loggerManager = mock(BuildLoggerManager.class);
+        Mockito.doReturn(mock(BuildLogger.class)).when(loggerManager).getLogger(any(ResultKey.class));
+
+        final PostBuildAction pba = mock(PostBuildAction.class);
+        Mockito.doReturn(config).when(pba).getBuildConfiguration(any(BuildContext.class));
+        Mockito.doNothing().when(pba).recordSauceJobResult(any(SODMappedBuildConfiguration.class));
+        Mockito.doReturn(rest).when(pba).getSauceREST(any(SODMappedBuildConfiguration.class));
+        Mockito.doReturn("1234").when(pba).getBuildNumber();
+        Mockito.doReturn(loggerManager).when(pba).getBuildLoggerManager();
+        Mockito.doCallRealMethod().when(pba).call();
+        Mockito.doCallRealMethod().when(pba).init(any(BuildContext.class));
+        Mockito.doCallRealMethod().when(pba).setCustomVariableContext(any(CustomVariableContext.class));
+
+        final BuildContext buildContext = mock(BuildContext.class);
+
+        pba.setCustomVariableContext(mock(CustomVariableContext.class));
+        pba.init(buildContext);
+        pba.call();
+
+        verify(pba, times(times)).recordSauceJobResult(any(SODMappedBuildConfiguration.class));
+    }
+
+    @Test
+    public void testRecordSauceJobResult_Enabled_NoSauceConnect() throws Exception {
+        SODMappedBuildConfiguration config = mock(SODMappedBuildConfiguration.class);
+        Mockito.doReturn(true).when(config).isEnabled();
+        Mockito.doReturn(false).when(config).isSauceConnectEnabled();
+        assertRecordSauceJobResults(config, 1);
+    }
+
+    @Test
+    public void testRecordSauceJobResult_Enabled_SauceConnect() throws Exception {
+        SODMappedBuildConfiguration config = mock(SODMappedBuildConfiguration.class);
+        Mockito.doReturn(true).when(config).isEnabled();
+        Mockito.doReturn(true).when(config).isSauceConnectEnabled();
+        assertRecordSauceJobResults(config, 1);
+    }
+
+    @Test
+    public void testRecordSauceJobResult_Disabled_NotSauceConnect() throws Exception {
+        SODMappedBuildConfiguration config = mock(SODMappedBuildConfiguration.class);
+        Mockito.doReturn(false).when(config).isEnabled();
+        Mockito.doReturn(false).when(config).isSauceConnectEnabled();
+        assertRecordSauceJobResults(config, 0);
     }
 }

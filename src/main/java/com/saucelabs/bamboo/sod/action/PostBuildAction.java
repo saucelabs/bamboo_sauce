@@ -65,21 +65,28 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     private CustomVariableContext customVariableContext;
 
+    protected SODMappedBuildConfiguration getBuildConfiguration(BuildContext buildContext) {
+        return new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
+    }
+
     @NotNull
     public BuildContext call() {
-
-        final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
-        if (config.isEnabled() && config.isSauceConnectEnabled()) {
-            BuildLoggerManager buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
-            final BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
-            PrintStream printLogger = new PrintStream(new NullOutputStream()) {
-                @Override
-                public void println(String x) {
-                    buildLogger.addBuildLogEntry(x);
-                }
-            };
-
+        final SODMappedBuildConfiguration config = getBuildConfiguration(buildContext);
+        if (config.isEnabled()) {
             try {
+                recordSauceJobResult(config);
+            } catch (IOException e) {
+                logger.error(e);
+            }
+            if (config.isSauceConnectEnabled()) {
+                final BuildLogger buildLogger = getBuildLoggerManager().getLogger(buildContext.getResultKey());
+                PrintStream printLogger = new PrintStream(new NullOutputStream()) {
+                    @Override
+                    public void println(String x) {
+                        buildLogger.addBuildLogEntry(x);
+                    }
+                };
+
                 SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
                 String options = customVariableContext.substituteString(config.getSauceConnectOptions(), buildContext, null);
                 if (config.useGeneratedTunnelIdentifier()) {
@@ -91,9 +98,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                     options,
                     printLogger
                 );
-                recordSauceJobResult(config);
-            } catch (IOException e) {
-                logger.error(e);
             }
         }
         return buildContext;
@@ -286,6 +290,13 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      */
     private BuildContext getBuildContextToUse() {
         return buildContext.getParentBuildContext() == null ? buildContext : buildContext.getParentBuildContext();
+    }
+
+    public BuildLoggerManager getBuildLoggerManager() {
+        if (buildLoggerManager == null) {
+            buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
+        }
+        return buildLoggerManager;
     }
 
     public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {
