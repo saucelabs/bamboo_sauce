@@ -14,7 +14,6 @@ import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.util.ValueStack;
-import com.saucelabs.bamboo.sod.BuildUtils;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.bamboo.sod.singletons.SauceConnectFourManagerSingleton;
@@ -194,9 +193,14 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         populateCommonContext(context);
         try {
             String[] selectedBrowsers = getSelectedBrowsers(buildConfiguration);
+            String[] selectedAppium = getAppiumBrowser(buildConfiguration);
+
             ValueStack stack = ActionContext.getContext().getValueStack();
+
             stack.getContext().put("selectedBrowsers", selectedBrowsers);
             context.put("selectedBrowsers", selectedBrowsers);
+            stack.getContext().put("selectedAppium", selectedAppium);
+            context.put("selectedAppium", selectedAppium);
 
             context.put("webDriverBrowserList", getSauceBrowserFactory().getWebDriverBrowsers());
             context.put("appiumBrowserList", getSauceBrowserFactory().getAppiumBrowsers());
@@ -221,8 +225,25 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         return selectedBrowsers.toArray(new String[selectedBrowsers.size()]);
     }
 
+
+    private String[] getAppiumBrowser(BuildConfiguration buildConfiguration) throws Exception {
+        List<Browser> browsers;
+        List<String> selectedBrowsers = new ArrayList<String>();
+        String[] selectedKeys = SODMappedBuildConfiguration.fromString(buildConfiguration.getString(SODKeys.APPIUM_KEY));
+
+        browsers = getSauceBrowserFactory().getAppiumBrowsers();
+
+        for (Browser browser : browsers) {
+            if (ArrayUtils.contains(selectedKeys, browser.getKey())) {
+                selectedBrowsers.add(browser.getKey());
+            }
+        }
+        return selectedBrowsers.toArray(new String[selectedBrowsers.size()]);
+    }
+
     private void populateDefaultBrowserList(Map<String, Object> context) {
         context.put("browserList", Collections.singletonList(DEFAULT_BROWSER));
+        context.put("appiumList", Collections.singletonList(DEFAULT_BROWSER));
     }
 
     /**

@@ -38,6 +38,11 @@ public class SODMappedBuildConfiguration {
         return fromString(browsers);
     }
 
+    public String[] getSelectedAppiums() {
+        String browsers = map.get(APPIUM_KEY);
+        return fromString(browsers);
+    }
+
     public static String[] fromString(String string) {
         if (string == null)
             return new String[]{};

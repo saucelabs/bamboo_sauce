@@ -26,32 +26,29 @@
     [/@ui.bambooSection]
 
     [@ww.select
-    label="WebDriver Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
-    name="custom.sauceondemand.browser"
-    id="webDriverBrowsers"
-    listKey="key"
-    listValue="name"
-    list=webDriverBrowserList
-    multiple="true"
-    value="selectedBrowsers"
-    size="20"
-    cssStyle="max-width: 100%"/]
+      label="WebDriver Browser(s)" description="The OS/Browser combination to use for testing with WebDriver"
+      name="custom.sauceondemand.browser"
+      id="webDriverBrowsers"
+      listKey="key"
+      listValue="name"
+      list=webDriverBrowserList
+      multiple="true"
+      value="selectedBrowsers"
+      size="20"
+      cssStyle="max-width: 100%"/]
 
-    [#--[@ww.checkbox label='Appium Support?' name='custom.sauceondemand.appium' toggle='true' description='' /]--]
+   [@ww.select
+      label="WebDriver Browser(s)" description="The OS/Device combination to use for testing with appium"
+      name="custom.sauceondemand.appium"
+      id="appiumBrowsers"
+      listKey="key"
+      listValue="name"
+      list=appiumBrowserList
+      multiple="true"
+      value="selectedAppium"
+      size="20"
+      cssStyle="max-width: 100%"/]
 
-    [#--[@ui.bambooSection dependsOn='custom.sauceondemand.appium' showOn='true']--]
-    [#--[@ww.select--]
-    [#--label="Appium Browser(s)" description="The OS/Browser combination to use for testing with Appium"--]
-    [#--name="custom.sauceondemand.appiumBrowser"--]
-    [#--id="appiumBrowser"--]
-    [#--listKey="key"--]
-    [#--listValue="name"--]
-    [#--list=appiumBrowserList--]
-    [#--multiple="true"--]
-    [#--value="selectedBrowsers"--]
-    [#--size="10"--]
-    [#--cssStyle="height: 160px; width: 600px;"/]--]
-    [#--[/@ui.bambooSection]--]
 
         <br clear="all"/>
     [@ww.textfield name='custom.sauceondemand.max-duration' label='Max Duration' description='The maximum time (in seconds) allotted to run tests' /]

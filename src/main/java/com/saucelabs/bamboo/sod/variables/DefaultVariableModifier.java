@@ -64,12 +64,17 @@ public abstract class DefaultVariableModifier implements VariableModifier {
     protected Map<String, VariableDefinitionContext> createSelenium2VariableContext(VariableContext variableContext) {
         Map<String, VariableDefinitionContext> variables = new HashMap<String, VariableDefinitionContext>();
 
-        String[] selectedBrowsers = config.getSelectedBrowsers();
         JSONArray browsersJSON = new JSONArray();
-        for (String browser : selectedBrowsers) {
+        for (String browser : config.getSelectedBrowsers()) {
             Browser browserInstance = sauceBrowserFactory.webDriverBrowserForKey(browser.replaceAll(" ", "_"));
             browserAsJSON(browsersJSON, browserInstance);
         }
+
+        for (String browser : config.getSelectedAppiums()) {
+            Browser browserInstance = sauceBrowserFactory.appiumBrowserForKey(browser.replaceAll(" ", "_"));
+            browserAsJSON(browsersJSON, browserInstance);
+        }
+
         String jsonString = browsersJSON.toString();
         addVariable(variableContext, SODKeys.SAUCE_BROWSERS, jsonString);
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
