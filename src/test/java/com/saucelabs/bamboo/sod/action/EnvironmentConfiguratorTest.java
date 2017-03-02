@@ -176,7 +176,7 @@ public class EnvironmentConfiguratorTest {
 
         String browsers = map.get(SODKeys.SAUCE_BROWSERS).getValue();
         assertNotNull(browsers);
-        assertEquals(browsers, "[{\"os\":\"Windows 2008\",\"browser\":\"Firefox\",\"browser-version\":\"7\",\"platform\":\"VISTA\",\"url\":\"sauce-ondemand:?os=Windows 2008&browser=Firefox&browser-version=7\"}]");
+        assertEquals(browsers, "[{\"os\":\"Windows 2008\",\"browser\":\"Firefox\",\"browser-version\":\"7\",\"platform\":\"Windows 2008\",\"url\":\"sauce-ondemand:?os=Windows 2008&browser=Firefox&browser-version=7\"}]");
 
         String startingUrl = map.get(SODKeys.SELENIUM_STARTING_URL_ENV).getValue();
         assertNotNull("Starting URL not set", startingUrl);
