@@ -131,8 +131,11 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         addVariable(variables, SODKeys.SAUCE_API_KEY, config.getTempApikey());
         if (buildContext.getParentBuildContext() == null) {
             addVariable(variables, SODKeys.BAMBOO_BUILD_NUMBER_ENV, buildContext.getBuildResultKey());
+            addVariable(variables, SODKeys.SAUCE_BUILD_NAME, buildContext.getBuildResultKey());
         } else {
             addVariable(variables, SODKeys.BAMBOO_BUILD_NUMBER_ENV, buildContext.getParentBuildContext().getBuildResultKey());
+            addVariable(variables, SODKeys.SAUCE_BUILD_NAME, buildContext.getParentBuildContext().getBuildResultKey());
+
         }
         String[] selectedBrowsers = config.getSelectedBrowsers();
         if (selectedBrowsers.length == 1) {
@@ -294,8 +297,10 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_ACCESS_KEY_ENV).append(EQUALS).append(config.getTempApikey()).append('"');
         if (buildContext.getParentBuildContext() == null) {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_BUILD_NAME).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
         } else {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getParentBuildContext().getBuildResultKey()).append('"');
+            stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_BUILD_NAME).append(EQUALS).append(buildContext.getParentBuildContext().getBuildResultKey()).append('"');
         }
         if (config.useGeneratedTunnelIdentifier()) {
             String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
