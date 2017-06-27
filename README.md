@@ -6,18 +6,28 @@ You'll want to make sure you have the Atlassian Dev environment and SDK installe
 
 To build (compile,test,jar) the plugin run: 
 
-	atlas-package
+```
+atlas-package
+```
 
 To run a local instance of Bamboo with the plugin (and its dependencies installed), run:
 
-	atlas-run
+```
+atlas-run
+```
 
 To run the local instance of Bamboo in debug mode, run:
 
-	atlas-debug
+```
+atlas-debug
+```
 
 ## Releasing
 
-  atlas-release (i've always used mvn release:prepare and release:perform, but 90% certain release will work and do both)
-  
+```
+atlas-release
+```
+
+I(Gavin)'ve personally `mvn release:prepare` and `mvn release:perform` but the atlas-release should do both and anything else they suggest
+
 Once this is complete, grab the new versioned jar file from the target directory, and upload it to the atlassian marketplace (https://marketplace.atlassian.com/manage/plugins/com.saucelabs.bamboo.bamboo-sauceondemand-plugin/versions/create)
