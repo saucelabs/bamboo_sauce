@@ -1,0 +1,10 @@
+ version: '3'
+ services:
+   atlas-plugin-sdk:
+     build: .
+     image: atlas-plugin-sdk:latest
+     volumes:
+       - .:/usr/src/app
+     ports:
+       - "6990:6990"
+     command: ['tail', '-f', '/dev/null']
