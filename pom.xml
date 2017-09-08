@@ -43,7 +43,7 @@
         </contributor>
     </contributors>
     <properties>
-        <ci-sauce.version>1.128</ci-sauce.version>
+        <ci-sauce.version>1.129</ci-sauce.version>
         <saucerest.version>1.0.35</saucerest.version>
         <bamboo.version>5.10.0</bamboo.version>
         <bamboo.data.version>5.9.7</bamboo.data.version>
