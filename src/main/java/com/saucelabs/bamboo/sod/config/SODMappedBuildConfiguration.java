@@ -2,6 +2,7 @@ package com.saucelabs.bamboo.sod.config;
 
 import com.saucelabs.ci.SeleniumVersion;
 import org.apache.commons.lang.math.NumberUtils;
+import java.net.ServerSocket;
 
 import java.util.Map;
 
@@ -112,14 +113,37 @@ public class SODMappedBuildConfiguration {
 
     public String getSshPorts() {
 
-        String port = map.get(SELENIUM_PORT_KEY);
+        // get port from the env var first in case it's already set, esp. if a random one was used
+        String port = map.get(SELENIUM_PORT_ENV);
+
+        // if not set, get it from the settings
+        if (port == null) {
+            port = map.get(SELENIUM_PORT_KEY);
+        }
+
+        // use default or random port depending on settings
         if (port == null || port.equals("")) {
             if (isSshEnabled()) {
                 port = "4445";
             } else {
                 port = "4444";
             }
+        } else if (port == "0") {
+            try {
+                ServerSocket s = new ServerSocket(0);
+                System.out.println("Port was 0, listening on port: " + s.getLocalPort());
+                port = Integer.toString(s.getLocalPort());
+            } catch (java.io.IOException e) {
+                if (isSshEnabled()) {
+                    port = "4445";
+                } else {
+                    port = "4444";
+                }
+            }
         }
+
+        map.put(SELENIUM_PORT_ENV,port);
+
         return port;
     }
 
