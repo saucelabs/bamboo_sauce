@@ -143,6 +143,9 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             retryWaitTime = 0;
         }
 
+        // set to use latest sauce connect if set
+        ((SauceConnectFourManager) sauceTunnelManager).setUseLatestSauceConnect(config.useLatestSauceConnect());
+
         do {
             try {
                 sauceTunnelManager.openConnection(

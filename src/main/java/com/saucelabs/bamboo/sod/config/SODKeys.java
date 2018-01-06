@@ -49,6 +49,7 @@ public final class SODKeys
     public static final String SSH_LOCAL_HOST_KEY = SSH_PREFIX + "local.host";
     //NOTE: ports and tunnel ports must be same length
     public static final String SSH_LOCAL_PORTS_KEY = SSH_PREFIX + "local.ports";
+    public static final String SSH_USE_LATEST_SAUCE_CONNECT = SSH_PREFIX + "useLatestSauceConnect";
     public static final String SSH_USE_GENERATED_TUNNEL_ID = SSH_PREFIX + "useGeneratedTunnelIdentifier";
 
     /* ADMIN CONFIG KEYS */

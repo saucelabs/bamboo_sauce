@@ -107,6 +107,9 @@ public class SODMappedBuildConfiguration {
         return Boolean.parseBoolean(map.get(SSH_VERBOSE_KEY));
     }
 
+    public boolean useLatestSauceConnect() {
+        return Boolean.parseBoolean(map.get(SSH_USE_LATEST_SAUCE_CONNECT));
+    }
     public boolean useGeneratedTunnelIdentifier() {
         return Boolean.parseBoolean(map.get(SSH_USE_GENERATED_TUNNEL_ID));
     }
