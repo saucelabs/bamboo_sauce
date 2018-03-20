@@ -3,7 +3,7 @@ package com.saucelabs.bamboo.sod.action;
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessor;
 import com.atlassian.bamboo.build.LogEntry;
-import com.atlassian.bamboo.build.logger.BuildLogUtils;
+import com.atlassian.bamboo.storage.StorageLocationService;
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.builder.BuildState;
 import com.atlassian.bamboo.plan.PlanManager;
@@ -62,6 +62,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      * Populated via dependency injection.
      */
     private BuildLoggerManager buildLoggerManager;
+    private StorageLocationService storageLocationService;
 
     private CustomVariableContext customVariableContext;
 
@@ -134,10 +135,10 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         }
 
         logger.info("Reading from log file");
-        //try read from the log file directly
-        File logDirectory = BuildLogUtils.getLogFileDirectory(buildContext.getPlanKey());
-        String logFileName = BuildLogUtils.getLogFileName(buildContext.getPlanResultKey());
-        List lines = FileUtils.readLines(new File(logDirectory, logFileName));
+        // try reading from the log file directly
+        final StorageLocationService storageLocationService = getStorageLocationService();
+        File logFile = storageLocationService.getLogFile(buildContext.getPlanResultKey());
+        List lines = FileUtils.readLines(logFile);
         for (Object object : lines) {
             String line = (String) object;
             if (logger.isDebugEnabled()) {
@@ -147,7 +148,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 foundLogEntry = true;
             }
         }
-
 
         logger.info("Reading from build logger output");
         BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
@@ -297,6 +297,13 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             buildLoggerManager = (BuildLoggerManager) ContainerManager.getComponent("buildLoggerManager");
         }
         return buildLoggerManager;
+    }
+
+    public StorageLocationService getStorageLocationService() {
+        if (storageLocationService == null) {
+            storageLocationService = (StorageLocationService) ContainerManager.getComponent("storageLocationService");
+        }
+        return storageLocationService;
     }
 
     public void setBuildLoggerManager(BuildLoggerManager buildLoggerManager) {

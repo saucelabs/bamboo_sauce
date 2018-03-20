@@ -2,6 +2,7 @@ package com.saucelabs.bamboo.sod.plan;
 
 import com.atlassian.bamboo.build.Job;
 import com.atlassian.bamboo.plan.Plan;
+import com.atlassian.bamboo.plan.PlanKey;
 import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.plan.cache.CachedPlanManager;
@@ -48,9 +49,14 @@ public class ViewSODCondition implements Condition {
     public boolean shouldDisplay(Map<String, Object> context) {
         if (!context.containsKey("planKey") || !context.containsKey("buildKey")) { return true; }
 
-        final ImmutableChain chain = cachedPlanManager.getPlanByKey(PlanKeys.getPlanKey(
-            context.get("planKey").toString()
-        ), ImmutableChain.class);
+        final ImmutableChain chain;
+        PlanKey planKey = PlanKeys.getPlanKey(context.get("planKey").toString());
+        if (PlanKeys.isChainKey(planKey)) {
+            chain = cachedPlanManager.getPlanByKey(planKey, ImmutableChain.class);
+        } else {
+            chain = cachedPlanManager.getPlanByKeyIfOfType(PlanKeys.getChainKeyFromJobKey(planKey), ImmutableChain.class);
+        }
+
         if (chain == null) { return false; }
 
         for (ImmutableJob job: chain.getAllJobs()) {

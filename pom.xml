@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
-    <version>1.6.84-SNAPSHOT</version>
+    <version>1.6.85-SNAPSHOT</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
     <packaging>atlassian-plugin</packaging>
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
@@ -43,10 +43,10 @@
         </contributor>
     </contributors>
     <properties>
-        <ci-sauce.version>1.132</ci-sauce.version>
-        <saucerest.version>1.0.35</saucerest.version>
-        <bamboo.version>5.10.0</bamboo.version>
-        <bamboo.data.version>5.9.7</bamboo.data.version>
+        <ci-sauce.version>1.133-SNAPSHOT</ci-sauce.version>
+        <saucerest.version>1.0.36</saucerest.version>
+        <bamboo.version>5.13.0</bamboo.version>
+        <bamboo.data.version>5.13.0</bamboo.data.version>
         <amps.version>6.2.6</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
@@ -258,6 +258,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <includeExclude>-com.atlassian.plugin.spring.scanner.annotation.*</includeExclude>
                     <scannedDependencies>
                         <dependency>
                             <groupId>com.atlassian.plugin</groupId>
