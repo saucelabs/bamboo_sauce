@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
-    <version>1.6.85-SNAPSHOT</version>
+    <version>1.6.86-SNAPSHOT</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
     <packaging>atlassian-plugin</packaging>
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
@@ -170,19 +170,19 @@
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-server</artifactId>
-            <version>7.2.1.v20101111</version>
+            <version>9.4.14.v20181114</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-http</artifactId>
-            <version>7.2.1.v20101111</version>
+            <version>9.4.14.v20181114</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-servlet</artifactId>
-            <version>7.2.1.v20101111</version>
+            <version>9.4.14.v20181114</version>
             <scope>test</scope>
         </dependency>
         <!-- Version 2.0 has not been deployed to a Maven repository yet, so it must be built and installed from source via git@github.com:infradna/selenium-client-factory.git-->
