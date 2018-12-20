@@ -104,7 +104,7 @@ public class EnvironmentConfiguratorTest {
             }
 
             @Override
-            public List<Browser> getWebDriverBrowsers() throws IOException, JSONException {
+            public List<Browser> getWebDriverBrowsers() throws JSONException {
                 return Arrays.asList(browser);
             }
         });
