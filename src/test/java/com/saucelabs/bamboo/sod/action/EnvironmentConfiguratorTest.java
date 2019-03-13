@@ -77,6 +77,7 @@ public class EnvironmentConfiguratorTest {
 
         when(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY)).thenReturn("defaultUser");
         when(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY)).thenReturn("defaultAccessKey");
+        when(adminConfig.getSystemProperty(SODKeys.SOD_DATACENTER_KEY)).thenReturn("defaultDataCenter");
         when(adminConfigManager.getAdministrationConfiguration()).thenReturn(adminConfig);
         environmentConfigurator.setAdministrationConfigurationManager(adminConfigManager);
         this.customConfiguration = new HashMap<String, String>();
@@ -84,6 +85,7 @@ public class EnvironmentConfiguratorTest {
         customConfiguration.put(SODKeys.SELENIUM_URL_KEY, "http://localhost");
         customConfiguration.put(SODKeys.TEMP_USERNAME, "tempUser");
         customConfiguration.put(SODKeys.TEMP_API_KEY, "apiKey");
+        customConfiguration.put(SODKeys.TEMP_DATA_CENTER, "dataCenter");
         customConfiguration.put(SODKeys.ENABLED_KEY, "true");
         customConfiguration.put(SODKeys.BROWSER_KEY, "Windows 2008firefox7" );
         this.taskDefinitions = new ArrayList<TaskDefinition>();
@@ -173,6 +175,10 @@ public class EnvironmentConfiguratorTest {
         String key = map.get(SODKeys.SAUCE_ACCESS_KEY_ENV).getValue();
         assertNotNull(key);
         assertEquals(key, "defaultAccessKey");
+
+        String dataCenter = map.get(SODKeys.SAUCE_DATA_CENTER_ENV).getValue();
+        assertNotNull(dataCenter);
+        assertEquals(dataCenter, "defaultDataCenter");
 
         String browsers = map.get(SODKeys.SAUCE_BROWSERS).getValue();
         assertNotNull(browsers);

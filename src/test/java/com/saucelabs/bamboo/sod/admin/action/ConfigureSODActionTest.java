@@ -25,6 +25,7 @@ public class ConfigureSODActionTest extends AbstractTestHelper {
         AdministrationConfiguration adminConfig = mock(AdministrationConfiguration.class);
         when(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY)).thenReturn("defaultUser");
         when(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY)).thenReturn("defaultAccessKey");
+        when(adminConfig.getSystemProperty(SODKeys.SOD_DATACENTER_KEY)).thenReturn("defaultDataCenter");
         when(adminConfigManager.getAdministrationConfiguration()).thenReturn(adminConfig);
         configureSODAction = new ConfigureSODAction(null) {
             @Override
@@ -42,6 +43,7 @@ public class ConfigureSODActionTest extends AbstractTestHelper {
         assertEquals("Result not INPUT", result, "input");
         assertEquals(configureSODAction.getUsername(), "defaultUser");
         assertEquals(configureSODAction.getAccessKey(), "defaultAccessKey");
+        assertEquals(configureSODAction.getDataCenter(), "defaultDataCenter");
     }
 
     @Test

@@ -118,6 +118,12 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             config.setTempApikey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
         }
 
+        if (config.shouldOverrideAuthentication() && StringUtils.isNotEmpty(config.getDataCenter())) {
+            config.setTempDatacenter(config.getDataCenter());
+        } else {
+            config.setTempDatacenter(adminConfig.getSystemProperty(SODKeys.SOD_DATACENTER_KEY));
+        }
+
         String sodDriverURI = getSodDriverUri(config.getTempUsername(), config.getTempApikey(), config);
         addVariable(variables, SODKeys.SELENIUM_DRIVER_ENV, sodDriverURI);
         addVariable(variables, SODKeys.SELENIUM_HOST_ENV, config.getSshHost());
@@ -129,6 +135,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         addVariable(variables, SODKeys.SAUCE_USERNAME, config.getTempUsername());
         addVariable(variables, SODKeys.SAUCE_USER_NAME, config.getTempUsername());
         addVariable(variables, SODKeys.SAUCE_API_KEY, config.getTempApikey());
+        addVariable(variables, SODKeys.SAUCE_DATA_CENTER, config.getTempDatacenter());
         if (buildContext.getParentBuildContext() == null) {
             addVariable(variables, SODKeys.BAMBOO_BUILD_NUMBER_ENV, buildContext.getBuildResultKey());
             addVariable(variables, SODKeys.SAUCE_BUILD_NAME, buildContext.getBuildResultKey());
@@ -295,6 +302,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_API_KEY).append(EQUALS).append(config.getTempApikey()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_USERNAME_ENV).append(EQUALS).append(config.getTempUsername()).append('"');
         stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_ACCESS_KEY_ENV).append(EQUALS).append(config.getTempApikey()).append('"');
+        stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_DATA_CENTER_ENV).append(EQUALS).append(config.getTempDatacenter()).append('"');
         if (buildContext.getParentBuildContext() == null) {
             stringBuilder.append(' ').append(prefix).append(SODKeys.BAMBOO_BUILD_NUMBER_ENV).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');
             stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_BUILD_NAME).append(EQUALS).append(buildContext.getBuildResultKey()).append('"');

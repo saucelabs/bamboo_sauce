@@ -70,7 +70,7 @@ public class ViewSODAction extends ViewBuildResults {
      */
     @Override
     public String doDefault() throws Exception {
-        String username, accessKey;
+        String username, accessKey, dataCenter;
         logger.info("Processing ViewSODAction");
 
         jobInformation = new ArrayList<JobInformation>();
@@ -83,7 +83,8 @@ public class ViewSODAction extends ViewBuildResults {
                 if (StringUtils.isNotEmpty(config.getUsername())) {
                     username = config.getUsername();
                     accessKey = config.getAccessKey();
-                    jobInformation.addAll(retrieveJobIdsFromSauce(username, accessKey));
+                    dataCenter = config.getDataCenter();
+                    jobInformation.addAll(retrieveJobIdsFromSauce(username, accessKey, dataCenter));
                 }
                 if (jobInformation.size() != 0) {
                     break;
@@ -95,7 +96,8 @@ public class ViewSODAction extends ViewBuildResults {
 
             username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
             accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
-            jobInformation.addAll(retrieveJobIdsFromSauce(username, accessKey));
+            dataCenter = adminConfig.getSystemProperty(SODKeys.SOD_DATACENTER_KEY);
+            jobInformation.addAll(retrieveJobIdsFromSauce(username, accessKey, dataCenter));
         }
 
         return super.doDefault();
@@ -110,11 +112,11 @@ public class ViewSODAction extends ViewBuildResults {
      * @param accessKey
      * @throws Exception
      */
-    private ArrayList<JobInformation> retrieveJobIdsFromSauce(String username, String accessKey) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    private ArrayList<JobInformation> retrieveJobIdsFromSauce(String username, String accessKey, String dataCenter) throws InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         ArrayList<JobInformation> jobInformations = new ArrayList<JobInformation>();
 
         String buildName = PlanKeys.getPlanResultKey(resultsSummary.getPlanKey(), getResultsSummary().getBuildNumber()).getKey();
-        SauceREST sauceREST = new SauceREST(username, accessKey);
+        SauceREST sauceREST = new SauceREST(username, accessKey, dataCenter);
         //invoke Sauce Rest API to find plan results with those values
         String jsonResponse = sauceREST.getBuildFullJobs(buildName);
         logger.info("REST response " + jsonResponse);

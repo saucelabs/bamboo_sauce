@@ -31,6 +31,10 @@ public class SODMappedBuildConfiguration {
         return map.get(SAUCE_ACCESS_KEY);
     }
 
+    public String getDataCenter() {
+        return map.get(SAUCE_DATACENTER_KEY);
+    }
+
     public String[] getSelectedBrowsers() {
         String browsers = map.get(BROWSER_KEY);
         if (browsers == null) {
@@ -163,10 +167,6 @@ public class SODMappedBuildConfiguration {
         return host;
     }
 
-    public String getTempApikey() {
-        return map.get(TEMP_API_KEY);
-    }
-
     public String getTempUsername() {
         return map.get(TEMP_USERNAME);
     }
@@ -175,8 +175,20 @@ public class SODMappedBuildConfiguration {
         map.put(TEMP_USERNAME, user);
     }
 
+    public String getTempApikey() {
+        return map.get(TEMP_API_KEY);
+    }
+
     public void setTempApikey(String key) {
         map.put(TEMP_API_KEY, key);
+    }
+
+    public String getTempDatacenter() {
+        return map.get(TEMP_DATA_CENTER);
+    }
+
+    public void setTempDatacenter(String datacenter) {
+        map.put(TEMP_DATA_CENTER, datacenter);
     }
 
     public Map<String, String> getMap() {

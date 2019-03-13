@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
-    <version>1.6.86-SNAPSHOT</version>
+    <version>1.6.87-SNAPSHOT</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
     <packaging>atlassian-plugin</packaging>
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
@@ -44,7 +44,7 @@
     </contributors>
     <properties>
         <ci-sauce.version>1.141</ci-sauce.version>
-        <saucerest.version>1.0.36</saucerest.version>
+        <saucerest.version>1.0.40-SNAPSHOT</saucerest.version>
         <bamboo.version>5.13.0</bamboo.version>
         <bamboo.data.version>5.13.0</bamboo.data.version>
         <amps.version>6.2.6</amps.version>
@@ -88,6 +88,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20080701</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>com.saucelabs</groupId>

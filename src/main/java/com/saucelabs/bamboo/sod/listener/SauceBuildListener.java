@@ -36,8 +36,9 @@ public class SauceBuildListener implements HibernateEventListener {
             final SODMappedBuildConfiguration config = new SODMappedBuildConfiguration(buildDefinition.getCustomConfiguration());
             String username = administrationConfigurationManager.getAdministrationConfiguration().getSystemProperty(SODKeys.SOD_USERNAME_KEY);
             String accessKey = administrationConfigurationManager.getAdministrationConfiguration().getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
+            String dataCenter = administrationConfigurationManager.getAdministrationConfiguration().getSystemProperty(SODKeys.SOD_DATACENTER_KEY);
 
-            SauceREST sauceREST = new SauceREST(username, accessKey);
+            SauceREST sauceREST = new SauceREST(username, accessKey, dataCenter);
             try {
                 String jsonResponse = sauceREST.getFullJobs();
                 JSONArray jobResults = new JSONArray(jsonResponse);

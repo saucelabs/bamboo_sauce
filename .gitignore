@@ -22,3 +22,5 @@ sauce_connect.log.2
 sauce_connect.log.3
 
 src/test/resources/export.zip
+
+src/main/java/com/saucelabs/bamboo/sod/BuildUtils.java
