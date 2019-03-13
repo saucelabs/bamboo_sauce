@@ -22,12 +22,13 @@
 
         [@ui.bambooSection title="Credentials"]
             [@ww.textfield name='username' label='User Name' /]
-            [@ww.textfield name="accessKey" label='Access Key' /]
+            [@ww.textfield name='accessKey' label='Access Key' /]
+            [@ww.select name ='dataCenter' label='Data Center' list='{US, EU}' required='true' /]
         [/@ui.bambooSection]
 
         [@ui.bambooSection title="Sauce Connect"]
             [@ww.textfield name='sauceConnectMaxRetries' label='Max Retries' /]
-            [@ww.textfield name="sauceConnectRetryWaitTime" label='Retry Wait Time' /]
+            [@ww.textfield name='sauceConnectRetryWaitTime' label='Retry Wait Time' /]
         [/@ui.bambooSection]
     [/@ww.form]
 </body>

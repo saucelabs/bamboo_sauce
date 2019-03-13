@@ -48,7 +48,7 @@ public class ViewSauceJobAction extends ViewBuildResults {
 
     private Credentials findSauceRestForPlan(ImmutablePlan plan) {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
-        String username, accessKey;
+        String username, accessKey, dataCenter;
         SauceREST sauceREST;
 
         // bad username or password probably
@@ -59,7 +59,8 @@ public class ViewSauceJobAction extends ViewBuildResults {
                 if (StringUtils.isNotEmpty(config.getUsername())) {
                     username = config.getUsername();
                     accessKey = config.getAccessKey();
-                    sauceREST = new SauceREST(username, accessKey);
+                    dataCenter = config.getDataCenter();
+                    sauceREST = new SauceREST(username, accessKey, dataCenter);
                     if (!Strings.isNullOrEmpty(sauceREST.getJobInfo(jobId))) {
                         return new Credentials(username, accessKey);
                     }
@@ -68,7 +69,8 @@ public class ViewSauceJobAction extends ViewBuildResults {
         }
         username = adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY);
         accessKey = adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY);
-        sauceREST = new SauceREST(username, accessKey);
+        dataCenter = adminConfig.getSystemProperty(SODKeys.SOD_DATACENTER_KEY);
+        sauceREST = new SauceREST(username, accessKey, dataCenter);
         if (!Strings.isNullOrEmpty(sauceREST.getJobInfo(jobId))) {
             return new Credentials(username, accessKey);
         }

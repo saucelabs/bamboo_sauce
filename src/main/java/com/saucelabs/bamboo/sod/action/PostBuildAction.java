@@ -241,7 +241,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     protected SauceREST getSauceREST(SODMappedBuildConfiguration config) {
-        return new SauceREST(config.getTempUsername(), config.getTempApikey());
+        return new SauceREST(config.getTempUsername(), config.getTempApikey(), config.getTempDatacenter());
     }
 
     private Boolean hasTestPassed(String name) {

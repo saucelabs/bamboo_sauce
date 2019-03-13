@@ -37,6 +37,7 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
     private String sauceConnectDirectory;
     private String username;
     private String accessKey;
+    private String dataCenter;
 
     private Integer sauceConnectMaxRetries = 0;
     private Integer sauceConnectRetryWaitTime = 0;
@@ -60,6 +61,7 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
         final AdministrationConfiguration adminConfig = this.getAdministrationConfiguration();
         setUsername(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY));
         setAccessKey(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY));
+        setDataCenter(adminConfig.getSystemProperty(SODKeys.SOD_DATACENTER_KEY));
         setSauceConnectDirectory(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY));
         setSauceConnectMaxRetries(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_MAX_RETRIES));
         setSauceConnectRetryWaitTime(adminConfig.getSystemProperty(SODKeys.SOD_SAUCE_CONNECT_RETRY_WAIT_TIME));
@@ -76,6 +78,7 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
         final AdministrationConfiguration adminConfig = this.getAdministrationConfiguration();
         adminConfig.setSystemProperty(SODKeys.SOD_USERNAME_KEY, getUsername());
         adminConfig.setSystemProperty(SODKeys.SOD_ACCESSKEY_KEY, getAccessKey());
+        adminConfig.setSystemProperty(SODKeys.SOD_DATACENTER_KEY, getDataCenter());
         adminConfig.setSystemProperty(SODKeys.SOD_SAUCE_CONNECT_DIRECTORY, getSauceConnectDirectory());
         adminConfig.setSystemProperty(SODKeys.SOD_SAUCE_CONNECT_MAX_RETRIES, getSauceConnectMaxRetries().toString());
         adminConfig.setSystemProperty(SODKeys.SOD_SAUCE_CONNECT_RETRY_WAIT_TIME, getSauceConnectRetryWaitTime().toString());
@@ -124,6 +127,16 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
 
     }
 
+    public String getUsername()
+    {
+        return username;
+    }
+
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
+
     public String getAccessKey()
     {
         return accessKey;
@@ -134,14 +147,14 @@ public class ConfigureSODAction extends BambooActionSupport implements GlobalAdm
         this.accessKey = accesskey;
     }
 
-    public String getUsername()
+    public String getDataCenter()
     {
-        return username;
+        return dataCenter;
     }
 
-    public void setUsername(String username)
+    public void setDataCenter(String dataCenter)
     {
-        this.username = username;
+        this.dataCenter = dataCenter;
     }
 
     public void setSauceConnectDirectory(String sauceConnectDirectory) {

@@ -14,6 +14,7 @@ public final class SODKeys
     public static final String SAUCE_USERNAME = "SAUCE_USERNAME";
     public static final String SAUCE_USER_NAME = "SAUCE_USER_NAME";
     public static final String SAUCE_API_KEY = "SAUCE_ACCESS_KEY";
+    public static final String SAUCE_DATA_CENTER = "SAUCE_DATA_CENTER";
     public static final String SAUCE_BROWSERS = "SAUCE_ONDEMAND_BROWSERS";
     public static final String SELENIUM_MAX_DURATION_ENV = "SELENIUM_MAX_DURATION";
     public static final String SELENIUM_IDLE_TIMEOUT_ENV = "SELENIUM_IDLE_TIMEOUT";
@@ -30,8 +31,9 @@ public final class SODKeys
     public static final String SELENIUM_URL_KEY = CUSTOM_PREFIX + "selenium.url";
     public static final String SELENIUM_VERSION_KEY = CUSTOM_PREFIX + "selenium.version";
     public static final String SAUCE_USER_KEY = CUSTOM_PREFIX + "user_name";
-    public static final String OVERRIDE_AUTHENTICATION_KEY = CUSTOM_PREFIX + "auth.enabled";
     public static final String SAUCE_ACCESS_KEY = CUSTOM_PREFIX + "access_key";
+    public static final String SAUCE_DATACENTER_KEY = CUSTOM_PREFIX + "data_center";
+    public static final String OVERRIDE_AUTHENTICATION_KEY = CUSTOM_PREFIX + "auth.enabled";
 
     /* ADVANCED OPTIONS */
     public static final String RECORD_VIDEO_KEY = CUSTOM_PREFIX + "record-video";
@@ -55,6 +57,7 @@ public final class SODKeys
     /* ADMIN CONFIG KEYS */
     public static final String SOD_USERNAME_KEY = "sauceondemand.username";
     public static final String SOD_ACCESSKEY_KEY = "sauceondemand.accesskey";
+    public static final String SOD_DATACENTER_KEY = "sauceondemand.datacenter";
     public static final String SOD_SAUCE_CONNECT_DIRECTORY = "sauceondemand.sauceConnectDirectory";
     public static final String SOD_SAUCE_CONNECT_MAX_RETRIES = "sauceondemand.sauceConnectMaxRetries";
     public static final String SOD_SAUCE_CONNECT_RETRY_WAIT_TIME = "sauceondemand.sauceConnectRetryWaitTime";
@@ -74,9 +77,11 @@ public final class SODKeys
     public static final String SAUCE_BUILD_NAME = "SAUCE_BUILD_NAME";
     public static final String SAUCE_USERNAME_ENV = "SAUCE_USERNAME";
     public static final String SAUCE_ACCESS_KEY_ENV = "SAUCE_ACCESS_KEY";
+    public static final String SAUCE_DATA_CENTER_ENV = "SAUCE_DATA_CENTER";
 
     public static final String TEMP_USERNAME = CUSTOM_PREFIX + "temp.username";
     public static final String TEMP_API_KEY = CUSTOM_PREFIX + "temp.apikey";
+    public static final String TEMP_DATA_CENTER = CUSTOM_PREFIX + "temp.datacenter";
 
     public static final String HTTPS_PROTOCOL = CUSTOM_PREFIX + "httpsProtocol";
     public static final String SAUCE_CONNECT_OPTIONS = CUSTOM_PREFIX + "sauceConnectOptions";
