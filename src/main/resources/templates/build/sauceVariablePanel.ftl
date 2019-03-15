@@ -24,6 +24,7 @@
             correlate a Sauce job with a Bamboo build.<br/><br/>
             <strong>SAUCE_USER_NAME</strong> - The Sauce user name applicable for the Bamboo build.<br/><br/>
             <strong>SAUCE_ACCESS_KEY</strong> - The Sauce access key applicable for the Bamboo build.<br/><br/>
+            <strong>SAUCE_DATA_CENTER</strong> - The Sauce data center applicable for the Bamboo build.<br/><br/>
             <strong>SELENIUM_MAX_DURATION_ENV</strong> - The entered max duration for the tests.<br/><br/>
             <strong>SELENIUM_IDLE_TIMEOUT</strong> - The entered idle timeout for the test.<br/><br/>
         </div>
@@ -40,6 +41,7 @@
             correlate a Sauce job with a Bamboo build.<br/><br/>
             <strong>SAUCE_USER_NAME</strong> - The Sauce user name applicable for the Bamboo build.<br/><br/>
             <strong>SAUCE_ACCESS_KEY</strong> - The Sauce access key applicable for the Bamboo build.<br/><br/>
+            <strong>SAUCE_DATA_CENTER</strong> - The Sauce data center applicable for the Bamboo build.<br/><br/>
         </div>
     [/@ui.bambooSection]
 
