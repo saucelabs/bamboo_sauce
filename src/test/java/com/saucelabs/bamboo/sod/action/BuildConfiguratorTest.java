@@ -190,7 +190,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             eq("SO FAKE"),
             eq(4445),
             eq((File) null),
-            eq("--tunnel-identifier null "),
+            eq("-x https://saucelabs.com/rest/v1 --tunnel-identifier null "),
             any(PrintStream.class),
             eq(false),
             eq((String) null)
@@ -228,7 +228,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             eq("SO FAKE"),
             eq(4445),
             eq((File) null),
-            eq("--tunnel-identifier null "),
+            eq("-x https://saucelabs.com/rest/v1 --tunnel-identifier null "),
             any(PrintStream.class),
             eq(false),
             eq((String) null)
@@ -265,7 +265,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             eq("SO FAKE"),
             eq(4445),
             eq((File) null),
-            eq("--tunnel-identifier null "),
+            eq("-x https://saucelabs.com/rest/v1 --tunnel-identifier null "),
             any(PrintStream.class),
             eq(false),
             eq((String) null)
@@ -298,7 +298,7 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
             eq("SO FAKE"),
             eq(4445),
             eq((File) null),
-            eq("--tunnel-identifier null "),
+            eq("-x https://saucelabs.com/rest/v1 --tunnel-identifier null "),
             any(PrintStream.class),
             eq(false),
             eq((String) null)

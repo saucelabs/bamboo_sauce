@@ -46,9 +46,12 @@ public class ViewSauceJobAction extends ViewBuildResults {
 
     private String jobId;
 
+    private SauceREST sauceREST;
+
     private Credentials findSauceRestForPlan(ImmutablePlan plan) {
         AdministrationConfiguration adminConfig = administrationConfigurationManager.getAdministrationConfiguration();
         String username, accessKey, dataCenter;
+
         SauceREST sauceREST;
 
         // bad username or password probably
@@ -62,7 +65,7 @@ public class ViewSauceJobAction extends ViewBuildResults {
                     dataCenter = config.getDataCenter();
                     sauceREST = new SauceREST(username, accessKey, dataCenter);
                     if (!Strings.isNullOrEmpty(sauceREST.getJobInfo(jobId))) {
-                        return new Credentials(username, accessKey);
+                        return new Credentials(username, accessKey, dataCenter);
                     }
                 }
             }
@@ -72,7 +75,7 @@ public class ViewSauceJobAction extends ViewBuildResults {
         dataCenter = adminConfig.getSystemProperty(SODKeys.SOD_DATACENTER_KEY);
         sauceREST = new SauceREST(username, accessKey, dataCenter);
         if (!Strings.isNullOrEmpty(sauceREST.getJobInfo(jobId))) {
-            return new Credentials(username, accessKey);
+            return new Credentials(username, accessKey, dataCenter);
         }
         return null;
     }
@@ -95,6 +98,7 @@ public class ViewSauceJobAction extends ViewBuildResults {
     public String doDefault() throws Exception {
         Credentials credentials = findSauceRestForPlan(getImmutablePlan());
         jobInformation = new JobInformation(jobId, calcHMAC(credentials.username, credentials.accessKey, jobId));
+        sauceREST = new SauceREST(credentials.username, credentials.accessKey, credentials.dataCenter);
         return super.doDefault();
     }
 
@@ -122,6 +126,10 @@ public class ViewSauceJobAction extends ViewBuildResults {
         return jobInformation;
     }
 
+    public SauceREST getSauceREST() {
+        return sauceREST;
+    }
+
     public void setJobId(String jobId) {
         this.jobId = jobId;
     }
@@ -134,11 +142,21 @@ public class ViewSauceJobAction extends ViewBuildResults {
     private class Credentials {
         public final String username;
         public final String accessKey;
+        public final String dataCenter;
 
-        public Credentials(String username, String accessKey) {
+        public Credentials(String username, String accessKey, String dataCenter) {
 
             this.username = username;
             this.accessKey = accessKey;
+            this.dataCenter = dataCenter;
+        }
+
+        public String getUsername() {
+            return this.username;
+        }
+
+        public String getDataCenter() {
+            return this.dataCenter;
         }
     }
 }

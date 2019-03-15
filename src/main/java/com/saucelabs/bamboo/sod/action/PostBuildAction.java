@@ -94,6 +94,10 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                     String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
                     options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
                 }
+
+                SauceREST sauceREST = getSauceREST(config);
+                options = "-x " + sauceREST.getServer() + "rest/v1" + " " + options;
+
                 sauceTunnelManager.closeTunnelsForPlan(
                     config.getTempUsername(),
                     options,
@@ -213,6 +217,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             logger.debug("Invoking Sauce REST API for " + sessionId);
             String json = sauceREST.getJobInfo(sessionId);
             logger.debug("Results: " + json);
+
             JobInformation jobInformation = new JobInformation(sessionId, "");
             jobInformation.populateFromJson(new org.json.JSONObject(json));
             if (jobInformation.getStatus() == null) {

@@ -25,6 +25,7 @@ import com.saucelabs.ci.SeleniumVersion;
 import com.saucelabs.ci.sauceconnect.AbstractSauceTunnelManager;
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import com.saucelabs.ci.sauceconnect.SauceTunnelManager;
+import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -109,6 +110,10 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         return buildContext;
     }
 
+    protected SauceREST getSauceREST(SODMappedBuildConfiguration config) {
+        return new SauceREST(config.getTempUsername(), config.getTempApikey(), config.getTempDatacenter());
+    }
+
     /**
      * Opens the tunnel and adds the tunnel instance to the sauceTunnelManager map.
      *
@@ -130,6 +135,10 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
             String tunnelIdentifier = getCustomVariableContext().getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
             options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
         }
+
+        SauceREST sauceREST = getSauceREST(config);
+        options = "-x " + sauceREST.getServer() + "rest/v1" + " " + options;
+
         AdministrationConfiguration adminConfig = getAdministrationConfigurationAccessor().getAdministrationConfiguration();
         int maxRetries = 0, retryWaitTime = 0, retryCount = 0;
         try {

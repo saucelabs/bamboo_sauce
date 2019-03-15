@@ -28,11 +28,11 @@
                 <a href="build/result/viewSauceJobResult.action?jobId=${job.jobId}&buildKey=${buildKey}&buildNumber=${buildNumber}">${job.jobId}</a>
             </td>
             <td>${job.getOs()} ${job.getBrowser()} ${job.getVersion()}</td>
-            <td>${job.getStatus()}</td>
+            <td>${job.getStatus()!"complete"}</td>
             <td>
-                <a href="${job.getVideoUrl()}">Video</a>
+                <a href="${job.getVideoUrl().replace('.flv','.mp4')}?auth=${job.hmac}">Video</a>
                 -
-                <a href="${job.getLogUrl()}">Logs</a>
+                <a href="${job.getLogUrl()}?auth=${job.hmac}">Logs</a>
             </td>
         </tr>
     [/#list]
