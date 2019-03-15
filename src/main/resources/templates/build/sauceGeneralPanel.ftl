@@ -24,7 +24,7 @@
         <br clear="all"/>
         [@ww.textfield name='custom.sauceondemand.access_key' label='Access Key' description="The Sauce access key" /]
         <br clear="all"/>
-        [@ww.select name ='dataCenter' label='Data Center' list='{US, EU}' required='true' /]
+        [@ww.select name ='custom.sauceondemand.data_center' label='Data Center' list="{'US', 'EU'}"  description="The Sauce data center" required='true' /]
         <br clear="all"/>
     [/@ui.bambooSection]
 
