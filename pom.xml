@@ -44,7 +44,7 @@
     </contributors>
     <properties>
         <ci-sauce.version>1.141</ci-sauce.version>
-        <saucerest.version>1.0.42</saucerest.version>
+        <saucerest.version>1.0.41-SNAPSHOT</saucerest.version>
         <bamboo.version>5.13.0</bamboo.version>
         <bamboo.data.version>5.13.0</bamboo.data.version>
         <amps.version>6.2.6</amps.version>

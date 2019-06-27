@@ -23,7 +23,7 @@
         [@ui.bambooSection title="Credentials"]
             [@ww.textfield name='username' label='User Name' /]
             [@ww.textfield name='accessKey' label='Access Key' /]
-            [@ww.select name ='dataCenter' label='Data Center' list="{'US', 'EU'}" required='true' /]
+            [@ww.select name ='dataCenter' label='Data Center' list="{'US', 'EU', 'US_EAST'}" required='true' /]
         [/@ui.bambooSection]
 
         [@ui.bambooSection title="Sauce Connect"]
