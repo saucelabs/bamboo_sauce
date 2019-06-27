@@ -22,20 +22,21 @@
     </organization>
     <developers>
         <developer>
-            <id>halkeye</id>
-            <name>Gavin Mogan</name>
-            <email>gavin@saucelabs.com</email>
+            <id>seanenright</id>
+            <name>Sean Enright</name>
+            <email>sean@saucelabs.com</email>
             <organization>Sauce Labs</organization>
             <organizationUrl>http://www.saucelabs.com/</organizationUrl>
-            <timezone>America/Vancouver</timezone>
+        </developer>
+        <developer>
+            <id>yfangsl</id>
+            <name>Yeh Fang</name>
+            <email>yeh.fang@saucelabs.com </email>
+            <organization>Sauce Labs</organization>
+            <organizationUrl>http://www.saucelabs.com/</organizationUrl>
         </developer>
     </developers>
     <contributors>
-        <contributor>
-            <name>Jonathan Doklovic</name>
-            <organization>Systems Bliss Inc.</organization>
-            <organizationUrl>http://www.sysbliss.com/</organizationUrl>
-        </contributor>
         <contributor>
             <name>Ross Rowe</name>
             <organization>Avain IT</organization>
