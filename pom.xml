@@ -42,6 +42,11 @@
             <organization>Avain IT</organization>
             <organizationUrl>http://www.avainit.com/</organizationUrl>
         </contributor>
+        <contributor>
+            <name>Gavin Mogan</name>
+            <organization>cloudbees</organization>
+            <organizationUrl>https://www.gavinmogan.com/</organizationUrl>
+        </contributor>
     </contributors>
     <properties>
         <ci-sauce.version>1.141</ci-sauce.version>
