@@ -25,8 +25,10 @@
             <td>${job.getOs()} ${job.getBrowser()} ${job.getVersion()}</td>
             <td>${job.getStatus()!"complete"}</td>
             <td>
-                <a href="${job.getVideoUrl().replace('.flv','.mp4')}?auth=${job.hmac}">Video</a>
-                -
+                [#if job.getVideoUrl().indexOf('us-east') == -1]
+                    <a href="${job.getVideoUrl().replace('.flv','.mp4')}?auth=${job.hmac}">Video</a>
+                    -
+                [/#if]
                 <a href="${job.getLogUrl()}?auth=${job.hmac}">Logs</a>
             </td>
         </tr>
