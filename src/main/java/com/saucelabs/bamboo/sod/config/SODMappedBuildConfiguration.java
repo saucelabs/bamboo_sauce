@@ -137,9 +137,13 @@ public class SODMappedBuildConfiguration {
             }
         } else if (port == "0") {
             try {
-                ServerSocket s = new ServerSocket(0);
-                System.out.println("Port was 0, listening on port: " + s.getLocalPort());
-                port = Integer.toString(s.getLocalPort());
+                // get a random port. Prior we used 0 however the ServerSocket was not actually random and
+                // returns the same port when mutliple builds are triggered simultaneously
+                Integer randomPort = (int) Math.floor(Math.random() * ((65000 - 1025) + 1) + 1025);
+                ServerSocket s = new ServerSocket(randomPort);
+
+                Integer.toString(s.getLocalPort());
+                System.out.println("Port was 0, listening on port: " + port);
             } catch (java.io.IOException e) {
                 if (isSshEnabled()) {
                     port = "4445";
@@ -202,6 +206,4 @@ public class SODMappedBuildConfiguration {
     public String getSauceConnectOptions() {
         return map.get(SAUCE_CONNECT_OPTIONS);
     }
-
-
 }
