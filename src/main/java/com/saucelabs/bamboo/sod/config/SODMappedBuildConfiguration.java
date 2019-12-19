@@ -135,22 +135,6 @@ public class SODMappedBuildConfiguration {
             } else {
                 port = "4444";
             }
-        } else if (port == "0") {
-            try {
-                // get a random port. Prior we used 0 however the ServerSocket was not actually random and
-                // returns the same port when mutliple builds are triggered simultaneously
-                Integer randomPort = (int) Math.floor(Math.random() * ((65000 - 1025) + 1) + 1025);
-                ServerSocket s = new ServerSocket(randomPort);
-
-                Integer.toString(s.getLocalPort());
-                System.out.println("Port was 0, listening on port: " + port);
-            } catch (java.io.IOException e) {
-                if (isSshEnabled()) {
-                    port = "4445";
-                } else {
-                    port = "4444";
-                }
-            }
         }
 
         map.put(SELENIUM_PORT_ENV,port);
