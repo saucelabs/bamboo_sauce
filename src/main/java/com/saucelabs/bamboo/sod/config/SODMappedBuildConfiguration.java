@@ -135,18 +135,6 @@ public class SODMappedBuildConfiguration {
             } else {
                 port = "4444";
             }
-        } else if (port == "0") {
-            try {
-                ServerSocket s = new ServerSocket(0);
-                System.out.println("Port was 0, listening on port: " + s.getLocalPort());
-                port = Integer.toString(s.getLocalPort());
-            } catch (java.io.IOException e) {
-                if (isSshEnabled()) {
-                    port = "4445";
-                } else {
-                    port = "4444";
-                }
-            }
         }
 
         map.put(SELENIUM_PORT_ENV,port);
@@ -202,6 +190,4 @@ public class SODMappedBuildConfiguration {
     public String getSauceConnectOptions() {
         return map.get(SAUCE_CONNECT_OPTIONS);
     }
-
-
 }
