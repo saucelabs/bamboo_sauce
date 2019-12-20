@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
-    <version>1.6.88</version>
+    <version>1.6.88-SNAPSHOT</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
     <packaging>atlassian-plugin</packaging>
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
@@ -64,7 +64,7 @@
         <connection>scm:git:git://github.com/saucelabs/bamboo_sauce.git</connection>
         <developerConnection>scm:git:git@github.com:saucelabs/bamboo_sauce.git</developerConnection>
         <url>git@github.com:saucelabs/bamboo_sauce.git</url>
-        <tag>bamboo-sauceondemand-plugin-1.6.88</tag>
+        <tag>HEAD</tag>
     </scm>
     <dependencies>
         <!-- <dependency>
