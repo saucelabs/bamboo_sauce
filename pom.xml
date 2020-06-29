@@ -51,8 +51,8 @@
     <properties>
         <ci-sauce.version>1.142</ci-sauce.version>
         <saucerest.version>1.0.42</saucerest.version>
-        <bamboo.version>5.13.0</bamboo.version>
-        <bamboo.data.version>5.13.0</bamboo.data.version>
+        <bamboo.version>6.8.1</bamboo.version>
+        <bamboo.data.version>6.8.1</bamboo.data.version>
         <amps.version>8.0.2</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
@@ -121,6 +121,12 @@
             <artifactId>selenium-java</artifactId>
             <version>2.26.0</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javassist/javassist -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.20.0-GA</version>
         </dependency>
         <!-- Dependencies included with Bamboo -->
         <dependency>
