@@ -4,7 +4,7 @@
 
 You'll want to make sure you have the Atlassian Dev environment and SDK installed (https://developer.atlassian.com/docs/getting-started/set-up-the-atlassian-plugin-sdk-and-build-a-project)
 
-To build (compile,test,jar) the plugin run: 
+To build (compile,test,jar) the plugin run:
 
 ```
 atlas-package
@@ -21,6 +21,10 @@ To run the local instance of Bamboo in debug mode, run:
 ```
 atlas-debug
 ```
+
+### Testing the plugin
+After running the local instance of Bamboo in debug mode with the plugin installed follow configuration steps described [here](https://wiki.saucelabs.com/display/DOCS/Configuring+Bamboo+for+a+Python+Project+with+Sauce+Labs).
+Remember to add additional argument to `pytest` - `-s` # disable all capturing, to make sure Sauce plugin reads test results.
 
 ## Releasing
 
