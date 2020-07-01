@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.saucelabs.bamboo</groupId>
     <artifactId>bamboo-sauceondemand-plugin</artifactId>
-    <version>1.6.90-SNAPSHOT</version>
+    <version>1.6.91-SNAPSHOT</version>
     <name>Bamboo Sauce OnDemand Plugin</name>
     <packaging>atlassian-plugin</packaging>
     <description>This is the Sauce OnDemand plugin for Bamboo</description>
@@ -51,9 +51,9 @@
     <properties>
         <ci-sauce.version>1.142</ci-sauce.version>
         <saucerest.version>1.0.42</saucerest.version>
-        <bamboo.version>5.13.0</bamboo.version>
-        <bamboo.data.version>5.13.0</bamboo.data.version>
-        <amps.version>6.2.6</amps.version>
+        <bamboo.version>6.8.1</bamboo.version>
+        <bamboo.data.version>6.8.1</bamboo.data.version>
+        <amps.version>8.0.2</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
@@ -121,6 +121,12 @@
             <artifactId>selenium-java</artifactId>
             <version>2.26.0</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javassist/javassist -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.20.0-GA</version>
         </dependency>
         <!-- Dependencies included with Bamboo -->
         <dependency>
@@ -235,13 +241,12 @@
             </plugin>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-bamboo-plugin</artifactId>
+                <artifactId>bamboo-maven-plugin</artifactId>
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
-                    <productDataPath>../generated-test-resources.zip</productDataPath>
                     <enableQuickReload>true</enableQuickReload>
                     <enableFastdev>false</enableFastdev>
                     <instructions>
