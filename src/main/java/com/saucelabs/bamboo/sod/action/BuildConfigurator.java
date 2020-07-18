@@ -10,6 +10,7 @@ import com.atlassian.bamboo.plan.PlanManager;
 import com.atlassian.bamboo.v2.build.BaseConfigurableBuildPlugin;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.variable.CustomVariableContext;
+import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.atlassian.bamboo.ww2.actions.build.admin.create.BuildConfiguration;
 import com.atlassian.spring.container.ContainerManager;
 import com.opensymphony.xwork2.ActionContext;
@@ -132,7 +133,8 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
         String options = getResolvedOptions(config.getSauceConnectOptions());
         if (config.useGeneratedTunnelIdentifier()) {
-            String tunnelIdentifier = getCustomVariableContext().getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
+            VariableDefinitionContext key = getCustomVariableContext().getVariableContexts().get(SODKeys.TUNNEL_IDENTIFIER);
+            String tunnelIdentifier = key == null ? null : key.getValue();
             options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
         }
 
