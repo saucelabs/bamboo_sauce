@@ -12,6 +12,7 @@ import com.atlassian.bamboo.resultsummary.tests.TestState;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
 import com.atlassian.bamboo.variable.CustomVariableContext;
+import com.atlassian.bamboo.variable.VariableDefinitionContext;
 import com.atlassian.spring.container.ContainerManager;
 import com.saucelabs.bamboo.sod.AbstractSauceBuildPlugin;
 import com.saucelabs.bamboo.sod.config.SODKeys;
@@ -91,7 +92,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
                 String options = customVariableContext.substituteString(config.getSauceConnectOptions(), buildContext, null);
                 if (config.useGeneratedTunnelIdentifier()) {
-                    String tunnelIdentifier = customVariableContext.getVariableContexts().get(SODKeys.TUNNEL_IDENTIFIER).getValue();
+                    VariableDefinitionContext key = customVariableContext.getVariableContexts().get(SODKeys.TUNNEL_IDENTIFIER);
+                    String tunnelIdentifier = key == null ? null : key.getValue();
                     options = "--tunnel-identifier " + tunnelIdentifier + " " + options;
                 }
 
