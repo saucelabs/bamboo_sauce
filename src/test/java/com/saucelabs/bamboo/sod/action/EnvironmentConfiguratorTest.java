@@ -10,10 +10,7 @@ import com.atlassian.bamboo.process.EnvironmentVariableAccessorImpl;
 import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.v2.build.BuildContext;
 import com.atlassian.bamboo.v2.build.CurrentBuildResult;
-import com.atlassian.bamboo.variable.VariableContext;
-import com.atlassian.bamboo.variable.VariableContextImpl;
-import com.atlassian.bamboo.variable.VariableDefinitionContext;
-import com.atlassian.bamboo.variable.CustomVariableContext;
+import com.atlassian.bamboo.variable.*;
 import com.saucelabs.bamboo.sod.config.SODKeys;
 import com.saucelabs.ci.Browser;
 import com.saucelabs.ci.BrowserFactory;
@@ -112,9 +109,9 @@ public class EnvironmentConfiguratorTest {
         });
         environmentConfigurator.setEnvironmentVariableAccessor(environmentVariableAccessor);
         customConfiguration.put(SODKeys.SSH_USE_GENERATED_TUNNEL_ID, Boolean.TRUE.toString());
-        Map<String, String> tempMap = new HashMap<>();
-        tempMap.put(SODKeys.TUNNEL_IDENTIFIER, "TUNNEL_IDENTIFIER");
-        when(customVariableContext.getVariables(buildContext)).thenReturn(tempMap);
+        Map<String, VariableDefinitionContext> tempMap = new HashMap<>();
+        tempMap.put(SODKeys.TUNNEL_IDENTIFIER, new VariableDefinitionContextImpl(SODKeys.TUNNEL_IDENTIFIER, "TUNNEL_IDENTIFIER", VariableType.CUSTOM));
+        when(customVariableContext.getVariableContexts()).thenReturn(tempMap);
     }
 
     @Test

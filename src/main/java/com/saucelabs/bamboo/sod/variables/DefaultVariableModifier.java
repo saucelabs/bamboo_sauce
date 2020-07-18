@@ -155,7 +155,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             }
         }
         if (config.useGeneratedTunnelIdentifier()) {
-            addVariable(variables, SODKeys.TUNNEL_IDENTIFIER, customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER));
+            addVariable(variables, SODKeys.TUNNEL_IDENTIFIER, customVariableContext.getVariableContexts().get(SODKeys.TUNNEL_IDENTIFIER).getValue());
         }
     }
 
