@@ -158,7 +158,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
         logger.info("Reading from build logger output");
         BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
-        for (LogEntry logEntry : buildLogger.getBuildLog()) {
+        for (LogEntry logEntry : buildLogger.getLastNLogEntries(100)) {
             if (processLine(config, logEntry.getLog())) {
                 foundLogEntry = true;
             }
