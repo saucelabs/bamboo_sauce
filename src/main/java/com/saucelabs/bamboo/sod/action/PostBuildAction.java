@@ -90,7 +90,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 };
 
                 SauceTunnelManager sauceTunnelManager = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager();
-                String options = customVariableContext.substituteString(config.getSauceConnectOptions(), buildContext, null);
+                String options = customVariableContext.substituteString(config.getSauceConnectOptions());
+
                 if (config.useGeneratedTunnelIdentifier()) {
                     VariableDefinitionContext key = customVariableContext.getVariableContexts().get(SODKeys.TUNNEL_IDENTIFIER);
                     String tunnelIdentifier = key == null ? null : key.getValue();

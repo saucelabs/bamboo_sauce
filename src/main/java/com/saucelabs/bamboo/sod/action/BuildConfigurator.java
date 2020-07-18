@@ -192,7 +192,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     private String getResolvedOptions(String sauceConnectOptions) {
         String options = sauceConnectOptions;
         if (options != null) {
-            return customVariableContext.substituteString(options, buildContext, null);
+            return customVariableContext.substituteString(options);
         }
         return "";
     }
