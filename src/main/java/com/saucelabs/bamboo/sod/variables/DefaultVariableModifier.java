@@ -311,7 +311,7 @@ public abstract class DefaultVariableModifier implements VariableModifier {
             stringBuilder.append(' ').append(prefix).append(SODKeys.SAUCE_BUILD_NAME).append(EQUALS).append(buildContext.getParentBuildContext().getBuildResultKey()).append('"');
         }
         if (config.useGeneratedTunnelIdentifier()) {
-            String tunnelIdentifier = customVariableContext.getVariables(buildContext).get(SODKeys.TUNNEL_IDENTIFIER);
+            String tunnelIdentifier = customVariableContext.getVariableContexts().get(SODKeys.TUNNEL_IDENTIFIER).getValue();
             stringBuilder.append(' ').append(prefix).append(SODKeys.TUNNEL_IDENTIFIER).append(EQUALS).append(tunnelIdentifier).append('"');
         }
     }
