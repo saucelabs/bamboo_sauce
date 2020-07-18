@@ -129,12 +129,6 @@ public class BuildConfiguratorTest extends AbstractTestHelper {
         buildConfigurator.setCustomVariableContext(new CustomVariableContextImpl(null) {
             @NotNull
             @Override
-            public Map<String, VariableDefinitionContext> getVariableContexts(@Nullable CommonContext commonContext) {
-                return new HashMap<String, VariableDefinitionContext>();
-            }
-
-            @NotNull
-            @Override
             public Map<String, VariableDefinitionContext> getVariableContexts() {
                 return new HashMap<String, VariableDefinitionContext>();
             }
