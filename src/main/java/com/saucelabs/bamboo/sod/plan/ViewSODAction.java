@@ -1,12 +1,12 @@
 package com.saucelabs.bamboo.sod.plan;
 
+import com.atlassian.bamboo.build.PlanResultsAction;
 import com.atlassian.bamboo.plan.cache.ImmutableChain;
 import com.atlassian.bamboo.plan.cache.ImmutableJob;
 import com.atlassian.bamboo.plan.cache.ImmutablePlan;
 import com.saucelabs.ci.JobInformation;
 
 import com.atlassian.bamboo.build.Job;
-import com.atlassian.bamboo.build.ViewBuildResults;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 import com.atlassian.bamboo.plan.PlanKeys;
@@ -38,7 +38,7 @@ import java.util.TimeZone;
  *
  * @author Ross Rowe
  */
-public class ViewSODAction extends ViewBuildResults {
+public class ViewSODAction extends PlanResultsAction {
 
     private static final Logger logger = Logger.getLogger(ViewSODAction.class);
 

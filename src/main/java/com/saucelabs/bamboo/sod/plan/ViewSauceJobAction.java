@@ -1,5 +1,6 @@
 package com.saucelabs.bamboo.sod.plan;
 
+import com.atlassian.bamboo.build.PlanResultsAction;
 import com.atlassian.bamboo.plan.cache.ImmutableChain;
 import com.atlassian.bamboo.plan.cache.ImmutableJob;
 import com.atlassian.bamboo.plan.cache.ImmutablePlan;
@@ -7,7 +8,6 @@ import com.google.common.base.Strings;
 import com.saucelabs.bamboo.sod.config.SODMappedBuildConfiguration;
 import com.saucelabs.ci.JobInformation;
 
-import com.atlassian.bamboo.build.ViewBuildResults;
 import com.atlassian.bamboo.configuration.AdministrationConfiguration;
 import com.atlassian.bamboo.configuration.AdministrationConfigurationManager;
 
@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author Ross Rowe
  */
-public class ViewSauceJobAction extends ViewBuildResults {
+public class ViewSauceJobAction extends PlanResultsAction {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd-HH";
 
