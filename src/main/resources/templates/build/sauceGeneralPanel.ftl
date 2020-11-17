@@ -13,7 +13,7 @@
 
     [@ww.checkbox label='Verbose Sauce Connect Logging' name='custom.sauceondemand.ssh.verbose' toggle='false' description='If selected, the output from the Sauce Connect process will be included in the console output for the job' /]
 
-    [@ww.checkbox label='Use Latest Sauce Connect' name='custom.sauceondemand.ssh.useLatestSauceConnect' toggle='true' description='If selected, it will check for and use the latest version of <a href="https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy">Sauce Connect</a>, otherwise the bundled version of 4.5.1 will be used' /]
+    [@ww.checkbox label='Use Latest Sauce Connect' name='custom.sauceondemand.ssh.useLatestSauceConnect' toggle='true' description='If selected, it will check for and use the latest version of <a href="https://wiki.saucelabs.com/display/DOCS/Sauce+Connect+Proxy">Sauce Connect</a>, otherwise the bundled version of ${currentSauceConnectVersion} will be used' /]
 
     [@ww.checkbox label='Create a new unique Sauce Connect tunnel per build' name='custom.sauceondemand.ssh.useGeneratedTunnelIdentifier' toggle='false' description='If selected, separate sauce connect tunnel will be started for the build' /]
 
