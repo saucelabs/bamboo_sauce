@@ -206,6 +206,7 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
     @Override
     protected void populateContextForEdit(final Map<String, Object> context, final BuildConfiguration buildConfiguration, final Plan build) {
         populateCommonContext(context);
+        populateSauceConnectVersion(context);
         try {
             String[] selectedBrowsers = getSelectedBrowsers(buildConfiguration);
             ValueStack stack = ActionContext.getContext().getValueStack();
@@ -286,6 +287,11 @@ public class BuildConfigurator extends BaseConfigurableBuildPlugin implements Cu
         AdministrationConfiguration adminConfig = administrationConfigurationAccessor.getAdministrationConfiguration();
         return (StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SOD_USERNAME_KEY))
                 && StringUtils.isNotBlank(adminConfig.getSystemProperty(SODKeys.SOD_ACCESSKEY_KEY)));
+    }
+
+    private void populateSauceConnectVersion(final Map<String, Object> context) {
+        String sauceConnectVersion = SauceConnectFourManagerSingleton.getSauceConnectFourTunnelManager().CURRENT_SC_VERSION;
+        context.put("currentSauceConnectVersion", sauceConnectVersion);
     }
 
     public AdministrationConfigurationAccessor getAdministrationConfigurationAccessor() {
