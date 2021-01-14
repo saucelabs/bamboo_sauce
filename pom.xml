@@ -51,8 +51,8 @@
     <properties>
         <ci-sauce.version>1.149</ci-sauce.version>
         <saucerest.version>1.0.42</saucerest.version>
-        <bamboo.version>7.1.1</bamboo.version>
-        <bamboo.data.version>7.1.1</bamboo.data.version>
+        <bamboo.version>7.2.1</bamboo.version>
+        <bamboo.data.version>7.2.1</bamboo.data.version>
         <amps.version>8.0.2</amps.version>
         <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
         <atlassian.spring.scanner.version>1.2.6</atlassian.spring.scanner.version>
