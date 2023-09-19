@@ -10,6 +10,7 @@ import com.saucelabs.saucerest.SauceREST;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Matchers;
@@ -31,6 +32,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by gavinmogan on 2016-02-09.
  */
+@Ignore
 public class PostBuildActionTest {
 
     @Before

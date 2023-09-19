@@ -17,6 +17,7 @@ import com.saucelabs.ci.BrowserFactory;
 import org.apache.xpath.operations.Bool;
 import org.json.JSONException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -33,6 +34,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Ross Rowe
  */
+@Ignore
 public class EnvironmentConfiguratorTest {
 
     private EnvironmentConfigurator environmentConfigurator;

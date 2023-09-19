@@ -118,6 +118,7 @@ public class ViewSODAction extends PlanResultsAction {
         String buildName = PlanKeys.getPlanResultKey(resultsSummary.getPlanKey(), getResultsSummary().getBuildNumber()).getKey();
         SauceREST sauceREST = new SauceREST(username, accessKey, dataCenter);
         //invoke Sauce Rest API to find plan results with those values
+        logger.info("Fetching jobs for build " + buildName);
         String jsonResponse = sauceREST.getBuildFullJobs(buildName);
         logger.info("REST response " + jsonResponse);
         try {

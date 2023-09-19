@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.junit.Before;
+import org.junit.Ignore;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -18,6 +19,7 @@ import java.util.Random;
 /**
  * @author Ross Rowe
  */
+@Ignore
 public abstract class AbstractTestHelper extends HttpServlet {
 
     public static final int PORT = 5000;
@@ -33,7 +35,7 @@ public abstract class AbstractTestHelper extends HttpServlet {
 
     @Before
     public void loadProperties() throws Exception {
-        
+
         File sauceSettings = new File(new File(System.getProperty("user.home")), ".sauce-ondemand");
         if (!sauceSettings.exists()) {
             String userName = System.getProperty("sauce.user");

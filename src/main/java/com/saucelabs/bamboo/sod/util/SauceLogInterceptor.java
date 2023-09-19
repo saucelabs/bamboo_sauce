@@ -25,12 +25,9 @@ public class SauceLogInterceptor implements LogInterceptor {
 
     public void intercept(@NotNull LogEntry logEntry) {
         if (StringUtils.containsIgnoreCase(logEntry.getLog(), PostBuildAction.SAUCE_ON_DEMAND_SESSION_ID)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Adding log entry: " + logEntry.getLog());
-            }
+            logger.info("Adding log entry: " + logEntry.getLog());
             CurrentBuildResult buildResult = buildContext.getBuildResult();
             buildResult.getCustomBuildData().put("SAUCE_JOB_ID_" + System.currentTimeMillis(), logEntry.getLog());
-
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Skipping line " + logEntry.getLog());
@@ -40,13 +37,9 @@ public class SauceLogInterceptor implements LogInterceptor {
 
     public void interceptError(@NotNull LogEntry logEntry) {
         if (StringUtils.containsIgnoreCase(logEntry.getLog(), PostBuildAction.SAUCE_ON_DEMAND_SESSION_ID)) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Adding log entry: " + logEntry.getLog());
-            }
+            logger.info("Adding log entry: " + logEntry.getLog());
             CurrentBuildResult buildResult = buildContext.getBuildResult();
             buildResult.getCustomBuildData().put("SAUCE_JOB_ID_" + System.currentTimeMillis(), logEntry.getLog());
-
-
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("Skipping line " + logEntry.getLog());

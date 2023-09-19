@@ -3,6 +3,7 @@ package com.saucelabs.bamboo.sod.action;
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessor;
 import com.atlassian.bamboo.build.LogEntry;
+import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.storage.StorageLocationService;
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.builder.BuildState;
@@ -156,6 +157,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             }
         }
 
+        // FIXME jobs may already have been processed via log interceptor
         logger.info("Reading from build logger output");
         BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
         for (LogEntry logEntry : buildLogger.getLastNLogEntries(100)) {
@@ -168,12 +170,9 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         if (!foundLogEntry) {
             logger.warn("No Sauce Session ids found in build output");
         }
-
     }
 
     protected boolean processLine(SODMappedBuildConfiguration config, String line) {
-
-
         //extract session id
         String sessionId = null;
         String jobName = null;
@@ -194,7 +193,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         }
         if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
             if (sessionId.trim().equals("")) {
-                logger.error("Session id for line" + line + " was blank");
                 return false;
             } else {
                 //TODO extract Sauce Job name (included on log line as 'job-name=')?
@@ -217,42 +215,40 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         SauceREST sauceREST = getSauceREST(config);
 
         try {
-            logger.debug("Invoking Sauce REST API for " + sessionId);
+            logger.info("Fetching Sauce job " + sessionId);
             String json = sauceREST.getJobInfo(sessionId);
-            logger.debug("Results: " + json);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Results: " + json);
+            }
 
             JobInformation jobInformation = new JobInformation(sessionId, "");
             jobInformation.populateFromJson(new org.json.JSONObject(json));
             if (jobInformation.getStatus() == null) {
-                Boolean testPassed = hasTestPassed(jobInformation.getName());
-                if (testPassed != null) {
-                    //set the status to passed if the test was successful
-                    jobInformation.setStatus(testPassed.booleanValue() ? "passed" : "failed");
-                }
+                boolean testPassed = hasTestPassed(jobInformation.getName());
+                jobInformation.setStatus(testPassed ? "passed" : "failed");
             }
             if (!jobInformation.hasJobName()) {
+                logger.info("Setting job name to " + jobName);
                 jobInformation.setName(jobName);
             }
             if (!jobInformation.hasBuild()) {
                 jobInformation.setBuild(getBuildNumber());
             }
             if (jobInformation.hasChanges()) {
-                logger.debug("Performing Sauce REST update for " + jobInformation.getJobId());
+                logger.info("Updating Sauce job " + jobInformation.getJobId());
                 sauceREST.updateJobInfo(jobInformation.getJobId(), jobInformation.getChanges());
+                logger.info("Changes: " + jobInformation.getChanges());
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             logger.error("Unable to set build number for " + sessionId, e);
-        } /*catch (Exception e) {
-            logger.error("Unexpected error processing " + sessionId, e);
-        }*/
-
+        }
     }
 
     protected SauceREST getSauceREST(SODMappedBuildConfiguration config) {
         return new SauceREST(config.getTempUsername(), config.getTempApikey(), config.getTempDatacenter());
     }
 
-    private Boolean hasTestPassed(String name) {
+    private boolean hasTestPassed(String name) {
         //do we have a test which matches the job name?
         TestResults testResults = findTestResult(name);
         if (testResults != null) {
@@ -288,7 +284,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     protected String getBuildNumber() {
-        return getBuildContextToUse().getBuildResultKey();
+        return getBuildContextToUse().getPlanResultKey().getKey();
     }
 
     /**
