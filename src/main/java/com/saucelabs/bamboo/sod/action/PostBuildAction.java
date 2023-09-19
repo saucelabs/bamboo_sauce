@@ -224,7 +224,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 boolean testPassed = hasTestPassed(jobInformation.getName());
                 jobInformation.setStatus(testPassed ? "passed" : "failed");
             }
-            if (!jobInformation.hasJobName()) {
+            if (!jobInformation.hasJobName() && !jobName.isEmpty()) {
                 logger.info("Setting job name to " + jobName);
                 jobInformation.setName(jobName);
             }
