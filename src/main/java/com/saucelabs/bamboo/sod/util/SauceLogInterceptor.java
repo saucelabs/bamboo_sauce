@@ -19,7 +19,6 @@ public class SauceLogInterceptor implements LogInterceptor {
 
 
     public SauceLogInterceptor(BuildContext buildContext) {
-
         this.buildContext = buildContext;
     }
 
@@ -36,15 +35,7 @@ public class SauceLogInterceptor implements LogInterceptor {
     }
 
     public void interceptError(@NotNull LogEntry logEntry) {
-        if (StringUtils.containsIgnoreCase(logEntry.getLog(), PostBuildAction.SAUCE_ON_DEMAND_SESSION_ID)) {
-            logger.info("Adding log entry: " + logEntry.getLog());
-            CurrentBuildResult buildResult = buildContext.getBuildResult();
-            buildResult.getCustomBuildData().put("SAUCE_JOB_ID_" + System.currentTimeMillis(), logEntry.getLog());
-        } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Skipping line " + logEntry.getLog());
-            }
-        }
+        intercept(logEntry);
     }
 
 }
