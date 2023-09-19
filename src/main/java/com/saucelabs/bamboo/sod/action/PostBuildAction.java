@@ -3,7 +3,6 @@ package com.saucelabs.bamboo.sod.action;
 import com.atlassian.bamboo.build.BuildLoggerManager;
 import com.atlassian.bamboo.build.CustomBuildProcessor;
 import com.atlassian.bamboo.build.LogEntry;
-import com.atlassian.bamboo.plan.PlanKeys;
 import com.atlassian.bamboo.storage.StorageLocationService;
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.builder.BuildState;
@@ -27,7 +26,6 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
@@ -196,7 +194,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 return false;
             } else {
                 //TODO extract Sauce Job name (included on log line as 'job-name=')?
-                storeBambooBuildNumberInSauce(config, sessionId, jobName);
+                storeBuildMetadata(config, sessionId, jobName);
                 return true;
             }
         }
@@ -204,14 +202,13 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     /**
-     * Invokes the Sauce REST API to store the build number and pass/fail status against the Sauce Job.
+     * Store build metadata in the Sauce jbo with the given session ID (aka job ID).
      *
      * @param config bamboo/sauce configuration
-     * @param sessionId the Sauce Job Id
+     * @param sessionId the Sauce job ID
      * @param jobName newly parsed job name
      */
-
-    protected void storeBambooBuildNumberInSauce(SODMappedBuildConfiguration config, String sessionId, String jobName) {
+    protected void storeBuildMetadata(SODMappedBuildConfiguration config, String sessionId, String jobName) {
         SauceREST sauceREST = getSauceREST(config);
 
         try {
@@ -240,7 +237,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
                 logger.info("Changes: " + jobInformation.getChanges());
             }
         } catch (Exception e) {
-            logger.error("Unable to set build number for " + sessionId, e);
+            logger.error("Unable to set build metadata for " + sessionId, e);
         }
     }
 

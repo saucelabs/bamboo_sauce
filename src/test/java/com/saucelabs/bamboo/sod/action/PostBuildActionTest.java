@@ -50,7 +50,7 @@ public class PostBuildActionTest {
         final String[] data = new String[2];
         PostBuildAction pba = new PostBuildAction() {
             @Override
-            protected void storeBambooBuildNumberInSauce(SODMappedBuildConfiguration config, String sessionId, String jobName) {
+            protected void storeBuildMetadata(SODMappedBuildConfiguration config, String sessionId, String jobName) {
                 //super.storeBambooBuildNumberInSauce(config, sessionId, jobName);
                 data[0] = sessionId;
                 data[1] = jobName;
