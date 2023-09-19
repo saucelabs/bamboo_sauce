@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
@@ -144,9 +145,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         // try reading from the log file directly
         final StorageLocationService storageLocationService = getStorageLocationService();
         File logFile = storageLocationService.getLogFile(buildContext.getPlanResultKey());
-        List lines = FileUtils.readLines(logFile);
-        for (Object object : lines) {
-            String line = (String) object;
+        List<String> lines = FileUtils.readLines(logFile, Charset.defaultCharset());
+        for (String line : lines) {
             if (logger.isDebugEnabled()) {
                 logger.debug("Processing line: " + line);
             }
