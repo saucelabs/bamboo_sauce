@@ -32,9 +32,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -132,14 +130,13 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     protected void recordSauceJobResult() throws IOException {
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         boolean foundLogEntry = false;
+        Set<String> lines = new HashSet<>();
+
         logger.info("Checking log interceptor entries");
         CurrentBuildResult buildResult = buildContext.getBuildResult();
         for (Map.Entry<String, String> entry : buildResult.getCustomBuildData().entrySet()) {
             if (entry.getKey().contains("SAUCE_JOB_ID")) {
-                if (processLine(entry.getValue())) {
-                    foundLogEntry = true;
-                }
-
+                lines.add(entry.getValue());
             }
         }
 
@@ -147,25 +144,20 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         // try reading from the log file directly
         final StorageLocationService storageLocationService = getStorageLocationService();
         File logFile = storageLocationService.getLogFile(buildContext.getPlanResultKey());
-        List<String> lines = FileUtils.readLines(logFile, Charset.defaultCharset());
+        List<String> logLines = FileUtils.readLines(logFile, Charset.defaultCharset());
+        lines.addAll(logLines);
+
+        logger.info("Reading from build logger output");
+        BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
+        for (LogEntry logEntry : buildLogger.getLastNLogEntries(100)) {
+            lines.add(logEntry.getLog());
+        }
+
         for (String line : lines) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Processing line: " + line);
-            }
             if (processLine(line)) {
                 foundLogEntry = true;
             }
         }
-
-        // FIXME jobs may already have been processed via log interceptor
-        logger.info("Reading from build logger output");
-        BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
-        for (LogEntry logEntry : buildLogger.getLastNLogEntries(100)) {
-            if (processLine(logEntry.getLog())) {
-                foundLogEntry = true;
-            }
-        }
-
 
         if (!foundLogEntry) {
             logger.warn("No Sauce Session ids found in build output");
