@@ -191,8 +191,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
             sessionId = StringUtils.substringAfter(line, SAUCE_ON_DEMAND_SESSION_ID + "=");
         }
-        if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
-            if (sessionId.trim().equals("")) {
+        if (!sessionId.equalsIgnoreCase("null")) {
+            if (sessionId.trim().isEmpty()) {
                 return false;
             } else {
                 //TODO extract Sauce Job name (included on log line as 'job-name=')?
