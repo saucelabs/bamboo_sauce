@@ -193,7 +193,6 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             if (sessionId.trim().isEmpty()) {
                 return false;
             } else {
-                //TODO extract Sauce Job name (included on log line as 'job-name=')?
                 storeBuildMetadata(config, sessionId, jobName);
                 return true;
             }
