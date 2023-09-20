@@ -195,7 +195,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     /**
-     * Store build metadata in the Sauce jbo with the given session ID (aka job ID).
+     * Store build metadata in the Sauce job with the given session ID (aka job ID).
      *
      * @param sessionId the Sauce job ID
      * @param jobName newly parsed job name
