@@ -26,15 +26,13 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -67,6 +65,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
 
     private CustomVariableContext customVariableContext;
 
+    private SauceREST sauceClient;
+
     protected SODMappedBuildConfiguration getBuildConfiguration(BuildContext buildContext) {
         return new SODMappedBuildConfiguration(buildContext.getBuildDefinition().getCustomConfiguration());
     }
@@ -76,7 +76,8 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         final SODMappedBuildConfiguration config = getBuildConfiguration(buildContext);
         if (config.isEnabled()) {
             try {
-                recordSauceJobResult(config);
+                this.sauceClient = getSauceREST(config);
+                recordSauceJobResult();
             } catch (IOException e) {
                 logger.error(e);
             }
@@ -124,20 +125,18 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
      * store the session id from the line in the custom build data of the build, and invoke the Sauce REST API
      * to store the Bamboo build number
      *
-     * @param config sauceondemand configuration
      * @throws IOException when it has trouble reading from log file
      */
-    protected void recordSauceJobResult(SODMappedBuildConfiguration config) throws IOException {
+    protected void recordSauceJobResult() throws IOException {
         //iterate over the entries of the build logger to see if one starts with 'SauceOnDemandSessionID'
         boolean foundLogEntry = false;
+        Set<String> lines = new HashSet<>();
+
         logger.info("Checking log interceptor entries");
         CurrentBuildResult buildResult = buildContext.getBuildResult();
         for (Map.Entry<String, String> entry : buildResult.getCustomBuildData().entrySet()) {
             if (entry.getKey().contains("SAUCE_JOB_ID")) {
-                if (processLine(config, entry.getValue())) {
-                    foundLogEntry = true;
-                }
-
+                lines.add(entry.getValue());
             }
         }
 
@@ -145,35 +144,27 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
         // try reading from the log file directly
         final StorageLocationService storageLocationService = getStorageLocationService();
         File logFile = storageLocationService.getLogFile(buildContext.getPlanResultKey());
-        List lines = FileUtils.readLines(logFile);
-        for (Object object : lines) {
-            String line = (String) object;
-            if (logger.isDebugEnabled()) {
-                logger.debug("Processing line: " + line);
-            }
-            if (processLine(config, line)) {
-                foundLogEntry = true;
-            }
-        }
+        List<String> logLines = FileUtils.readLines(logFile, Charset.defaultCharset());
+        lines.addAll(logLines);
 
         logger.info("Reading from build logger output");
         BuildLogger buildLogger = buildLoggerManager.getLogger(buildContext.getResultKey());
         for (LogEntry logEntry : buildLogger.getLastNLogEntries(100)) {
-            if (processLine(config, logEntry.getLog())) {
+            lines.add(logEntry.getLog());
+        }
+
+        for (String line : lines) {
+            if (processLine(line)) {
                 foundLogEntry = true;
             }
         }
 
-
         if (!foundLogEntry) {
             logger.warn("No Sauce Session ids found in build output");
         }
-
     }
 
-    protected boolean processLine(SODMappedBuildConfiguration config, String line) {
-
-
+    protected boolean processLine(String line) {
         //extract session id
         String sessionId = null;
         String jobName = null;
@@ -192,13 +183,11 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
             //we might not have a space separating the session id and job-name, so retrieve the text up to the end of the string
             sessionId = StringUtils.substringAfter(line, SAUCE_ON_DEMAND_SESSION_ID + "=");
         }
-        if (sessionId != null && !sessionId.equalsIgnoreCase("null")) {
-            if (sessionId.trim().equals("")) {
-                logger.error("Session id for line" + line + " was blank");
+        if (!sessionId.equalsIgnoreCase("null")) {
+            if (sessionId.trim().isEmpty()) {
                 return false;
             } else {
-                //TODO extract Sauce Job name (included on log line as 'job-name=')?
-                storeBambooBuildNumberInSauce(config, sessionId, jobName);
+                storeBuildMetadata(sessionId, jobName);
                 return true;
             }
         }
@@ -206,53 +195,47 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     /**
-     * Invokes the Sauce REST API to store the build number and pass/fail status against the Sauce Job.
+     * Store build metadata in the Sauce job with the given session ID (aka job ID).
      *
-     * @param config bamboo/sauce configuration
-     * @param sessionId the Sauce Job Id
+     * @param sessionId the Sauce job ID
      * @param jobName newly parsed job name
      */
-
-    protected void storeBambooBuildNumberInSauce(SODMappedBuildConfiguration config, String sessionId, String jobName) {
-        SauceREST sauceREST = getSauceREST(config);
-
+    protected void storeBuildMetadata(String sessionId, String jobName) {
         try {
-            logger.debug("Invoking Sauce REST API for " + sessionId);
-            String json = sauceREST.getJobInfo(sessionId);
-            logger.debug("Results: " + json);
+            logger.info("Fetching Sauce job " + sessionId);
+            String json = this.sauceClient.getJobInfo(sessionId);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Results: " + json);
+            }
 
             JobInformation jobInformation = new JobInformation(sessionId, "");
             jobInformation.populateFromJson(new org.json.JSONObject(json));
             if (jobInformation.getStatus() == null) {
-                Boolean testPassed = hasTestPassed(jobInformation.getName());
-                if (testPassed != null) {
-                    //set the status to passed if the test was successful
-                    jobInformation.setStatus(testPassed.booleanValue() ? "passed" : "failed");
-                }
+                boolean testPassed = hasTestPassed(jobInformation.getName());
+                jobInformation.setStatus(testPassed ? "passed" : "failed");
             }
-            if (!jobInformation.hasJobName()) {
+            if (!jobInformation.hasJobName() && !jobName.isEmpty()) {
+                logger.info("Setting job name to " + jobName);
                 jobInformation.setName(jobName);
             }
             if (!jobInformation.hasBuild()) {
                 jobInformation.setBuild(getBuildNumber());
             }
             if (jobInformation.hasChanges()) {
-                logger.debug("Performing Sauce REST update for " + jobInformation.getJobId());
-                sauceREST.updateJobInfo(jobInformation.getJobId(), jobInformation.getChanges());
+                logger.info("Updating Sauce job " + jobInformation.getJobId());
+                this.sauceClient.updateJobInfo(jobInformation.getJobId(), jobInformation.getChanges());
+                logger.info("Changes: " + jobInformation.getChanges());
             }
-        } catch (JSONException e) {
-            logger.error("Unable to set build number for " + sessionId, e);
-        } /*catch (Exception e) {
-            logger.error("Unexpected error processing " + sessionId, e);
-        }*/
-
+        } catch (Exception e) {
+            logger.error("Unable to set build metadata for " + sessionId, e);
+        }
     }
 
     protected SauceREST getSauceREST(SODMappedBuildConfiguration config) {
         return new SauceREST(config.getTempUsername(), config.getTempApikey(), config.getTempDatacenter());
     }
 
-    private Boolean hasTestPassed(String name) {
+    private boolean hasTestPassed(String name) {
         //do we have a test which matches the job name?
         TestResults testResults = findTestResult(name);
         if (testResults != null) {
@@ -288,7 +271,7 @@ public class PostBuildAction extends AbstractSauceBuildPlugin implements CustomB
     }
 
     protected String getBuildNumber() {
-        return getBuildContextToUse().getBuildResultKey();
+        return getBuildContextToUse().getPlanResultKey().getKey();
     }
 
     /**

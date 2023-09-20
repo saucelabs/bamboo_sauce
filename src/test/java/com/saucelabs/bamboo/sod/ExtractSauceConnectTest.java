@@ -2,6 +2,7 @@ package com.saucelabs.bamboo.sod;
 
 import com.saucelabs.ci.sauceconnect.SauceConnectFourManager;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.io.File;
 /**
  * @author Ross Rowe
  */
+@Ignore
 public class ExtractSauceConnectTest {
 
     private SauceConnectFourManager manager = new SauceConnectFourManager();

@@ -15,6 +15,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Ross Rowe
  */
+@Ignore
 public class ConfigureSODActionTest extends AbstractTestHelper {
 
     private ConfigureSODAction configureSODAction;

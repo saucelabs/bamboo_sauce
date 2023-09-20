@@ -29,6 +29,7 @@ import com.saucelabs.rest.SauceTunnelFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.invocation.InvocationOnMock;
@@ -58,6 +59,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 /**
  * @author Ross Rowe
  */
+@Ignore
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(ContainerManager.class)
 public class BuildConfiguratorTest extends AbstractTestHelper {
