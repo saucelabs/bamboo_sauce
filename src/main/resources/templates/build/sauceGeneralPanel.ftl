@@ -7,7 +7,7 @@
                 One of the advantages to Sauce Labs' OnDemand setup is that all the code remains on your server, snug and secure behind whatever protection you feel is best.
 
                 To enable access from our cloud to a specific test server on your private network, enable <a
-                    href="http://saucelabs.com/docs/sauce-connect">Sauce Connect</a> below.</span>
+                    href="https://docs.saucelabs.com/secure-connections/">Sauce Connect</a> below.</span>
         </div>
     [@ww.checkbox label='Enable Sauce Connect' name='custom.sauceondemand.ssh.enabled' toggle='true' description='Enabling Sauce Connect will launch a SSH tunnel, which creates a secure and reliable tunnel from our cloud to your private network that can only be accessed by you' /]
 
