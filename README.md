@@ -1,5 +1,7 @@
 # Bamboo Sauce OnDemand plugin.
 
+This plugin has been deprecated and is no longer actively developed, in alignment with Atlassian's decision to deprecate Bamboo Server.
+
 ## Development
 
 You'll want to make sure you have the Atlassian Dev environment and SDK installed (https://developer.atlassian.com/docs/getting-started/set-up-the-atlassian-plugin-sdk-and-build-a-project)
